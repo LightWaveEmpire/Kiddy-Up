@@ -1,2 +1,2 @@
-# Kiddy-Up
+# KiddyUp
 
