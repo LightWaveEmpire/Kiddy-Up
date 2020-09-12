@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 media/
 settings.py
+*.whl
 
 .idea/
 
@@ -86,6 +87,7 @@ celerybeat-schedule
 .venv/
 venv/
 ENV/
+kiddyup_venv/
 
 # Spyder project settings
 .spyderproject
