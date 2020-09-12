@@ -21,10 +21,7 @@ CMD ["uwsgi", "--ini", "/uwsgi.ini"]
 
 
 # copy entrypoint.sh
-COPY ./entrypoint.sh .
-
-# copy project
-COPY . .
+COPY ./entrypoint.sh /entrypoint.sh
 
 # run entrypoint.sh
-ENTRYPOINT ["/usr/src/app/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
