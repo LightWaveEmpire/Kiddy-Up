@@ -16,21 +16,21 @@ services:
     volumes:
       - ./app:/var/www/html
     working_dir: /var/www/html
-    depends_on:
-      mysql:
-        condition: service_healthy
-  mysql:
-    build: docker/mysql
-    container_name: mysql
-    ports:
-      - 3306:3306
-    volumes:
-      - data-volume:/var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=password
-      - MYSQL_DATABASE=django
-    healthcheck:
-      test: "exit 0"
+#    depends_on:
+#      mysql:
+#        condition: service_healthy
+#  mysql:
+#    build: docker/mysql
+#    container_name: mysql
+#    ports:
+#      - 3306:3306
+#    volumes:
+#      - data-volume:/var/lib/mysql
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=password
+#      - MYSQL_DATABASE=django
+#    healthcheck:
+#      test: "exit 0"
 
 volumes:
   data-volume:
