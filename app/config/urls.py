@@ -15,13 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from register import views
+
+
 
 #from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("register/", views.register, name="register"),
+    # path("register/", views.register, name="register"),
+    path("", include("parent_accounts.urls")),
+    path("", include("register.urls")),
 ]
 
 """ Take this comment out to enable DebugToolbar
