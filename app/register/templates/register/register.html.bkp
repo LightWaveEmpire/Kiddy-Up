@@ -1,9 +1,11 @@
-{% extends "base.html" %}
-
-{% block title %} {% endblock %}
-
-{% block content %}
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
 
 <div class="register-photo">
     <div class="form-container">
@@ -19,6 +21,5 @@
             <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Sign Up</button></div><a class="already" href="#">You already have an account? Login here.</a></form>
     </div>
 </div>
-
-
-{% endblock %}
+</body>
+</html>

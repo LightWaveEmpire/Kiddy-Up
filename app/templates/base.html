@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="style.css">
+    <title>{% block title %}Kiddy-Up{% endblock %}</title>
+</head>
+
+<body>
+    <div id="sidebar">
+        {% block sidebar %}
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/">Dashboard</a></li>
+            <li><a href="/">Calendar</a></li>
+            <li><a href="/">Tasks</a></li>
+            <li><a href="/">Rewards</a></li>            
+            <li><a href="/">Settings</a></li>            
+            <li><a href="/">Help</a></li>
+        </ul>
+        {% endblock %}
+    </div>
+
+    <div id="content">
+        {% block content %} 
+		<h1>Kiddy-Up: Keeping Kids on top of their Day!</h1>
+
+	{% endblock %}
+    </div>
+</body>
+</html>
