@@ -11,7 +11,7 @@
         <title>{% block title %}Main {% endblock title %} | Kiddy-Up</title>
         {% block head_favicon %}
             <link rel="icon" type="image/png"
-                  href="{{ STATIC_URL }}images/favicon.ico">
+                  href="{% static 'images/favicon.ico' %}">
         {% endblock head_favicon %}
         {% block head_meta %}
             {% block head_meta_charset %}
@@ -42,11 +42,13 @@
 <body>
     {# Navigation Menu #}
     <header>
-        <div class="navbar navbar-default navbar-static-top 
+        <div class="
         {% block nav-style %}{% endblock %}">
-            <div class="container p-none">
+            <div class="">
                 <div class="navbar-header">
-                    <h1><a class="navbar-brand" href="/">Kiddy-Up</a></h1>
+                    <h1><a class="navbar-brand" href="" > Kiddy-Up</a>
+		    <img src="{% static 'images/kiddy-up.png' %}" width="30" height="20" style="width: 44px;height: 25px;margin: 0px 0px 0px 1px;">
+                    </h1>
                 </div>
                 <div class="navbar">
                     <ul class="nav navbar-nav navbar-right">
