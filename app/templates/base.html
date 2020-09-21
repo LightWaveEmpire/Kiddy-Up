@@ -1,30 +1,81 @@
+{% load static %}
+
+
+
+
+{# HTML5 declaration #}
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <link rel="stylesheet" href="style.css">
-    <title>{% block title %}Kiddy-Up{% endblock %}</title>
-</head>
+<html>
+    {# Make modifiable head elements #}
+    <head>
+        <title>{% block title %}Main {% endblock title %} | Kiddy-Up</title>
+        {% block head_favicon %}
+            <link rel="icon" type="image/png"
+                  href="{{ STATIC_URL }}images/favicon.ico">
+        {% endblock head_favicon %}
+        {% block head_meta %}
+            {% block head_meta_charset %}
+                <meta http-equiv="Content-Type"
+                      content="text/html; charset=utf-8" />
+            {% endblock head_meta_charset %}
+            {% block head_meta_contentlanguage %}
+                <meta http-equiv="Content-Language" value="en-US" />
+            {% endblock head_meta_contentlanguage %}
+            {% block head_meta_viewport %}
+                <meta name="viewport"
+                      content="width=device-width, initial-scale=1.0">
+            {% endblock head_meta_viewport %}
+        {% endblock head_meta %}
+        {% block head_css %}
+            {% block head_css_site %}
+                <link href="{% static 'css/main.css' %}"
+                      rel="stylesheet" media="screen">
+                <link href="{% static 'css/app.css' %}"
+                      rel="stylesheet" media="screen">
+            {% endblock head_css_site %}
+            {% block head_css_section %}{% endblock head_css_section %}
+            {% block head_css_page %}{% endblock head_css_page %}
+        {% endblock head_css %}
+    </head>
+
 
 <body>
-    <div id="sidebar">
-        {% block sidebar %}
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/">Dashboard</a></li>
-            <li><a href="/">Calendar</a></li>
-            <li><a href="/">Tasks</a></li>
-            <li><a href="/">Rewards</a></li>            
-            <li><a href="/">Settings</a></li>            
-            <li><a href="/">Help</a></li>
-        </ul>
-        {% endblock %}
+    {# Navigation Menu #}
+    <header>
+        <div class="navbar navbar-default navbar-static-top 
+        {% block nav-style %}{% endblock %}">
+            <div class="container p-none">
+                <div class="navbar-header">
+                    <h1><a class="navbar-brand" href="/">Kiddy-Up</a></h1>
+                </div>
+                <div class="navbar">
+                    <ul class="nav navbar-nav navbar-right">
+                        {% if user.is_authenticated %}
+                            <li><a href="" >Logout</a></li>
+                            <li><a href="" >Accounts</a></li>
+                        {% else %}
+                            <li><a href="" >Login</a></li>
+                            <li><a href="" >Sign Up</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    {# The Document Body #}
+    <div id="site-wrapper">
+        {% block content %}
+            <h1>Kiddy-Up: Keeping Kids on top of their Day!</h1>
+            if you see this, something is wrong!
+        {% endblock content %}
     </div>
-
-    <div id="content">
-        {% block content %} 
-		<h1>Kiddy-Up: Keeping Kids on top of their Day!</h1>
-
-	{% endblock %}
+    {# The Footer #}
+    <div class="footer">
+        <div class="container">
+            <ul><li>About</li><li>Help</li></ul>
+        </div>
     </div>
 </body>
+
 </html>
