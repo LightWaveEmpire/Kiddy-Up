@@ -1,15 +1,25 @@
 {% load static %}
 
 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+Design by TEMPLATED
+http://templated.co
+Released for free under the Creative Commons Attribution License
 
+Name       : Yellowing
+Description: A two-column, fixed-width design with dark color scheme.
+Version    : 1.0
+Released   : 20110123
 
-{# HTML5 declaration #}
-<!DOCTYPE html>
-<html>
-    {# Make modifiable head elements #}
-    <head>
-        <title>{% block title %}Main {% endblock title %} | Kiddy-Up</title>
-        {% block head_favicon %}
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>{% block title %}Default {% endblock title %} | Kiddy-Up</title>
+{% block head_favicon %}
             <link rel="icon" type="image/png"
                   href="{% static 'images/favicon.ico' %}">
         {% endblock head_favicon %}
@@ -36,48 +46,71 @@
             {% block head_css_section %}{% endblock head_css_section %}
             {% block head_css_page %}{% endblock head_css_page %}
         {% endblock head_css %}
-    </head>
-
-
+</head>
 <body>
-    {# Navigation Menu #}
-    <header>
-        <div class="
-        {% block nav-style %}{% endblock %}">
-            <div class="">
-                <div class="navbar-header">
-                    <h1><a class="navbar-brand" href="" > Kiddy-Up</a>
-		    <img src="{% static 'images/kiddy-up.png' %}" width="30" height="20" style="width: 44px;height: 25px;margin: 0px 0px 0px 1px;">
-                    </h1>
-                </div>
-                <div class="navbar">
-                    <ul class="nav navbar-nav navbar-right">
-                        {% if user.is_authenticated %}
-                            <li><a href="" >Logout</a></li>
-                            <li><a href="" >Accounts</a></li>
-                        {% else %}
-                            <li><a href="" >Login</a></li>
-                            <li><a href="" >Sign Up</a></li>
-                        {% endif %}
-                    </ul>
-                </div>
-            </div>
+<div id="wrapper">
+	<div id="header">
+		<div id="logo">
+			<h1><a href="#">Kiddy-Up </a></h1>
+		</div>
+	</div>
+	<!-- end #header -->
+	<div id="page">
+		<div id="page-bgtop">
+			<div id="page-bgbtm">
+				<div id="menu">
+					<ul>
+						<li><a href="#">Dashboard</a></li>
+						<li><a href="#">Events</a></li>
+						<li><a href="#">Tasks</a></li>
+						<li><a href="#">Rewards</a></li>
+						<li><a href="#">Settings</a></li>
+					</ul>
+				</div>
+				<!-- end #menu -->
+				<div id="content">
+                    {% block content %}
+                        <h1>Kiddy-Up: Keeping Kids on top of their Day!</h1>
+                        if you see this, something is wrong!
+                    {% endblock content %}
+				</div>
+				<!-- end #content -->
+				<div id="sidebar">
+					{% block sidebar_content %}
+					<ul>
+						<li>
+							<h2>Default Sidebar Data</h2>
+							<ul>
+								<li><a href="#">Aliquam libero</a></li>
+								<li><a href="#">Consectetuer adipiscing elit</a></li>
+								<li><a href="#">Metus aliquam pellentesque</a></li>
+								<li><a href="#">Suspendisse iaculis mauris</a></li>
+								<li><a href="#">Urnanet non molestie semper</a></li>
+								<li><a href="#">Proin gravida orci porttitor</a></li>
+							</ul>
+						</li>
+					</ul>
+					{% endblock sidebar_content %}
+				</div>
+				<!-- end #sidebar -->
+				<div style="clear: both;">&nbsp;</div>
+			</div>
+		</div>
+	</div>
+	<!-- end #page -->
+</div>
+<div id="footer-wrapper">
+	<div id="footer">
+        <div id="menu">
+            <ul>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Help</a></li>
+                <li><a href="#">Contact Us</a></li>
+            </ul>
         </div>
-    </header>
 
-    {# The Document Body #}
-    <div id="site-wrapper">
-        {% block content %}
-            <h1>Kiddy-Up: Keeping Kids on top of their Day!</h1>
-            if you see this, something is wrong!
-        {% endblock content %}
-    </div>
-    {# The Footer #}
-    <div class="footer">
-        <div class="container">
-            <ul><li>About</li><li>Help</li></ul>
-        </div>
-    </div>
+	</div>
+</div>
+<!-- end #footer -->
 </body>
-
 </html>
