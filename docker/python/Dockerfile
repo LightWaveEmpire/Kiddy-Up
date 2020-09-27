@@ -8,7 +8,8 @@ RUN apk update \
     && apk add jpeg-dev \
     && apk add zlib-dev \
     && apk add mariadb-dev \
-    && apk add libffi-dev
+    && apk add libffi-dev \
+    && apk add g++
 
 # install pypi packages
 COPY requirements.txt /requirements.txt
@@ -25,3 +26,5 @@ COPY ./entrypoint.sh /entrypoint.sh
 
 # run entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
+
+RUN apk add --no-cache bash coreutils grep sed
