@@ -21,6 +21,7 @@ COPY uwsgi.ini /uwsgi.ini
 CMD ["uwsgi", "--ini", "/uwsgi.ini"]
 
 
+
 # copy entrypoint.sh
 COPY ./entrypoint.sh /entrypoint.sh
 
