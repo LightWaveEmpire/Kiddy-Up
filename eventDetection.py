@@ -1,5 +1,5 @@
 # There's a bug in the algorithm-- it can't tell what to do with
-# [multiple noun phrases with the same base] in the [same sentence].
+# [multiple noun phrases with the same base] in the [same sentence] .
 #
 # fine:
 # "Soccer practice on thurs. Football practice on september 8th"
