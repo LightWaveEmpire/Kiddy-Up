@@ -25,7 +25,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # path("register/", views.register, name="register"),
     path("", include("parent_accounts.urls")),
-    path("", include("register.urls")),
+    path("", include("login.urls")),
+    path("", include("child.urls")),
+#     path("", include("register.urls")),
+
 ]
 
 
