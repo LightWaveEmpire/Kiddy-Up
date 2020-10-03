@@ -3,8 +3,15 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 # from .forms import RegisterForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login
+from .forms import ParentCreationForm
+from django.urls import reverse
 
-# Create your views here.
+
+
+
+# Require Login
+
 @login_required
 def home(request):
     return render(request, "parent/index.html")
@@ -21,3 +28,18 @@ def profile(request):
 def settings(request):
     return render(request, "parent/parent_settings.html")
 
+
+# Create your views here.
+
+def register(request):
+    if request.method == "GET":
+        return render(
+            request, "parent/register.html",
+            {"form": ParentCreationForm}
+        )
+    elif request.method == "POST":
+        form = ParentCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect(reverse("home"))
