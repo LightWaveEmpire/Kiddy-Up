@@ -23,15 +23,17 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path("register/", views.register, name="register"),
     path("", include("parent.urls")),
-    path("", include("login.urls")),
+#    path("", include("login.urls")),
     path("", include("child.urls")),
-#     path("", include("register.urls")),
 
 ]
 
+#Add Django site authentication urls (for login, logout, password management)
 
+urlpatterns += [
+    path('accounts/', include('django.contrib.auth.urls')),
+]
 
 # urlpatterns += staticfiles_urlpatterns()
 

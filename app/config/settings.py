@@ -159,3 +159,31 @@ DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': 'config.utils.show_toolbar',
 }
 """
+
+# Redirect to home URL after login (Default redirects to /accounts/profile/)
+LOGIN_REDIRECT_URL = '/'
+
+
+# Handle Email Requests for password reset
+
+# Password reset via write to file
+#EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+#EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
+
+# Password reset via email
+# EMAIL_BACKEND = ‘django.core.mail.backends.smtp.EmailBackend’
+# EMAIL_HOST = ‘smtp.gmail.com’
+# EMAIL_USE_TLS = True
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = ‘kiddy.up.help@gmail.com’
+# EMAIL_HOST_PASSWORD = ‘aB9@hiHW5V’
+
+# Password reset via consosle
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # During development only
+
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'apikey'
+EMAIL_HOST_PASSWORD = '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'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'Kiddy-Up Support <kiddy.up.help@gmail.com>'
