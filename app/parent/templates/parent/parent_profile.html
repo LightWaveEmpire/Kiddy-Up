@@ -7,10 +7,10 @@
 
 <h1>Profile</h1>
 <ul>
-<li>Name:  John</li>
-<li>Birthdate: 3/1/1995</li>
-<li>Address: 1212 Main Street, Norfolk, VA</li>
-<li>Password: ********</li>
+<li>Name:  {{ user.first_name }} {{user.last_name}}</li>
+<li>Username:  {{ user.username }}</li>
+<li>Email Address: {{user.email}}</li>
+<li>Password: **** </li>
 
 
 </ul>
