@@ -45,12 +45,18 @@
     </nav>
     <header class="masthead bg-primary text-white text-center"></header>
 
-		<div id="content">
-            {% block content %}
+
+    <div class="wrapper">
+        {% block sidenav %}        
+	        <!-- Sidebar -- Blank by default--> 
+	{% endblock %}
+
+    <div id="content">
+        {% block content %}
 
      
-            {% endblock %}
-		</div>
+        {% endblock %}
+    </div>
 
     <footer class="footer text-center">
         <div class="container">
