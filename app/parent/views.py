@@ -9,6 +9,8 @@ from django.urls import reverse
 
 
 
+# Create views here.
+
 
 # Require Login
 
@@ -18,18 +20,30 @@ def home(request):
 
 @login_required
 def parent(request):
-    return render(request, "parent/parent_dashboard.html")
+    return render(request, "parent/dashboard.html")
 
 @login_required
 def profile(request):
-    return render(request, "parent/parent_profile.html")
+    return render(request, "parent/profile.html")
 
 @login_required
 def settings(request):
-    return render(request, "parent/parent_settings.html")
+    return render(request, "parent/settings.html")
+
+@login_required
+def tasks(request):
+    return render(request, "parent/tasks.html")
+
+@login_required
+def rewards(request):
+    return render(request, "parent/rewards.html")
+
+@login_required
+def child_login(request):
+    return render(request, "parent/child_login.html")
 
 
-# Create your views here.
+# No Login Required
 
 def register(request):
     if request.method == "GET":
