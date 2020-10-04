@@ -26,6 +26,7 @@ urlpatterns = [
     path("", include("parent.urls")),
 #    path("", include("login.urls")),
     path("child/", include("child.urls")),
+    path("", include("about.urls")),
 
 ]
 

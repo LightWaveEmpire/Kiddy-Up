@@ -36,6 +36,7 @@ INSTALLED_APPS = [
 #    'login.apps.LoginConfig',
     'child.apps.ChildConfig',
     'parent.apps.ParentConfig',
+    'about.apps.AboutConfig',
 #    'parent.apps.ParentDashboardConfig',
 #    'parent.apps.ParentProfileConfig',
 #    'parent.apps.ParentSettingsConfig',
