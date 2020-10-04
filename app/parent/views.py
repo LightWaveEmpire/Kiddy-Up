@@ -15,10 +15,6 @@ from django.urls import reverse
 # Require Login
 
 @login_required
-def home(request):
-    return render(request, "parent/index.html")
-
-@login_required
 def parent(request):
     return render(request, "parent/dashboard.html")
 
@@ -44,6 +40,11 @@ def child_login(request):
 
 
 # No Login Required
+
+
+def home(request):
+    return render(request, "parent/index.html")
+
 
 def register(request):
     if request.method == "GET":
