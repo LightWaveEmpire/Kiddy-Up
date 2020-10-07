@@ -84,7 +84,8 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-
+# Default Parameters for DATABASES
+#
 #DATABASES = {
 #    'default': {
 #        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -96,18 +97,16 @@ WSGI_APPLICATION = 'config.wsgi.application'
 #    }
 #}
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django',
-        'USER': 'root',
-        'PASSWORD': 'password',
-        'HOST': 'mysql',
-        'PORT': 3306,
+        'NAME': 'kiddyup',                      
+        'USER': 'kiddyuproot',                      
+        'PASSWORD': 'xXfXGxHYG2RWJdrt',                  
+        'HOST': '',                      
+        'PORT': '',                      
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
