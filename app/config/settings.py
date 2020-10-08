@@ -100,11 +100,16 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'kiddyup',                      
-        'USER': 'kiddyuproot',                      
-        'PASSWORD': 'xXfXGxHYG2RWJdrt',                  
-        'HOST': '',                      
-        'PORT': '',                      
+        'NAME': 'django',
+        'USER': 'root',
+        'PASSWORD': 'password',
+        'HOST': 'mysql',
+        'PORT': 3306,
+#        'NAME': 'kiddyup',                      
+#        'USER': 'kiddyuproot',                      
+#        'PASSWORD': 'xXfXGxHYG2RWJdrt',                  
+#        'HOST': '',                      
+#        'PORT': '',                      
     }
 }
 
