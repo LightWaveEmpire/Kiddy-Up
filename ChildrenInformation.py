@@ -7,15 +7,20 @@ class ChildrenInformation:
     def __init__(self,firstName,lastName,youngerGroup): 
         self.firstName = firstName 
         self.lastName = lastName 
-        self.youngerGroup = True
+        self.youngerGroup = youngerGroup
         
     def createListOfChildren(self, numberOfChildren):
         i=0
         list = []
         while i<numberOfChildren:
-            temp = input("What is the first name of child number" +i)
-            temp2= input("What is the last name of child number" + i)
-            temp3= input("What is the age of child number" + i)
+            string = "child"
+            j= i+1
+            print (string+str(j))
+            temp = input("What is the first name of child number")
+            temp2= input("What is the last name of child number")
+            temp3= input("What is the age of child number" )
             list.append(ChildrenInformation(temp,temp2,temp3))
             i =i +1
         return list
+childrenInformationObject=ChildrenInformation("charles","seal",False)
+childrenInformationObject.createListOfChildren(2)
