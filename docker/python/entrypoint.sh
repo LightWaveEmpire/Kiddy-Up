@@ -12,6 +12,9 @@ then
 fi
 
 python manage.py flush --no-input
+#python manage.py migrate auth
+#python manage.py migrate parent
 python manage.py migrate
+
 
 exec "$@"

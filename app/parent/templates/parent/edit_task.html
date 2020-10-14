@@ -1,0 +1,27 @@
+
+{% extends "parent/parent_base.html" %}
+
+{% block title %} Edit Task{% endblock %}
+
+{% block content %}
+
+  <h1>Edit Task</h1>
+
+<p> Here we will need to pull the details of a task into editable html fields. The task id or instance willneed to be passed with the http request. There will be a save button to write contents to the DB and return the user to the task view.</p>
+<ul><h2>Task</h2>
+<li>Do Dishes</li>
+<li>John and Sally</li>
+<li>Friday - 4pm</li>
+<li>Home</li>
+--Save button--
+</ul>
+
+
+{% endblock %}
+
+
+{% block sidebar_content %}
+<!-- no sidebar for registration page -->
+{% endblock %}
+
+

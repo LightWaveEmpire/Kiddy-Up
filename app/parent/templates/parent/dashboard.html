@@ -1,9 +1,17 @@
 
 {% extends "parent/parent_base.html" %}
 
+{% load has_perms %}
+
 {% block title %} Parent Dashboard{% endblock %}
 
 {% block content %}
+
+<!--    {% if request.user|has_perms %}-->
+<!--        <li class="nav-item">-->
+<!--                <span data-i18n="nav.dash.main">Authenticated</span>-->
+<!--        </li>-->
+<!--    {% endif %}-->
 
     <div style="margin: 200px 0px 0px;">
         <div class="container" style="padding: 100px;">
