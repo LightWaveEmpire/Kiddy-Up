@@ -32,14 +32,9 @@ ALLOWED_HOSTS = ['411silverf20.cs.odu.edu', 'localhost', '127.0.0.1', '.localhos
 
 INSTALLED_APPS = [
 #    'debug_toolbar',
-#    'login.apps.RegisterConfig',
-#    'login.apps.LoginConfig',
     'child.apps.ChildConfig',
     'parent.apps.ParentConfig',
     'about.apps.AboutConfig',
-#    'parent.apps.ParentDashboardConfig',
-#    'parent.apps.ParentProfileConfig',
-#    'parent.apps.ParentSettingsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
