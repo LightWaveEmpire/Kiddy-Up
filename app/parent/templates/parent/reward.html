@@ -1,6 +1,8 @@
 
 {% extends "parent/parent_base.html" %}
 
+{% load has_perms %}
+
 {% block title %}Reward{% endblock %}
 
 {% block content %}
@@ -12,7 +14,7 @@
 <li>Movie Night</li>
 <li>One movie with popcorn with the family</li>
 <li>20 points</li>
---Edit Reward--
+<li><a href="{% url 'edit_task'%}">Edit Task</a></li>
 </ul>
 
 

@@ -1,7 +1,9 @@
 
 {% extends "parent/parent_base.html" %}
 
-{% block title %} Task{% endblock %}
+{% load has_perms %}
+
+{% block title %}Task{% endblock %}
 
 {% block content %}
 
@@ -13,6 +15,7 @@
 <li>John and Sally</li>
 <li>Friday - 4pm</li>
 <li>Home</li>
+<li><a href="{% url 'edit_task'%}">Edit Task</a></li>
 </ul>
 
 

@@ -1,39 +1,32 @@
 
 {% extends "parent/parent_base.html" %}
 
-{% block title %} Tasks and Events {% endblock %}
+{% load has_perms %}
+
+{% block title %} Tasks {% endblock %}
 
 {% block content %}
 
-  <h1>Tasks and Events</h1>
+  <h1>Tasks</h1>
 
 <p> Here we will need to pull the tasks from the DB and display one task per line using a for loop. Each line will be a link to a Task View page and there will be a button to edit the Task</p>
 <ul><h2>Tasks</h2>
-<li>Do Dishes</li>
-<li>Manage Sources</li>
-<li>Manage Children</li>
-<li>...</li>
-<li>...</li>
-<li>...</li>
-<li>...</li>
-<li>...</li>
-<li>...</li>
-
-</ul>
-
-
-<ul><h2>Events</h2>
-<li>Soccer practice at 5</li>
-<li>Band Practice</li>
-<li>School</li>
-<li>...</li>
-<li>...</li>
-<li>...</li>
-<li>...</li>
-<li>...</li>
+<li>
+    <a href="{% url 'task'%}">Do Dishes</a> - 
+    <a href="{% url 'edit_task'%}">Edit Task</a>
+</li>
+<li>
+    <a href="{% url 'task'%}">Sweep Floor</a> - 
+    <a href="{% url 'edit_task'%}">Edit Task</a>
+</li>
+<li>
+    <a href="{% url 'task'%}">Band Practice</a> - 
+    <a href="{% url 'edit_task'%}">Edit Task</a></li>
 <li>...</li>
 
 </ul>
+
+
 
 
 {% endblock %}
