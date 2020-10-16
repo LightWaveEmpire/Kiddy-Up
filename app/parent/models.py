@@ -32,6 +32,13 @@ class Child(models.Model):
     target_reward = models.ForeignKey('Reward', on_delete=models.PROTECT)
     # there's not a reason this is JSON; something else is likely better.
     owned_rewards = models.JSONField(blank=True, null=True)
+    # Example list field that will hold the earned and not yet received rewards for each child
+    # e.g. pizza night, movie night, skating... may be list of RIDs (1,4,3,2,2,3,4)
+    #
+    # owned_rewards = ListCharField(
+    #         base_field=CharField(max_length=10),
+    #     size=6,
+    #     max_length=(6 * 11)  # 6 * 10 character nominals, plus commas
 
     class Meta:
         db_table = 'child'

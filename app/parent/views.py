@@ -9,6 +9,7 @@ from parent.permissions import is_in_group_parent
 
 
 
+
 # Create views here.
 
 
@@ -42,6 +43,8 @@ def rewards(request):
 @login_required
 @user_passes_test(is_in_group_parent)
 def task(request):
+#     tasks = get_tasks(1,2)
+
     return render(request, "parent/task.html")
 
 @login_required
