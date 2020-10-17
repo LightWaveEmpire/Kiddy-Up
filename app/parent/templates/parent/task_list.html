@@ -15,7 +15,7 @@
     {% for task in object_list %}
         <!-- code to iterate across each reward -->
         <li>
-            <a href="{% url 'task' task.tid %}"> - {{task.tname}}</a> - <a href="{% url 'task-update' task.tid%}">Edit</a>
+            <a href="{% url 'task' task.id %}"> - {{task.tname}}</a> - <a href="{% url 'task-update' task.id%}">Edit</a>
        </li>
     {% endfor %}
 </ul>

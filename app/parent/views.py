@@ -43,6 +43,9 @@ class RewardListView(generic.ListView):
     model=Reward
     paginate_by = 10
 
+    def get_queryset(self):
+        return Reward.objects.filter(created_by_id=self.request.user)
+
 
 class RewardDetailView(generic.DetailView):
     model = Reward
@@ -51,6 +54,10 @@ class TaskListView(generic.ListView):
     model=Task
     paginate_by = 10
 
+    def get_queryset(self):
+        return Task.objects.filter(created_by_id=self.request.user)
+
+
 
 class TaskDetailView(generic.DetailView):
     model = Task
@@ -58,6 +65,9 @@ class TaskDetailView(generic.DetailView):
 class ChildListView(generic.ListView):
     model=Child
     paginate_by = 10
+
+    def get_queryset(self):
+        return Child.objects.filter(created_by_id=self.request.user)
 
 
 class ChildDetailView(generic.DetailView):
@@ -70,8 +80,7 @@ class RewardCreate(LoginRequiredMixin, generic.CreateView):
     fields = ['rname', 'cost']
 
     def form_valid(self, form):
-#        form.instance.created_by = self.request.user
-#        form.instance.rid = Reward.objects.get(pk=self.kwargs['pk'])
+        form.instance.created_by = self.request.user
         return super().form_valid(form)
 
 class RewardUpdate(LoginRequiredMixin, generic.UpdateView):
@@ -85,7 +94,12 @@ class RewardDelete(LoginRequiredMixin, generic.DeleteView):
 
 class TaskCreate(LoginRequiredMixin, generic.CreateView):
     model = Task
-    fields = ['tname', 'tdesc', 'point_value']
+    fields = ['tname', 'tdesc', 'point_value', 'owner']
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
+
 
 class TaskUpdate(LoginRequiredMixin, generic.UpdateView):
     model = Task
@@ -99,6 +113,11 @@ class TaskDelete(LoginRequiredMixin, generic.DeleteView):
 class ChildCreate(LoginRequiredMixin, generic.CreateView):
     model = Child
     fields = ['cname', 'age', 'comp_level']
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
+
 
 class ChildUpdate(LoginRequiredMixin, generic.UpdateView):
     model = Child

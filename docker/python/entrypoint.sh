@@ -12,7 +12,9 @@ then
 fi
 
 python manage.py flush --no-input
-python manage.py makemigrations parent
+#python manage.py makemigrations parent
+python manage.py migrate --fake parent zero
+python manage.py migrate parent
 python manage.py migrate
 
 

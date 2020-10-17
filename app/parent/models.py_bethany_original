@@ -10,74 +10,61 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 
 
-class Reward(models.Model):
-#    pid = models.IntegerField()
-#    rid = models.IntegerField(primary_key=True)
-    reward_name = models.CharField(max_length=20)
-    reward_cost = models.IntegerField()
-    reward_image = models.CharField(max_length=20)
-    # should we allow Null for this..?
-#    visible_to = models.CharField(max_length=8, blank=True, null=True)
-#     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    class Meta:
-        db_table = 'reward'
-
-    def __str__(self):
-        """String for representing the Model object."""
-        return self.rname
-
-    def get_absolute_url(self):
-        return reverse('reward', kwargs={'pk': self.pk})
-
-
-
 class Parent(models.Model):
 ## This information will be stored in the django user management system that is built-in
 ## may need to use this to have multiple parents for same account?
-    user = models.ForeignKey('auth.User', on_delete = models.CASCADE)
-    first_name = models.CharField(max_length=12)
-    last_name = models.CharField(max_length=12)
-#    email = user.email # ? Not sure about this
+#    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    pid = models.AutoField(db_column='PID', primary_key=True)
+    password = models.CharField(db_column='PASSWORD', max_length=8)
+#    email = models.EmailField(default="")
+    name = models.CharField(db_column='NAME', max_length=20, default="")
+#    last_name = models.CharField(db_column='NAME', max_length=8)
+#    children = models.ManyToManyField(Child)
+#    tasks = models.ManyToManyField(Task)
+#    rewards = models.ManyToManyField(Reward)
 
 # reevaluate field type on info re: acct storage
-#    accounts = models.JSONField(blank=True, null=True)
+    accounts = models.JSONField(blank=True, null=True)
 
     class Meta:
         db_table = 'parent'
 
+
     def __str__(self):
         """String for representing the Model object."""
-        return f"{self.first_name} {self.last_name}"
+        return self.name
 
 
 
 
 class Child(models.Model):
-    parent = models.ForeignKey('Parent', on_delete=models.CASCADE)
-    child_name = models.CharField(max_length=12)
+    pid = models.ForeignKey('Parent', on_delete=models.CASCADE)
+    cname = models.CharField(max_length=10)
     # null=True for debug ONLY! Must be fixed for production!
     comp_level = models.IntegerField(blank=True, null=True)
-#    password = models.CharField(max_length=8, blank=True, null=True)
+    password = models.CharField(max_length=8, blank=True, null=True)
     age = models.IntegerField()
     # get details on image storage from Samuel
     avatar = models.CharField(max_length=11)
     current_points = models.IntegerField(default=0)
     target_reward = models.ForeignKey('Reward', on_delete=models.PROTECT)
     # there's not a reason this is JSON; something else is likely better.
-#    owned_rewards = models.JSONField(blank=True, null=True)
+    owned_rewards = models.JSONField(blank=True, null=True)
     # Example list field that will hold the earned and not yet received rewards for each child
     # e.g. pizza night, movie night, skating... may be list of RIDs (1,4,3,2,2,3,4)
     #
-    owned_rewards = models.ManyToManyField(Reward)
+#    owned_rewards = ListCharField(
+#        base_field=CharField(max_length=10),
+#        size=6,
+#        max_length=(6 * 11)  # 6 * 10 character nominals, plus commas
 
     class Meta:
         db_table = 'child'
         constraints = [
             # ensures a parent can't have multiple children with same name
-            models.UniqueConstraint(fields=['parent', 'child_name'], name='unique_sibling'),
+            models.UniqueConstraint(fields=['pid', 'cname'], name='unique_sibling'),
             # ensures age of child is between 5-12, inclusive
-#             models.CheckConstraint(check=models.Q(age__range=(1, 18)), name='age_1_18')
+             models.CheckConstraint(check=models.Q(age__range=(5, 12)), name='age_5_12')
         ]
 
     def __str__(self):
@@ -103,10 +90,10 @@ class Task(models.Model):
     ]
 
 #    tid = models.IntegerField(primary_key=True)
-    task_name = models.CharField(max_length=12)
-    task_description = models.TextField()
+    tname = models.CharField(max_length=12)
+    tdesc = models.TextField()
     # const: "one or more" of "Child whose PID == Parent.pid"
-#    visible_to = models.CharField(max_length=8)
+    visible_to = models.CharField(max_length=8)
     status = models.CharField(
         max_length=8,
         choices=STATUS_CHOICES,
@@ -114,9 +101,9 @@ class Task(models.Model):
     )
     owner = models.ForeignKey('Child', on_delete=models.CASCADE)
     # get details on image storage from Samuel
-    task_image = models.CharField(max_length=20)
+    timage = models.CharField(max_length=12)
     # this setup doesn't really allow for recurring events-- alter? dupe?
-    task_date = models.DateField()
+    date = models.DateField()
     point_value = models.IntegerField(default=0)
 
     class Meta:
@@ -130,3 +117,22 @@ class Task(models.Model):
         return reverse('task', kwargs={'pk': self.pk})
 
 
+class Reward(models.Model):
+    pid = models.IntegerField()
+    rid = models.IntegerField(primary_key=True)
+    rname = models.CharField(max_length=8)
+    cost = models.IntegerField()
+    rimage = models.CharField(max_length=8)
+    # should we allow Null for this..?
+    visible_to = models.CharField(max_length=8, blank=True, null=True)
+#     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'reward'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.rname
+
+    def get_absolute_url(self):
+        return reverse('reward', kwargs={'pk': self.pk})
