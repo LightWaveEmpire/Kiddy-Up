@@ -1,22 +1,20 @@
 
 {% extends "parent/parent_base.html" %}
 
-
 {% load has_perms %}
 
-
-{% block title %}Edit Reward{% endblock %}
+{% block title %}Reward{% endblock %}
 
 {% block content %}
 
-  <h1>Edit Reward</h1>
+  <h1>Reward</h1>
 
-<p> Here we will need to pull the details of a reward into editable html fields. The reward id or instance will need to be passed with the http request. There will be a button to save the field contents to the DB and take user to the reward view.</p>
+<p> Here we will need to pull the details of a reward. The reward id or instance will need to be passed with the http request. There will be a button to edit the reward that will take user to the edit reward view.</p>
 <ul><h2>Reward</h2>
-<li>Movie Night</li>
-<li>One movie with popcorn with the family</li>
-<li>20 points</li>
---Save Reward--
+<li>Reward: {{ reward.rname }}</li>
+<li>Cost: {{ reward.cost }}</li>
+<li>Image: {{ reward.rimage }}</li>
+<li><a href="{% url 'edit_reward'%}">Edit Reward</a></li>
 </ul>
 
 

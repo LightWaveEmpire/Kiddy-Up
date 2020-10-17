@@ -11,10 +11,10 @@
 
 <p> Here we will need to pull the details of a reward. The reward id or instance will need to be passed with the http request. There will be a button to edit the reward that will take user to the edit reward view.</p>
 <ul><h2>Reward</h2>
-<li>Movie Night</li>
-<li>One movie with popcorn with the family</li>
-<li>20 points</li>
-<li><a href="{% url 'edit_task'%}">Edit Task</a></li>
+<li>Reward: {{ reward.rname }}</li>
+<li>Cost: {{ reward.cost }}</li>
+<li>Image: {{ reward.rimage }}</li>
+<li><a href="{% url 'edit_reward'%}">Edit Reward</a></li>
 </ul>
 
 

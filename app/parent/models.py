@@ -19,6 +19,12 @@ class Parent(models.Model):
         db_table = 'parent'
 
 
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.name
+
+
+
 class Child(models.Model):
     pid = models.ForeignKey('Parent', on_delete=models.CASCADE)
     cname = models.CharField(max_length=10)
@@ -48,6 +54,11 @@ class Child(models.Model):
             # ensures age of child is between 5-12, inclusive
             models.CheckConstraint(check=models.Q(age__range=(5, 12)), name='age_5_12')
         ]
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.cname
+
 
 
 class Task(models.Model):
@@ -81,6 +92,11 @@ class Task(models.Model):
     class Meta:
         db_table = 'task'
 
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.tname
+
+
 
 class Reward(models.Model):
     pid = models.IntegerField()
@@ -93,3 +109,11 @@ class Reward(models.Model):
 
     class Meta:
         db_table = 'reward'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.rname
+
+    def get_absolute_url(self):
+        """Returns the url to access a particular reward instance."""
+        return reverse('reward-detail', args=[str(self.id)])

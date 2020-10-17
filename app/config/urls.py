@@ -24,7 +24,6 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("parent.urls")),
-#    path("", include("login.urls")),
     path("child/", include("child.urls")),
     path("", include("about.urls")),
 
