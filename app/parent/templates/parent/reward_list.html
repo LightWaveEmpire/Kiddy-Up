@@ -12,7 +12,6 @@
   <h1>Rewards</h1>
 
 <ul>
-    <li>Available Rewards</li>
     {% for reward in object_list %}
         <!-- code to iterate across each reward -->
         <li>
@@ -21,17 +20,9 @@
     {% endfor %}
 </ul>
 
+<p><a href="{% url 'reward-add' %}">Add a Reward</a></p>
 
 
-<!--<li>Children Rewards (earned/in progress/points)</li>-->
-<!--<li>...</li>-->
-<!--<li>...</li>-->
-<!--<li>...</li>-->
-<!--<li>...</li>-->
-<!--<li>...</li>-->
-<!--<li>...</li>-->
-
-</ul>
 
 
 {% endblock %}
