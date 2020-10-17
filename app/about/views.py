@@ -18,9 +18,12 @@ def about(request):
 def faq(request):
     return render(request, "about/faq.html")
 
+def thanks(request):
+    return render(request, "about/thanks.html")
 
-class ContactForm(FormView):
-    template_name = 'contact.html'
+
+class ContactView(FormView):
+    template_name = 'about/contact.html'
     form_class = ContactForm
     success_url = '/thanks/'
 

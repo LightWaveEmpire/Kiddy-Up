@@ -29,23 +29,6 @@ def profile(request):
 @user_passes_test(is_in_group_parent)
 def settings(request):
     return render(request, "parent/settings.html")
-
-@login_required
-@user_passes_test(is_in_group_parent)
-def edit_task(request):
-    return render(request, "parent/edit_task.html")
-
-@login_required
-@user_passes_test(is_in_group_parent)
-def edit_reward(request):
-    return render(request, "parent/edit_reward.html")
-
-@login_required
-@user_passes_test(is_in_group_parent)
-def edit_child(request):
-    return render(request, "parent/edit_child.html")
-
-
 @login_required
 @user_passes_test(is_in_group_parent)
 def child_login(request):
