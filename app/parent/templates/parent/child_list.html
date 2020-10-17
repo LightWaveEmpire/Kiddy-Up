@@ -15,7 +15,7 @@
     {% for child in object_list %}
         <!-- code to iterate across each reward -->
         <li>
-            <a href="{% url 'child' child.id %}"> - {{child.cname}}</a> - <a href="{% url 'edit_child'%}">Edit Child</a>
+            <a href="{% url 'child' child.id %}"> - {{child.cname}}</a> - <a href="{% url 'child-update' child.id%}">Edit</a>
         </li>
     {% endfor %}
 </ul>

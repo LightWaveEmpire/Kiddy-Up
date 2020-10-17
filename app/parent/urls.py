@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import include, path
 from . import views
+from parent.views import *
 
 #from django.conf import settings
 
@@ -20,4 +21,13 @@ urlpatterns = [
     path('task/<int:pk>', views.TaskDetailView.as_view(), name='task'),
     path('children/', views.ChildListView.as_view(), name='children'),
     path('child/<int:pk>', views.ChildDetailView.as_view(), name='child'),
+    path('reward/add/', RewardCreate.as_view(), name='reward-add'),
+    path('reward/<int:pk>/', RewardUpdate.as_view(), name='reward-update'),
+    path('reward/<int:pk>/delete/', RewardDelete.as_view(), name='reward-delete'),
+    path('task/add/', TaskCreate.as_view(), name='task-add'),
+    path('task/<int:pk>/', TaskUpdate.as_view(), name='task-update'),
+    path('task/<int:pk>/delete/', TaskDelete.as_view(), name='task-delete'),
+    path('child/add/', ChildCreate.as_view(), name='child-add'),
+    path('child/<int:pk>/', ChildUpdate.as_view(), name='child-update'),
+    path('child/<int:pk>/delete/', ChildDelete.as_view(), name='child-delete'),
 ]

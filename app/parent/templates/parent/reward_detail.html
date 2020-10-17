@@ -14,7 +14,8 @@
 <li>Reward: {{ reward.rname }}</li>
 <li>Cost: {{ reward.cost }}</li>
 <li>Image: {{ reward.rimage }}</li>
-<li><a href="{% url 'edit_reward'%}">Edit Reward</a></li>
+<li><a href="{% url 'reward-update' reward.rid %}">Edit</a></li>
+<li><a href="{% url 'reward-delete' reward.rid %}">Delete</a></li>
 </ul>
 
 

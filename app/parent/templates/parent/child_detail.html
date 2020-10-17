@@ -14,7 +14,7 @@
 <li>Age: {{ child.age }}</li>
 <li>Avater: {{ child.avatar }}</li>
 <li>Comprehension: {{ child.comp_level }}</li>
-<li><a href="{% url 'edit_child'%}">Edit Child</a></li>
+<li><a href="{% url 'child-update' child.id %}">Edit</a></li>
 </ul>
 
 

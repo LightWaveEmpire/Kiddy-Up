@@ -5,7 +5,7 @@
 {% load has_perms %}
 
 
-{% block title %} Rewards {% endblock %}
+{% block title %} Tasks {% endblock %}
 
 {% block content %}
 
@@ -15,7 +15,7 @@
     {% for task in object_list %}
         <!-- code to iterate across each reward -->
         <li>
-            <a href="{% url 'task' task.tid %}"> - {{task.tname}}</a> - <a href="{% url 'edit_reward'%}">Edit Task</a>
+            <a href="{% url 'task' task.tid %}"> - {{task.tname}}</a> - <a href="{% url 'task-update' task.tid%}">Edit</a>
        </li>
     {% endfor %}
 </ul>

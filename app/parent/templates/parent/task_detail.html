@@ -14,7 +14,8 @@
 <li>Description: {{ task.tdesc }}
 <li>Points: {{ task.point_value }}</li>
 <li>Image: {{ task.timage }}</li>
-<li><a href="{% url 'edit_task'%}">Edit Task</a></li>
+<li><a href="{% url 'task-update' task.tid%}">Edit</a></li>
+<li><a href="{% url 'task-delete' task.tid%}">Delete</a></li>
 </ul>
 
 

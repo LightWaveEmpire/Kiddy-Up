@@ -4,11 +4,11 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import login
 from .forms import ParentCreationForm
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from parent.permissions import is_in_group_parent
 from parent.models import Child, Task, Reward
 from django.views import generic
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create views here.
 
@@ -80,6 +80,50 @@ class ChildListView(generic.ListView):
 class ChildDetailView(generic.DetailView):
     model = Child
 
+
+
+class RewardCreate(LoginRequiredMixin, generic.CreateView):
+    model = Reward
+    fields = ['rname', 'cost']
+
+    def form_valid(self, form):
+#        form.instance.created_by = self.request.user
+#        form.instance.rid = Reward.objects.get(pk=self.kwargs['pk'])
+        return super().form_valid(form)
+
+class RewardUpdate(LoginRequiredMixin, generic.UpdateView):
+    model = Reward
+    fields = ['rname', 'cost']
+
+class RewardDelete(LoginRequiredMixin, generic.DeleteView):
+    model = Reward
+    success_url = reverse_lazy('rewards')
+
+
+class TaskCreate(LoginRequiredMixin, generic.CreateView):
+    model = Task
+    fields = ['tname', 'tdesc', 'point_value']
+
+class TaskUpdate(LoginRequiredMixin, generic.UpdateView):
+    model = Task
+    fields = ['tname', 'tdesc', 'point_value']
+
+class TaskDelete(LoginRequiredMixin, generic.DeleteView):
+    model = Task
+    success_url = reverse_lazy('tasks')
+
+
+class ChildCreate(LoginRequiredMixin, generic.CreateView):
+    model = Child
+    fields = ['cname', 'age', 'comp_level']
+
+class ChildUpdate(LoginRequiredMixin, generic.UpdateView):
+    model = Child
+    fields = ['cname', 'age', 'comp_level']
+
+class ChildDelete(LoginRequiredMixin, generic.DeleteView):
+    model = Child
+    success_url = reverse_lazy('children')
 
 
 # No Login Required
