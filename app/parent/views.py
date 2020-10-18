@@ -6,7 +6,7 @@ from django.contrib.auth import login
 from .forms import ParentCreationForm
 from django.urls import reverse, reverse_lazy
 from parent.permissions import is_in_group_parent
-from parent.models import Child, Task, Reward
+from parent.models import Child, Task, Reward, Parent
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -39,6 +39,10 @@ def child_login(request):
 ## I still need to ensure they require auth to access
 ## Also need to identify how to link rewards, tasks, children to parent/logged in user
 
+
+
+# Reward Views
+
 class RewardListView(generic.ListView):
     model=Reward
     paginate_by = 10
@@ -49,31 +53,6 @@ class RewardListView(generic.ListView):
 
 class RewardDetailView(generic.DetailView):
     model = Reward
-
-class TaskListView(generic.ListView):
-    model=Task
-    paginate_by = 10
-
-    def get_queryset(self):
-        return Task.objects.filter(created_by_id=self.request.user)
-
-
-
-class TaskDetailView(generic.DetailView):
-    model = Task
-
-class ChildListView(generic.ListView):
-    model=Child
-    paginate_by = 10
-
-    def get_queryset(self):
-        return Child.objects.filter(created_by_id=self.request.user)
-
-
-class ChildDetailView(generic.DetailView):
-    model = Child
-
-
 
 class RewardCreate(LoginRequiredMixin, generic.CreateView):
     model = Reward
@@ -92,9 +71,28 @@ class RewardDelete(LoginRequiredMixin, generic.DeleteView):
     success_url = reverse_lazy('rewards')
 
 
+
+
+
+
+
+
+# Task Views
+
+class TaskListView(generic.ListView):
+    model=Task
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Task.objects.filter(created_by_id=self.request.user)
+
+
+class TaskDetailView(generic.DetailView):
+    model = Task
+
 class TaskCreate(LoginRequiredMixin, generic.CreateView):
     model = Task
-    fields = ['tname', 'tdesc', 'point_value', 'owner']
+    fields = ['tname', 'tdesc', 'point_value', 'owner', 'date']
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
@@ -103,16 +101,35 @@ class TaskCreate(LoginRequiredMixin, generic.CreateView):
 
 class TaskUpdate(LoginRequiredMixin, generic.UpdateView):
     model = Task
-    fields = ['tname', 'tdesc', 'point_value']
+    fields = ['tname', 'tdesc', 'point_value', 'owner', 'date']
 
 class TaskDelete(LoginRequiredMixin, generic.DeleteView):
     model = Task
     success_url = reverse_lazy('tasks')
 
 
+
+
+
+
+# Child Views
+
+class ChildListView(generic.ListView):
+    model=Child
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Child.objects.filter(created_by_id=self.request.user)
+
+
+class ChildDetailView(generic.DetailView):
+    model = Child
+
+
+
 class ChildCreate(LoginRequiredMixin, generic.CreateView):
     model = Child
-    fields = ['cname', 'age', 'comp_level']
+    fields = ['cname', 'age', 'comp_level', 'parent', 'target_reward']
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
@@ -121,11 +138,45 @@ class ChildCreate(LoginRequiredMixin, generic.CreateView):
 
 class ChildUpdate(LoginRequiredMixin, generic.UpdateView):
     model = Child
-    fields = ['cname', 'age', 'comp_level']
+    fields = ['cname', 'age', 'comp_level', 'parent', 'target_reward']
 
 class ChildDelete(LoginRequiredMixin, generic.DeleteView):
     model = Child
     success_url = reverse_lazy('children')
+
+
+
+# Parent Views
+
+
+class ParentListView(generic.ListView):
+    model=Parent
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Parent.objects.filter(created_by_id=self.request.user)
+
+
+class ParentDetailView(generic.DetailView):
+    model = Parent
+
+
+class ParentCreate(LoginRequiredMixin, generic.CreateView):
+    model = Parent
+    fields = ['name']
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)
+
+
+class ParentUpdate(LoginRequiredMixin, generic.UpdateView):
+    model = Parent
+    fields = ['name']
+
+class ParentDelete(LoginRequiredMixin, generic.DeleteView):
+    model = Parent
+    success_url = reverse_lazy('parents')
 
 
 # No Login Required

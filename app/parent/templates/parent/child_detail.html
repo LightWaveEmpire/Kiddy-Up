@@ -15,6 +15,8 @@
 <li>Avater: {{ child.avatar }}</li>
 <li>Comprehension: {{ child.comp_level }}</li>
 <li><a href="{% url 'child-update' child.id %}">Edit</a></li>
+<li><a href="{% url 'child-delete' child.id%}">Delete</a></li>
+
 </ul>
 
 
