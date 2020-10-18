@@ -13,15 +13,13 @@ from django.urls import reverse
 class Parent(models.Model):
 ## This information will be stored in the django user management system that is built-in
 ## may need to use this to have multiple parents for same account?
-#    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    password = models.CharField(db_column='PASSWORD', max_length=20)
-#    email = models.EmailField(default="")
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+#    password = models.CharField(db_column='PASSWORD', max_length=20)
     name = models.CharField(db_column='NAME', max_length=20, default="")
-#    last_name = models.CharField(db_column='NAME', max_length=8)
 
 # reevaluate field type on info re: acct storage
     accounts = models.JSONField(blank=True, null=True)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+#    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'parent'

@@ -11,31 +11,31 @@
 
   <h1>Tasks</h1>
 
-<ul>
-    {% for task in object_list %}
-        <!-- code to iterate across each reward -->
-        <li>
-            <a href="{% url 'task' task.id %}"> - {{task.tname}}</a> - <a href="{% url 'task-update' task.id%}">Edit</a>
-       </li>
-    {% endfor %}
-</ul>
-
 <p><a href="{% url 'task-add' %}">Add a Task</a></p>
 
 
-<!--<li>Children Rewards (earned/in progress/points)</li>-->
-<!--<li>...</li>-->
-<!--<li>...</li>-->
-<!--<li>...</li>-->
-<!--<li>...</li>-->
-<!--<li>...</li>-->
-<!--<li>...</li>-->
-
-</ul>
-
-
-{% endblock %}
-
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Owner</th>
+      <th>Status</th>
+      <th>Point Value</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for task in object_list %}
+      <tr>
+        <td><a href="{% url 'task' task.id %}">{{task.tname}}</a></td>
+        <td>{{ task.owner_id }}</td>
+        <td>{{ task.status }}</td>
+        <td>{{ task.point_value }}</td>
+        <td><a href="{% url 'task-update' task.id%}">Edit</a></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
 
 {% block pagination %}
     {% if is_paginated %}
@@ -53,10 +53,9 @@
             </span>
         </div>
     {% endif %}
-  {% endblock %} 
+  {% endblock %}
 
-
-
+{% endblock %}
 
 
 {% block sidebar_content %}
