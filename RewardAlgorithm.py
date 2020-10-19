@@ -4,7 +4,7 @@ ISSUE 75 This code is intended to be used to create test accounts.
 @author: cseal
 '''
 from test.pydoc_mod import __xyz__
-class Rewards
+class RewardAlgorithm:
     def __init__(self,currentPoints):
         self.currentPoints = currentPoints
     '''
@@ -19,7 +19,14 @@ class Rewards
     '''
     This will have to be modified to reflect being read in from the database
     '''
-    def RecievedReward(self,valueOfReward):
+    def recievedReward(self,valueOfReward):
         self.currentPoints = self.currentPoints - valueOfReward
-
-        
+'''
+The remaining code shows that the algorithm runs as expected
+'''
+JohnnysRewards = RewardAlgorithm(18)
+#adds one point
+JohnnysRewards.completedTask()
+JohnnysRewards.recievedReward(10)
+print(JohnnysRewards.getPoints()) 
+print("hello world")
