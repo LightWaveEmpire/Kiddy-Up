@@ -10,12 +10,23 @@ then
 
     echo "MySQL started"
 fi
+#
+#DJANGO_DB_NAME=django
+#DJANGO_SU_NAME=admin
+#DJANGO_SU_EMAIL=kiddy.up.help@gmail.com
+#DJANGO_SU_PASSWORD=password
+
+
+
+
+
 
 python manage.py flush --no-input
 #python manage.py makemigrations parent
 python manage.py migrate --fake parent zero
 python manage.py migrate parent
 python manage.py migrate
+python manage.py shell -c "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'password')"
 
 
 exec "$@"

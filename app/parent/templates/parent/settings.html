@@ -8,86 +8,61 @@
 {% block content %}
 
   <h1>Settings</h1>
-<p>All the configurable elements will be pulled from DB and displayed in editable forms fields. A Save button will write changes to the DB. </p>
 
 
-<br />
-<br />
-<br />
+  <br />
+  <br />
+  <br />
 
 
-<h2> Profile </h2>
+  <h2> Profile </h2>
 
-{% for parent in view.parent %}
+  {% if view.parent %}
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Action</th>
+        </tr>
+      </thead>
 
-{% if parent.user_id == user.id %}
-<ul>
-    <li>{{parent.name}} - <a href="{% url 'parent-update' parent.id %}">Change Name</a></li>
-    <li>{{user.email}} - <a href="{% url 'parent-update' parent.id %}">Change Email</a></li>
-</ul>
-
-
-{% else %}
-    <a href="{% url 'parent-add' %}">Set Your Name</a>
-
-{% endif %}
-
-{% endfor %}
-
-
-<br />
-<br />
-<br />
-
-
-
-  <h2>Children</h2>
-
-<p><a href="{% url 'child-add' %}">Add a Child</a></p>
-
-<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th>Child Name</th>
-      <th>Age</th>
-      <th>Comprehension Level</th>
-      <th>Current Points</th>
-      <th>Target Reward</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for child in view.children %}
+    {% for parent in view.parent %}
+    {% if parent.user_id ==  user.id %}
+    <tbody>
       <tr>
-        <td><a href="{% url 'child' child.id %}">{{child.cname}}</a></td>
-        <td>{{ child.age }}</td>
-        <td>{{ child.comp_level }}</td>
-        <td>{{ child.current_points }}</td>
-        <td>{{ child.target_reward }}</td>
-        <td><a href="{% url 'child-update' child.id%}">Edit</a></td>
+        <td>{{user.username}}</td>
+        <td>{{parent.name}}</td>
+        <td>{{user.email}}</td>
+        <td><a href="{% url 'parent-update' parent.id%}">Edit</a></td>
+
       </tr>
+    {% endif %}
     {% endfor %}
-  </tbody>
-</table>
-
-<br />
-<br />
-<br />
+    </tbody>
+    </table>
 
 
-  <h2>Rewards</h2>
-<p><a href="{% url 'reward-add' %}">Add a Reward</a></p>
+
+    <br />
+    <br />
+    <br />
+    <h2>Rewards</h2>
+    <p><a href="{% url 'reward-add' %}">Add a Reward</a></p>
 
 
-<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th>Reward Name</th>
-      <th>Reward Value</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody>
+
+    {% if view.rewards %}
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Reward Name</th>
+          <th>Reward Value</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+    <tbody>
     {% for reward in view.rewards %}
       <tr>
         <td><a href="{% url 'reward' reward.id %}">{{reward.rname}}</a></td>
@@ -95,45 +70,49 @@
         <td><a href="{% url 'reward-update' reward.id%}">Edit</a></td>
       </tr>
     {% endfor %}
-  </tbody>
-</table>
+    </tbody>
+    </table>
 
+        <br />
+        <br />
+        <br />
 
+          <h2>Children</h2>
 
+          <p><a href="{% url 'child-add' %}">Add a Child</a></p>
 
-<br />
-<br />
-<br />
+        {% if view.children %}
 
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Child Name</th>
+                <th>Age</th>
+                <th>Comprehension Level</th>
+                <th>Current Points</th>
+                <th>Target Reward</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+          <tbody>
+          {% for child in view.children %}
+            <tr>
+              <td><a href="{% url 'child' child.id %}">{{child.cname}}</a></td>
+              <td>{{ child.age }}</td>
+              <td>{{ child.comp_level }}</td>
+              <td>{{ child.current_points }}</td>
+              <td>{{ child.target_reward }}</td>
+              <td><a href="{% url 'child-update' child.id%}">Edit</a></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+        {% endif %}
+    {% endif %}
 
-  <h2>Tasks</h2>
-
-<p><a href="{% url 'task-add' %}">Add a Task</a></p>
-
-
-<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th>Task</th>
-      <th>Owner</th>
-      <th>Status</th>
-      <th>Point Value</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for task in view.tasks %}
-      <tr>
-        <td><a href="{% url 'task' task.id %}">{{task.tname}}</a></td>
-        <td>{{ task.owner_id }}</td>
-        <td>{{ task.status }}</td>
-        <td>{{ task.point_value }}</td>
-        <td><a href="{% url 'task-update' task.id%}">Edit</a></td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
-
+  {% else %}
+	        <a href="{% url 'parent-add' %}">Set Your Name</a>
+  {% endif %}
 
 {% endblock %}
 
