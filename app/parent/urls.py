@@ -9,9 +9,11 @@ urlpatterns = [
     path('', views.parent, name="home"),
     path("dashboard/", views.parent, name="dashboard"),
     path("profile/", views.profile, name="profile"),
-    path("settings/", views.settings, name="settings"),
+#    path("settings/", views.settings, name="settings"),
     path("child_login/", views.child_login, name="child_login"),
     path("register/", views.register, name="register"),
+
+    path('settings/', views.SettingsView.as_view(), name='settings'),
 
     path('rewards/', views.RewardListView.as_view(), name='rewards'),
     path('reward/<int:pk>', views.RewardDetailView.as_view(), name='reward'),

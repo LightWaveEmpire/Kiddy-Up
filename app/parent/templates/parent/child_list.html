@@ -11,30 +11,32 @@
 
   <h1>Children</h1>
 
-<ul>
-    {% for child in object_list %}
-        <!-- code to iterate across each reward -->
-        <li>
-            <a href="{% url 'child' child.id %}"> - {{child.cname}}</a> - <a href="{% url 'child-update' child.id%}">Edit</a>
-        </li>
-    {% endfor %}
-</ul>
 <p><a href="{% url 'child-add' %}">Add a Child</a></p>
 
-
-<!--<li>Children Rewards (earned/in progress/points)</li>-->
-<!--<li>...</li>-->
-<!--<li>...</li>-->
-<!--<li>...</li>-->
-<!--<li>...</li>-->
-<!--<li>...</li>-->
-<!--<li>...</li>-->
-
-</ul>
-
-
-{% endblock %}
-
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Child Name</th>
+      <th>Age</th>
+      <th>Comprehension Level</th>
+      <th>Current Points</th>
+      <th>Target Reward</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for child in object_list %}
+      <tr>
+        <td><a href="{% url 'child' child.id %}">{{child.cname}}</a></td>
+        <td>{{ child.age }}</td>
+        <td>{{ child.comp_level }}</td>
+        <td>{{ child.current_points }}</td>
+        <td>{{ child.target_reward }}</td>
+        <td><a href="{% url 'child-update' child.id%}">Edit</a></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
 
 {% block pagination %}
     {% if is_paginated %}
@@ -52,7 +54,9 @@
             </span>
         </div>
     {% endif %}
-  {% endblock %} 
+  {% endblock %}
+
+{% endblock %}
 
 
 

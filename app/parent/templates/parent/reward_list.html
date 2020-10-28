@@ -11,22 +11,28 @@
 
   <h1>Rewards</h1>
 
-<ul>
-    {% for reward in object_list %}
-        <!-- code to iterate across each reward -->
-        <li>
-            <a href="{% url 'reward' reward.id %}"> - {{reward.rname}}</a> - <a href="{% url 'reward-update' reward.id%}">Edit</a>
-        </li>
-    {% endfor %}
-</ul>
 
 <p><a href="{% url 'reward-add' %}">Add a Reward</a></p>
 
 
-
-
-{% endblock %}
-
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Reward Name</th>
+      <th>Reward Value</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for reward in object_list %}
+      <tr>
+        <td><a href="{% url 'reward' reward.id %}">{{reward.rname}}</a></td>
+        <td>{{ reward.cost }}</td>
+        <td><a href="{% url 'reward-update' reward.id%}">Edit</a></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
 
 {% block pagination %}
     {% if is_paginated %}
@@ -46,6 +52,7 @@
     {% endif %}
   {% endblock %} 
 
+{% endblock %}
 
 
 

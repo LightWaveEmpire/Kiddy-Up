@@ -25,10 +25,11 @@ def parent(request):
 def profile(request):
     return render(request, "parent/profile.html")
 
-@login_required
-@user_passes_test(is_in_group_parent)
-def settings(request):
-    return render(request, "parent/settings.html")
+#@login_required
+#@user_passes_test(is_in_group_parent)
+#def settings(request):
+#    return render(request, "parent/settings.html")
+
 @login_required
 @user_passes_test(is_in_group_parent)
 def child_login(request):
@@ -154,7 +155,7 @@ class ParentListView(generic.ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return Parent.objects.filter(created_by_id=self.request.user)
+        return Parent.objects.filter(user_id=self.request.user)
 
 
 class ParentDetailView(generic.DetailView):
@@ -166,7 +167,7 @@ class ParentCreate(LoginRequiredMixin, generic.CreateView):
     fields = ['name']
 
     def form_valid(self, form):
-        form.instance.created_by = self.request.user
+        form.instance.user_id = self.request.user.id
         return super().form_valid(form)
 
 
@@ -176,7 +177,7 @@ class ParentUpdate(LoginRequiredMixin, generic.UpdateView):
 
 class ParentDelete(LoginRequiredMixin, generic.DeleteView):
     model = Parent
-    success_url = reverse_lazy('parents')
+    success_url = reverse_lazy('home')
 
 
 # No Login Required
@@ -200,3 +201,19 @@ def register(request):
             user = form.save()
             login(request, user)
             return redirect("home")
+
+
+# Settings
+
+class SettingsView(generic.TemplateView):
+    template_name = 'parent/settings.html'
+
+    def parent(self):
+        return Parent.objects.filter(user_id=self.request.user.id)
+    def rewards(self):
+        return Reward.objects.filter(created_by_id=self.request.user)
+    def tasks(self):
+        return Task.objects.filter(created_by_id=self.request.user)
+    def children(self):
+        return Child.objects.filter(created_by_id=self.request.user)
+
