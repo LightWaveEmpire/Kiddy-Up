@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import include, path
 from . import views
-from .views import *
+from parent.views import *
 
 #from django.conf import settings
 
@@ -21,7 +21,7 @@ urlpatterns = [
     path('reward/<int:pk>/', RewardUpdate.as_view(), name='reward-update'),
     path('reward/<int:pk>/delete/', RewardDelete.as_view(), name='reward-delete'),
 
-    path('tasks/', views.tasks_list, name='tasks'),
+    path('tasks/', views.TaskListView.as_view(), name='tasks'),
     path('task/<int:pk>', views.TaskDetailView.as_view(), name='task'),
     path('task/add/', TaskCreate.as_view(), name='task-add'),
     path('task/<int:pk>/', TaskUpdate.as_view(), name='task-update'),

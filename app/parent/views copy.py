@@ -5,8 +5,8 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import login
 from .forms import ParentCreationForm
 from django.urls import reverse, reverse_lazy
-from .permissions import is_in_group_parent
-from .models import Child, Task, Reward, Parent
+from parent.permissions import is_in_group_parent
+from parent.models import Child, Task, Reward, Parent
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -79,14 +79,6 @@ class RewardDelete(LoginRequiredMixin, generic.DeleteView):
 
 
 # Task Views
-@login_required
-@user_passes_test(is_in_group_parent)
-def tasks_list(request):
-    tasks = Task.objects.all()
-    context = {
-         'tasks':tasks,
-            }
-    return render(request, "parent/task_list.html", context)
 
 class TaskListView(generic.ListView):
     model=Task
