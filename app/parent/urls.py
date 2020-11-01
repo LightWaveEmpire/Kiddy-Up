@@ -27,6 +27,14 @@ urlpatterns = [
     path('task/<int:pk>/', TaskUpdate.as_view(), name='task-update'),
     path('task/<int:pk>/delete/', TaskDelete.as_view(), name='task-delete'),
 
+
+    path('original_tasks/', views.Original_TaskListView.as_view(), name='original_tasks'),
+    path('original_task/<int:pk>', views.Original_TaskDetailView.as_view(), name='original_task'),
+    path('original_task/add/', Original_TaskCreate.as_view(), name='original_task-add'),
+    path('original_task/<int:pk>/', Original_TaskUpdate.as_view(), name='original_task-update'),
+    path('original_task/<int:pk>/delete/', Original_TaskDelete.as_view(), name='original_task-delete'),
+
+
     path('children/', views.ChildListView.as_view(), name='children'),
     path('child/<int:pk>', views.ChildDetailView.as_view(), name='child'),
     path('child/add/', ChildCreate.as_view(), name='child-add'),
