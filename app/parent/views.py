@@ -5,8 +5,8 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import login
 from .forms import ParentCreationForm
 from django.urls import reverse, reverse_lazy
-from parent.permissions import is_in_group_parent
-from parent.models import Child, Task, Reward, Parent
+from .permissions import is_in_group_parent
+from .models import Child, Task, Reward, Parent, Original_Task
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
