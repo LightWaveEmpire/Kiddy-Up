@@ -5,8 +5,8 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import login
 from .forms import ParentCreationForm
 from django.urls import reverse, reverse_lazy
-from .permissions import is_in_group_parent
-from .models import Child, Task, Reward, Parent
+from parent.permissions import is_in_group_parent
+from parent.models import Child, Task, Reward, Parent
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -49,7 +49,7 @@ class RewardListView(generic.ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return Reward.objects.filter(created_by_id=self.request.user)
+        return Reward.objects.filter(parent__user=self.request.user)
 
 
 class RewardDetailView(generic.DetailView):
@@ -60,7 +60,7 @@ class RewardCreate(LoginRequiredMixin, generic.CreateView):
     fields = ['rname', 'cost']
 
     def form_valid(self, form):
-        form.instance.created_by = self.request.user
+        form.instance.parent__user = self.request.user
         return super().form_valid(form)
 
 class RewardUpdate(LoginRequiredMixin, generic.UpdateView):
@@ -70,6 +70,41 @@ class RewardUpdate(LoginRequiredMixin, generic.UpdateView):
 class RewardDelete(LoginRequiredMixin, generic.DeleteView):
     model = Reward
     success_url = reverse_lazy('rewards')
+
+
+
+
+
+
+
+# Original_Task Views
+
+class Original_TaskListView(generic.ListView):
+    model=Original_Task
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Original_Task.objects.filter(parent__user=self.request.user)
+
+
+class Original_TaskDetailView(generic.DetailView):
+    model = Original_Task
+
+class Original_TaskCreate(LoginRequiredMixin, generic.CreateView):
+    model = Original_Task
+    fields = ['otask']
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+class Original_TaskUpdate(LoginRequiredMixin, generic.UpdateView):
+    model = Original_Task
+    fields = ['otask']
+
+class Original_TaskDelete(LoginRequiredMixin, generic.DeleteView):
+    model = Original_Task
+    success_url = reverse_lazy('original_task')
 
 
 
@@ -93,7 +128,7 @@ class TaskListView(generic.ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return Task.objects.filter(created_by_id=self.request.user)
+        return Task.objects.filter(child__parent__user=self.request.user)
 
 
 class TaskDetailView(generic.DetailView):
@@ -104,7 +139,7 @@ class TaskCreate(LoginRequiredMixin, generic.CreateView):
     fields = ['tname', 'tdesc', 'point_value', 'owner', 'date']
 
     def form_valid(self, form):
-        form.instance.created_by = self.request.user
+        form.instance.child__parent__user = self.request.user
         return super().form_valid(form)
 
 
@@ -128,7 +163,7 @@ class ChildListView(generic.ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return Child.objects.filter(created_by_id=self.request.user)
+        return Child.objects.filter(parent__user=self.request.user)
 
 
 class ChildDetailView(generic.DetailView):
@@ -141,7 +176,7 @@ class ChildCreate(LoginRequiredMixin, generic.CreateView):
     fields = ['cname', 'age', 'comp_level', 'parent', 'target_reward']
 
     def form_valid(self, form):
-        form.instance.created_by = self.request.user
+        form.instance.parent__user = self.request.user
         return super().form_valid(form)
 
 
@@ -163,7 +198,7 @@ class ParentListView(generic.ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return Parent.objects.filter(user_id=self.request.user)
+        return Parent.objects.filter(user=self.request.user)
 
 
 class ParentDetailView(generic.DetailView):
@@ -175,7 +210,7 @@ class ParentCreate(LoginRequiredMixin, generic.CreateView):
     fields = ['name']
 
     def form_valid(self, form):
-        form.instance.user_id = self.request.user.id
+        form.instance.user = self.request.user
         return super().form_valid(form)
 
 
@@ -217,11 +252,11 @@ class SettingsView(generic.TemplateView):
     template_name = 'parent/settings.html'
 
     def parent(self):
-        return Parent.objects.filter(user_id=self.request.user.id)
+        return Parent.objects.filter(user= self.request.user)
     def rewards(self):
-        return Reward.objects.filter(created_by_id=self.request.user)
+        return Reward.objects.filter(parent__user = self.request.user)
     def tasks(self):
-        return Task.objects.filter(created_by_id=self.request.user)
+        return Task.objects.filter(parent__user = self.request.user)
     def children(self):
-        return Child.objects.filter(created_by_id=self.request.user)
+        return Child.objects.filter(parent__user = self.request.user)
 
