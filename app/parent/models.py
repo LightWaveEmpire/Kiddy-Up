@@ -20,7 +20,7 @@ class Original_Task(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return self.task
+        return self.otask
 
     def get_absolute_url(self):
         return reverse('original_task', kwargs={'pk': self.pk})

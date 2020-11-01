@@ -29,12 +29,12 @@
       </thead>
 
     {% for parent in view.parent %}
-    {% if parent.user_id ==  user.id %}
+    {% if parent.user ==  user %}
     <tbody>
       <tr>
-        <td>{{user.username}}</td>
+        <td>{{parent__user.username}}</td>
         <td>{{parent.name}}</td>
-        <td>{{user.email}}</td>
+        <td>{{parent__user.email}}</td>
         <td><a href="{% url 'parent-update' parent.id%}">Edit</a></td>
 
       </tr>

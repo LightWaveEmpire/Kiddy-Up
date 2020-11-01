@@ -11,7 +11,7 @@
 
   <h1>Original Tasks</h1>
 
-<p><a href="{% url 'task-add' %}">Add an Original Task</a></p>
+<p><a href="{% url 'original_task-add' %}">Add an Original Task</a></p>
 
 
 <table class="table table-bordered">
@@ -24,9 +24,9 @@
   <tbody>
     {% for original_task in object_list %}
       <tr>
-        <td><a href="{% url 'task' task.id %}">{{original_task.otask}}</a></td>
+        <td><a href="{% url 'original_task' original_task.id %}">{{original_task.otask}}</a></td>
         <td>{{ original_task.owner }}</td>
-        <td><a href="{% url 'task-update' task.id%}">Edit</a></td>
+        <td><a href="{% url 'original_task-update' otiginal_task.id%}">Edit</a></td>
       </tr>
     {% endfor %}
   </tbody>
