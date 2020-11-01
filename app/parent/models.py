@@ -1,3 +1,8 @@
+from django.db import models
+from django.contrib.auth.models import User
+from django.urls import reverse
+
+
 
 ## Proposed Changes (Original_Task) ##
 
@@ -8,7 +13,7 @@ class Original_Task(models.Model):
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
 
     # This may need to change based on how the google syncing works... I haven't looked into that yet
-    task = models.CharField(max_length=500)
+    otask = models.CharField(max_length=500)
 
     class Meta:
         db_table = 'original_task'
@@ -45,7 +50,7 @@ class Parent(models.Model):
 
 class Child(models.Model):
 
-    parent = models.ForeignKey('Parent', on_delete=models.CASCADE)
+    parent = models.ForeignKey('Parent', on_delete=models.CASCADE, null=True, default=None)
 
     #! This user will link to the child logged in user
     #! We still need to figure out how once we build out the child django users (auth.user)
@@ -111,7 +116,7 @@ class Task(models.Model):
     #! Link the child's task to the "master" or original task that is synced with google or other external source.
     #! Many tasks can be linked to the single original task (two kids going to same soccer match)
     #! If original is deleted, the child task is deleted
-    original__task = models.ForeignKey('Original_Task', on_delete=models.CASCADE)
+    original_task = models.ForeignKey('Original_Task', on_delete=models.CASCADE, null=True, default=None)
 
     # const: "one or more" of "Child whose PID == Parent.pid"
     #! I don't think this is needed anymore
@@ -153,7 +158,7 @@ class Task(models.Model):
 
 class Reward(models.Model):
 
-    parent = models.ForeignKey('Parent', on_delete=models.CASCADE)
+    parent = models.ForeignKey('Parent', on_delete=models.CASCADE, null=True, default=None)
 
     # review field type-- may need foreign key?
     # const: "one or more" of "Child whose PID == Parent.pid"
