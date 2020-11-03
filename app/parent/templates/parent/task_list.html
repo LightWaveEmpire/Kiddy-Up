@@ -9,7 +9,7 @@
     <thead>
         <tr>
             <th>Task</th>
-            <th>Owner</th>
+            <th>Child</th>
             <th>Status</th>
             <th>Point Value</th>
             <th>Action</th>
@@ -18,8 +18,8 @@
     <tbody>
         {% for task in object_list %}
         <tr>
-            <td><a href="{% url 'task' task.id %}">{{task.tname}}</a></td>
-            <td>{{ task.owner_id }}</td>
+            <td><a href="{% url 'task' task.id %}">{{task.name}}</a></td>
+            <td>{{ task.child }}</td>
             <td>{{ task.status }}</td>
             <td>{{ task.point_value }}</td>
             <td><a href="{% url 'task-update' task.id%}">Edit</a></td>

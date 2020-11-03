@@ -25,8 +25,8 @@
     {% for original_task in object_list %}
       <tr>
         <td><a href="{% url 'original_task' original_task.id %}">{{original_task.otask}}</a></td>
-        <td>{{ original_task.owner }}</td>
-        <td><a href="{% url 'original_task-update' otiginal_task.id%}">Edit</a></td>
+<!--        <td>{{ original_task.owner }}</td>-->
+        <td><a href="{% url 'original_task-update' original_task.id%}">Edit</a></td>
       </tr>
     {% endfor %}
   </tbody>

@@ -10,10 +10,10 @@
   <h1>Parent</h1>
 
 <ul>
-<li>Name: {{ parent.name }}</li>
-<li>Email: {{ parent.email }}</li>
-<li><a href="{% url 'parent-update' parent.id %}">Edit</a></li>
-<li><a href="{% url 'parent-delete' parent.id%}">Delete</a></li>
+<li>Name: {{ parent.user.first_name }} {{ parent.user.last_name }}</li>
+<li>Email: {{ parent.user.email }}</li>
+<li><a href="{% url 'parent-update' parent.user %}">Edit</a></li>
+<li><a href="{% url 'parent-delete' parent.user %}">Delete</a></li>
 
 </ul>
 

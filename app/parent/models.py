@@ -1,37 +1,21 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
 
 
 
-## Proposed Changes (Original_Task) ##
 
-#! New table for raw tasks
-# All naming can be changed
-class Original_Task(models.Model):
-    # link tasks to the logged in user (the parent)
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-
-    # This may need to change based on how the google syncing works... I haven't looked into that yet
-    otask = models.CharField(max_length=500)
-
-    class Meta:
-        db_table = 'original_task'
-
-    def __str__(self):
-        """String for representing the Model object."""
-        return self.otask
-
-    def get_absolute_url(self):
-        return reverse('original_task', kwargs={'pk': self.pk})
-
-## End Proposed Changes (Original_Task) ##
+class User(AbstractUser):
+    is_parent = models.BooleanField(default=False)
+    is_child = models.BooleanField(default=False)
 
 
 class Parent(models.Model):
-    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    name = models.CharField(db_column='NAME', max_length=20, default="")
-
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='parent')
+    zip_code = models.CharField(
+        "ZIP / Postal code",
+        max_length=12,
+    )
     # reevaluate field type on info re: acct storage
     # still need to work on things, not sure how this will work out
     # Will likely need changes when we get to it
@@ -42,51 +26,47 @@ class Parent(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return self.name
+        return self.user.username
 
     def get_absolute_url(self):
         return reverse('parent', kwargs={'pk': self.pk})
 
 
+class Reward(models.Model):
+    parent = models.ForeignKey(Parent, on_delete=models.CASCADE)
+    visible_to = models.CharField(max_length=20, blank=True, null=True)
+    name = models.CharField("Reward Name", max_length=20)
+    cost = models.IntegerField("Cost", )
+    image = models.CharField("Reward Image", max_length=20, null=True)
+
+    class Meta:
+        db_table = 'reward'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('reward', kwargs={'pk': self.pk})
+
+
+
 class Child(models.Model):
-
-    parent = models.ForeignKey('Parent', on_delete=models.CASCADE, null=True, default=None)
-
-    #! This user will link to the child logged in user
-    #! We still need to figure out how once we build out the child django users (auth.user)
-    #! user = ??
-
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='child')
+    parent = models.ForeignKey(Parent, on_delete=models.CASCADE)
+    name = models.CharField("Child Name", max_length=20)
     target_reward = models.ForeignKey('Reward', on_delete=models.PROTECT, blank=True, null=True)
-
-    # there's not a reason this is JSON; something else is likely better.
-    #! We need to understand how we are going to manage "purchased" rewards
-    #! e.g. pizza night, movie night, skating... may be list of RIDs (1,4,3,2,2,3,4)?
-
-    #! Example list field that will hold the earned and not yet received rewards for each child
-    #!    owned_rewards = ListCharField(
-    #!        base_field=CharField(max_length=10),
-    #!        size=6,
-    #!        max_length=(6 * 11)  # 6 * 10 character nominals, plus commas
-
+    age = models.IntegerField("Age")
+    comp_level = models.IntegerField("Comprehension Level", blank=True, null=True)
     owned_rewards = models.JSONField(blank=True, null=True)
-
-    cname = models.CharField(max_length=20)
-
-    comp_level = models.IntegerField(blank=True, null=True)
-
-    age = models.IntegerField()
-
-    # get details on image storage from Samuel
-    avatar = models.CharField(max_length=20)
-
-    current_points = models.IntegerField(default=0)
-
+    avatar = models.ImageField("Avatar", max_length=20)
+    current_points = models.IntegerField("Point Balance", default=0)
     class Meta:
         db_table = 'child'
 
         constraints = [
             # ensures a parent can't have multiple children with same name
-            models.UniqueConstraint(fields=['parent', 'cname'], name='unique_sibling'),
+            models.UniqueConstraint(fields=['parent', 'user'], name='unique_sibling'),
 
             # ensures age of child is between 5-12, inclusive
             models.CheckConstraint(check=models.Q(age__range=(5, 12)), name='age_5_12')
@@ -94,11 +74,16 @@ class Child(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return self.cname
+        return self.name
 
     def get_absolute_url(self):
         return reverse('child', kwargs={'pk': self.pk})
 
+
+
+
+
+# We will still need location added to Task model
 
 class Task(models.Model):
     OPEN = "OPEN"
@@ -111,69 +96,62 @@ class Task(models.Model):
         (COMPLETE, "Complete")
     ]
 
-    ## Proposed Changes (Tasks) ##
-
-    #! Link the child's task to the "master" or original task that is synced with google or other external source.
-    #! Many tasks can be linked to the single original task (two kids going to same soccer match)
-    #! If original is deleted, the child task is deleted
     original_task = models.ForeignKey('Original_Task', on_delete=models.CASCADE, null=True, default=None)
+    parent = models.ForeignKey(Parent, on_delete=models.CASCADE, related_name='creator')
+    child = models.ForeignKey(Child, on_delete=models.CASCADE, related_name='actioner')
 
-    # const: "one or more" of "Child whose PID == Parent.pid"
-    #! I don't think this is needed anymore
-    #! Each task will be linked to a child (which is linked to a parent)
-    #! Each task will be linked to an original_task which is linked to a parent
-    #!visible_to = models.CharField(max_length=20)
-
-    #! Linking each task to a child allows the child to
-    child = models.ForeignKey('Child', on_delete=models.CASCADE)
-
-    #! I don't think this is necessary as we are linking tasks to the parent in other ways (original_task.parent and child.parent)
-    #!created_by = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    ## End Proposed Changes (Tasks) ##
-
-    tname = models.CharField(max_length=20)
-    tdesc = models.TextField()
-    status = models.CharField(
+    name = models.CharField("Task Name", max_length=20)
+    description = models.TextField("Task Description", )
+    status = models.CharField("Status",
         max_length=8,
         choices=STATUS_CHOICES,
         default=OPEN
     )
     # get details on image storage from Samuel
-    timage = models.CharField(max_length=20, default='default_img')
-    # this setup doesn't really allow for recurring events-- alter? dupe?
-    date = models.DateField()
-    point_value = models.IntegerField(default=0)
+    image = models.CharField("Task Image", max_length=20, default='default_img')
+
+    # Will need to change to DateTimeField
+    date = models.DateTimeField("Task Date", )
+    point_value = models.IntegerField("Point Value", default=0)
+    location = models.CharField("Location", max_length=40)
 
     class Meta:
         db_table = 'task'
 
     def __str__(self):
         """String for representing the Model object."""
-        return self.tname
+        return self.name
 
     def get_absolute_url(self):
         return reverse('task', kwargs={'pk': self.pk})
 
 
-class Reward(models.Model):
 
-    parent = models.ForeignKey('Parent', on_delete=models.CASCADE, null=True, default=None)
 
-    # review field type-- may need foreign key?
-    # const: "one or more" of "Child whose PID == Parent.pid"
-    visible_to = models.CharField(max_length=20, blank=True, null=True)
 
-    rname = models.CharField(max_length=20)
-    cost = models.IntegerField()
-    rimage = models.CharField(max_length=20, null=True)
+
+
+
+
+class Original_Task(models.Model):
+    parent = models.ForeignKey(Parent, on_delete=models.CASCADE)
+    otask = models.CharField("Event / Task", max_length=500)
 
     class Meta:
-        db_table = 'reward'
+        db_table = 'original_task'
 
     def __str__(self):
         """String for representing the Model object."""
-        return self.rname
+        return self.otask
 
     def get_absolute_url(self):
-        return reverse('reward', kwargs={'pk': self.pk})
+        return reverse('original_task', kwargs={'pk': self.pk})
+
+
+
+
+
+
+
+
+

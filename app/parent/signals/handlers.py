@@ -9,3 +9,10 @@ def save_profile(sender, instance, created, **kwargs):
         g1 = Group.objects.get(name='parent')
         instance.groups.add(g1)
 
+
+#@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+#def save_child_profile(sender, instance, created, **kwargs):
+#    if created:
+#        g2 = Group.objects.get(name='child')
+#        instance.groups.add(g2)
+

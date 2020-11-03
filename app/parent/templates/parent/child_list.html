@@ -5,13 +5,14 @@
 {% load has_perms %}
 
 
-{% block title %} Rewards {% endblock %}
+{% block title %} Children - {{ block.super }} {% endblock %}
 
 {% block content %}
+{{ block.super }}
 
   <h1>Children</h1>
 
-<p><a href="{% url 'child-add' %}">Add a Child</a></p>
+<p><a href="{% url 'child_register' %}">Add a Child</a></p>
 
 <table class="table table-bordered">
   <thead>
@@ -27,12 +28,12 @@
   <tbody>
     {% for child in object_list %}
       <tr>
-        <td><a href="{% url 'child' child.id %}">{{child.cname}}</a></td>
+        <td><a href="{% url 'child' child.user_id %}">{{child.name}}</a></td>
         <td>{{ child.age }}</td>
         <td>{{ child.comp_level }}</td>
         <td>{{ child.current_points }}</td>
         <td>{{ child.target_reward }}</td>
-        <td><a href="{% url 'child-update' child.id%}">Edit</a></td>
+        <td><a href="{% url 'child-update' child.user_id %}">Edit</a></td>
       </tr>
     {% endfor %}
   </tbody>

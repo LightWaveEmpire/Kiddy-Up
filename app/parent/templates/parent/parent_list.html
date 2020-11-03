@@ -15,11 +15,10 @@
     {% for parent in object_list %}
         <!-- code to iterate across each reward -->
         <li>
-            <a href="{% url 'parent' parent.id %}"> - {{parent.name}}</a> - <a href="{% url 'parent-update' parent.id%}">Edit</a>
+            <a href="{% url 'parent' parent.user.user_id %}"> - {{parent.user.username}}</a> - <a href="{% url 'parent-update' parent.user.user_id %}">Edit</a>
         </li>
     {% endfor %}
 </ul>
-<p><a href="{% url 'parent-add' %}">Add a Parent</a></p>
 
 
 {% endblock %}
