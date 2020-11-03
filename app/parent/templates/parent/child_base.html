@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %} {{ block.super }}{% endblock %}
+
+
+{% block sidenav%}
+
+ <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p1">
+            <div class="container-fluid d-flex flex-column p1">
+                <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m1" href="{% url 'about' %}">
+                    <div class="sidebar-brand-icon rotate-n-14"><img src="https://www.cs.odu.edu/~dchamber/webimages/icon.png" width="30" height="30"></div>
+                    <div class="sidebar-brand-text mx-2"><span>kiddy-up</span></div>
+                </a>
+                <hr class="sidebar-divider my1">
+                <ul class="nav navbar-nav text-light" id="accordionSidebar">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'child-dashboard'%}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'child-profile' %}"><i class="fas fa-user"></i><span>Profile</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'child-tasks'%}"><i class="fas fa-table"></i><span>My Tasks</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'child-rewards'%}"><i class="far fa-user-circle"></i><span>My Rewards</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'login'%}"><i class="far fa-user-circle"></i><span>Child login</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'logout'%}"><i class="far fa-user-circle"></i><span>logout</span></a></li>
+                    {% else %}
+                    <li class="nav-item"><a class="nav-link " href="{% url 'login'%}?next={{request.path}}">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact Us</a></li>
+                    {% endif %}
+                </ul>
+                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border1" id="sidebarToggle" type="button"></button></div>
+            </div>
+        </nav>
+
+
+{% endblock %}
+
+
+
+<!-- Here we can overwrite sidenav or topnav, if needed for parent -->
+
+
+{% block topnav %}
+
+    {{ block.super }}
+
+{% endblock %}
+
+
+{% block content %}
+
+{{ block.super }}
+
+{% endblock %}
+
+
+

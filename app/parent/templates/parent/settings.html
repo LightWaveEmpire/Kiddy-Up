@@ -17,7 +17,6 @@
 
   <h2> Profile </h2>
 
-  {% if view.parent %}
     <table class="table table-bordered">
       <thead>
         <tr>
@@ -32,17 +31,52 @@
     {% if parent.user ==  user %}
     <tbody>
       <tr>
-        <td>{{parent__user.username}}</td>
-        <td>{{parent.name}}</td>
-        <td>{{parent__user.email}}</td>
-        <td><a href="{% url 'parent-update' parent.id%}">Edit</a></td>
+        <td>{{parent.user.username}}</td>
+        <td>{{parent.user.first_name}} {{parent.user.last_name}}</td>
+        <td>{{parent.user.email}}</td>
+        <td><a href="{% url 'parent-update' parent.user_id%}">Edit</a></td>
 
       </tr>
     {% endif %}
     {% endfor %}
     </tbody>
     </table>
+    {% endif %}
+        <br />
+        <br />
+        <br />
 
+          <h2>Children</h2>
+
+          <p><a href="{% url 'child_register' %}">Add a Child</a></p>
+
+        {% if view.children %}
+
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Child Name</th>
+                <th>Age</th>
+                <th>Comprehension Level</th>
+                <th>Current Points</th>
+                <th>Target Reward</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+          <tbody>
+          {% for child in view.children %}
+            <tr>
+              <td><a href="{% url 'child' child.user_id %}">{{child.user.first_name}}</a></td>
+              <td>{{ child.age }}</td>
+              <td>{{ child.comp_level }}</td>
+              <td>{{ child.current_points }}</td>
+              <td>{{ child.target_reward }}</td>
+              <td><a href="{% url 'child-update' child.user_id%}">Edit</a></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+        {% endif %}
 
 
     <br />
@@ -65,54 +99,24 @@
     <tbody>
     {% for reward in view.rewards %}
       <tr>
-        <td><a href="{% url 'reward' reward.id %}">{{reward.rname}}</a></td>
+        <td><a href="{% url 'reward' reward.id %}">{{reward.name}}</a></td>
         <td>{{ reward.cost }}</td>
         <td><a href="{% url 'reward-update' reward.id%}">Edit</a></td>
       </tr>
     {% endfor %}
     </tbody>
     </table>
-
-        <br />
-        <br />
-        <br />
-
-          <h2>Children</h2>
-
-          <p><a href="{% url 'child-add' %}">Add a Child</a></p>
-
-        {% if view.children %}
-
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>Child Name</th>
-                <th>Age</th>
-                <th>Comprehension Level</th>
-                <th>Current Points</th>
-                <th>Target Reward</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-          <tbody>
-          {% for child in view.children %}
-            <tr>
-              <td><a href="{% url 'child' child.id %}">{{child.cname}}</a></td>
-              <td>{{ child.age }}</td>
-              <td>{{ child.comp_level }}</td>
-              <td>{{ child.current_points }}</td>
-              <td>{{ child.target_reward }}</td>
-              <td><a href="{% url 'child-update' child.id%}">Edit</a></td>
-            </tr>
-          {% endfor %}
-          </tbody>
-        </table>
-        {% endif %}
     {% endif %}
 
-  {% else %}
-	        <a href="{% url 'parent-add' %}">Set Your Name</a>
-  {% endif %}
+    <br />
+    <br />
+    <br />
+    <h2>Link Calendar and Task List</h2>
+
+
+
+
+
 
 {% endblock %}
 

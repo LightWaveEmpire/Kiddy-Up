@@ -1,0 +1,44 @@
+ {% extends "parent/child_base.html" %} {% load has_perms %} {% block title %} Child Tasks {{ block.super }} {% endblock %} {% block content %}
+
+<h1>My Tasks</h1>
+
+<table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Event</th>
+                <th>Location</th>
+                <th>Due</th>
+                <th>Value</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for task in object_list %}
+        <tr>
+            <td><a href="{% url 'child-task' task.id %}">{{task.name}}</a></td>
+            <td>Location TBD</td>
+            <td>{{ task.date }}</td>
+            <td>{{ task.point_value }}</td>
+            <td><button type="button" class="btn btn-danger"><i class="far fa-trash-alt d-xl-flex justify-content-xl-center align-items-xl-center"></i></button>
+<button type="button" class="btn btn-warning"><i class="fas fa-pencil-alt d-xl-flex justify-content-xl-center align-items-xl-center"></i></button></td>
+        </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+{% block pagination %} {% if is_paginated %}
+<div class="pagination">
+    <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <span class="page-current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span> {% if page_obj.has_next %}
+    <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a> {% endif %}
+    </span>
+</div>
+{% endif %} {% endblock %} {% endblock %} {% block sidebar_content %}
+<!-- no sidebar for registration page -->
+{% endblock %}

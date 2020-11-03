@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-7">
     <meta name="viewport" content="width=device-width, initial-scale=2.0, shrink-to-fit=no">
-    <title>{% block title %}Kiddy-Up{% endblock %}</title>
+    <title>Dashboard - Brand</title>
     <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" media="screen">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:201,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
     <link rel="stylesheet" href="{% static 'assets/fonts/fontawesome-all.min.css' %}" media="screen">
@@ -16,11 +16,10 @@
 
 <body id="page-top">
     <div id="wrapper">
-
         {% block sidenav %}
         <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p1">
             <div class="container-fluid d-flex flex-column p1">
-                <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m1" href="{% url 'about' %}">
+                <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m1" href="#">
                     <div class="sidebar-brand-icon rotate-n-14"><img src="https://www.cs.odu.edu/~dchamber/webimages/icon.png" width="30" height="30"></div>
                     <div class="sidebar-brand-text mx-2"><span>kiddy-up</span></div>
                 </a>
@@ -33,39 +32,27 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'rewards'%}"><i class="far fa-user-circle"></i><span>Rewards</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'children'%}"><i class="far fa-user-circle"></i><span>Children</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'settings'%}"><i class="fas fa-user-circle"></i><span>Setting</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'login'%}"><i class="far fa-user-circle"></i><span>Child login</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'child_login'%}"><i class="far fa-user-circle"></i><span>Child login</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'logout'%}"><i class="far fa-user-circle"></i><span>logout</span></a></li>
                     {% else %}
-                    <li class="nav-item"><a class="nav-link " href="{% url 'login'%}?next={{request.path}}">Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact Us</a></li>
+                    <li class="nav-item mx1 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="{% url 'login'%}?next={{request.path}}">Login</a></li>
                     {% endif %}
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border1" id="sidebarToggle" type="button"></button></div>
             </div>
         </nav>
         {% endblock %}
-
         <div class="d-flex flex-column" id="content-wrapper">
             <div id="content">
-
-                {% block topnav %}
                 <nav class="navbar navbar-light navbar-expand bg-white shadow mb-3 topbar static-top">
                     <div class="container-fluid"><button class="btn btn-link d-md-none rounded-circle mr-2" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
-                        {% if user.is_authenticated %}
-                            <form class="form-inline d-none d-sm-inline-block mr-auto ml-md-2 my-2 my-md-0 mw-100 navbar-search">
+                        <form class="form-inline d-none d-sm-inline-block mr-auto ml-md-2 my-2 my-md-0 mw-100 navbar-search">
                             <div class="input-group"><input class="bg-light form-control border1 small" type="text" placeholder="Search for ...">
                                 <div class="input-group-append"><button class="btn btn-primary py1" type="button"><i class="fas fa-search"></i></button></div>
                             </div>
                         </form>
-                        {% endif %}
                         <ul class="nav navbar-nav flex-nowrap ml-auto">
-
-
-                        {% if user.is_authenticated %}
-
-<li class="nav-item dropdown d-sm-none no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><i class="fas fa-search"></i></a>
+                            <li class="nav-item dropdown d-sm-none no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><i class="fas fa-search"></i></a>
                                 <div class="dropdown-menu dropdown-menu-right p-2 animated--grow-in" aria-labelledby="searchDropdown">
                                     <form class="form-inline mr-auto navbar-search w-99">
                                         <div class="input-group"><input class="bg-light form-control border1 small" type="text" placeholder="Search for ...">
@@ -147,11 +134,6 @@
                                 </div>
                                 <div class="shadow dropdown-list dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown"></div>
                             </li>
-
-
-                        {% endif %}
-
-
                             <div class="d-none d-sm-block topbar-divider"></div>
                             <li class="nav-item dropdown no-arrow">
                                 <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-1 text-gray-600 small">{{user.username}}</span><img class="border rounded-circle img-profile" src="{% static 'assets/img/avatars/avatar1.jpeg' %}"></a>
@@ -163,15 +145,13 @@
                         </ul>
                     </div>
                 </nav>
-                {% endblock %}
-
-
+                <div class="container-fluid">
+                    <div class="d-sm-flex justify-content-between align-items-center mb-3">
+                        <!--h4 class="text-dark mb-0">Dashboard</h3--><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href="{% url 'settings'%}"><i class="far fa-sun fa-sm text-white-50"></i>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Set up</a></div>
                     <div id="content">
-                        {% block content %}
-
-                        {% endblock %}
+                        {% block content %} {% endblock %}
                     </div>
-
+                </div>
 
             </div>
             <footer class="bg-white sticky-footer">

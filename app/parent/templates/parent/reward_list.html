@@ -5,7 +5,7 @@
 {% load has_perms %}
 
 
-{% block title %} Rewards {% endblock %}
+{% block title %} Rewards - {{ block.super }} {% endblock %}
 
 {% block content %}
 
@@ -26,7 +26,7 @@
   <tbody>
     {% for reward in object_list %}
       <tr>
-        <td><a href="{% url 'reward' reward.id %}">{{reward.rname}}</a></td>
+        <td><a href="{% url 'reward' reward.id %}">{{reward.name}}</a></td>
         <td>{{ reward.cost }}</td>
         <td><a href="{% url 'reward-update' reward.id%}">Edit</a></td>
       </tr>
@@ -50,7 +50,7 @@
             </span>
         </div>
     {% endif %}
-  {% endblock %} 
+  {% endblock %}
 
 {% endblock %}
 

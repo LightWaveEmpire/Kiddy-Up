@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %} {{ block.super }}{% endblock %}
+
+
+{% block sidenav%}
+
+{{ block.super }}
+
+{% endblock %}
+
+
+
+<!-- Here we can overwrite sidenav or topnav, if needed for parent -->
+
+
+{% block topnav %}
+
+{% endblock %}
+
+
+{% block content %}
+
+{{ block.super }}
+
+{% endblock %}

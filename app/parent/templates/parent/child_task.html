@@ -1,13 +1,13 @@
 
-{% extends "parent/parent_base.html" %}
+{% extends "parent/child_base.html" %}
 
 {% load has_perms %}
 
-{% block title %}Task{% endblock %}
+{% block title %}Task- {{ block.super }} {% endblock %}
 
 {% block content %}
 
-  <h1>Task</h1>
+  <h1>My Task</h1>
 
 <ul>
 <li>Task: {{ task.name }}</li>

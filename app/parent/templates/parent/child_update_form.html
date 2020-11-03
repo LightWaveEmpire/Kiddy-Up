@@ -1,0 +1,25 @@
+
+{% extends "parent/child_base.html" %}
+
+{% load has_perms %}
+
+{% block title %}Update {{ block.super}} {% endblock %}
+
+{% block content %}
+
+  <h1>Update Profile</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_table }}
+    <input type="submit" value="Save">
+</form>
+
+{% endblock %}
+
+
+{% block sidebar_content %}
+<!-- no sidebar for registration page -->
+{% endblock %}
+
+

@@ -24,13 +24,13 @@ services:
     container_name: mysql
     ports:
       - 3306:3306
-    volumes:
-      - data-volume:/var/lib/mysql
+#    volumes:
+#      - data-volume:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_DATABASE=django
     healthcheck:
       test: "exit 0"
 
-volumes:
-  data-volume:
+#volumes:
+#  data-volume:

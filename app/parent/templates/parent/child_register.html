@@ -5,10 +5,11 @@
 {% block content %}
 {{ block.super }}
 
-<h2>Register</h2>
+<h2>Add a Child User</h2>
 
 <form method="post">
     {% csrf_token %}
+<!--    {{ form.as_table }}-->
 <table >
     {% for field in form %}
     <tbody>
@@ -23,9 +24,7 @@
     {% endfor %}
     </tbody>
   </table>
-<!--    {{ form.as_table }}-->
-    <input type="submit" value="Register">
+    <input type="submit" value="Add Child">
 </form>
 
-<a href="{% url 'login' %}">Back to login</a>
 {% endblock %}
