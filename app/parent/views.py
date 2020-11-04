@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import login
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 #from .forms import ParentCreationForm
 from django.urls import reverse, reverse_lazy
 from .permissions import is_in_group_parent
@@ -13,7 +13,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 
 from parent.forms import ParentSignUpForm, ChildSignUpForm, ChildUpdateForm, TaskUpdateForm
-from parent.models import User, Child, Task, Reward, Parent, Original_Task
+from parent.models import Child, Task, Reward, Parent, Original_Task, User
+
+
 
 
 # Create views here.
