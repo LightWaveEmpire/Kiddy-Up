@@ -67,7 +67,7 @@
           <tbody>
           {% for child in view.children %}
             <tr>
-              <td><a href="{% url 'child' child.user_id %}">{{child.user.first_name}}</a></td>
+              <td><a href="{% url 'child' child.user_id %}">{{child.name}}</a></td>
               <td>{{ child.age }}</td>
               <td>{{ child.comp_level }}</td>
               <td>{{ child.current_points }}</td>
