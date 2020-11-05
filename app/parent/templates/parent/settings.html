@@ -28,20 +28,21 @@
       </thead>
 
     {% for parent in view.parent %}
-    {% if parent.user ==  user %}
-    <tbody>
-      <tr>
-        <td>{{parent.user.username}}</td>
-        <td>{{parent.user.first_name}} {{parent.user.last_name}}</td>
-        <td>{{parent.user.email}}</td>
-        <td><a href="{% url 'parent-update' parent.user_id%}">Edit</a></td>
+	    {% if parent.user ==  user %}
+	    <tbody>
+	      <tr>
+	        <td>{{parent.user.username}}</td>
+	        <td>{{parent.user.first_name}} {{parent.user.last_name}}</td>
+	        <td>{{parent.user.email}}</td>
+	        <td><a href="{% url 'parent-update' parent.user_id%}">Edit</a></td>
 
-      </tr>
-    {% endif %}
+	      </tr>
+	    {% endif %}
     {% endfor %}
+
     </tbody>
     </table>
-    {% endif %}
+
         <br />
         <br />
         <br />
