@@ -1,8 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.urls import reverse
-
-
+from __future__ import print_function
+from datetime import datetime
+from pytz import timezone
+import pickle
+import os.path
+from googleapiclient.discovery import build
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
 
 
 
@@ -32,6 +38,58 @@ class Parent(models.Model):
     def get_absolute_url(self):
         return reverse('parent', kwargs={'pk': self.pk})
 
+
+'''
+function: login_and_getCalendarService()
+        This function goes through google's login process.
+    If it is the user's first time logging in, the user
+    will be brought to sign into their account. Otherwise,
+    credentials will be loaded from last log in. This function
+    returns a calendar service.
+
+    @return service
+'''
+    def login_and_getCalendarService():
+        creds = None
+
+        if os.path.exists('token.pickle'):
+            with open('token.pickle', 'rb') as token:
+                creds = pickle.load(token)
+
+        if not creds or not creds.valid:
+            if creds and creds.expired and creds.refresh_token:
+                creds.refresh(Request())
+            else:
+                flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
+                creds = flow.run_local_server(port=0)
+            with open('token.pickle', 'wb') as token:
+                pickle.dump(creds, token)
+
+        return build('calendar', 'v3', credentials=creds)
+
+'''
+function: getListOfEvents()
+        This function accesses the specified amount of calendar events
+    and puts them into a list of strings to be stored into DB.
+
+    @parameter service - calendar service object
+    @paremeter n - desired amount of events
+    @return listOfEvents - array of strings
+'''
+    def getListOfEvents(service, n):
+        now = datetime.now(tz).isoformat()
+        events_result = service.events().list(calendarId='primary', timeMin=now,
+                                            maxResults=n, singleEvents=True,
+                                            orderBy='startTime').execute()
+        events = events_result.get('items', [])
+
+        listOfEvents = []
+
+        for event in events
+            string = #event.summary, description, start, end
+            listOfEvents.append(string)
+
+        return listOfEvents
 
 class Reward(models.Model):
     parent = models.ForeignKey(Parent, on_delete=models.CASCADE)
@@ -126,14 +184,6 @@ class Task(models.Model):
     def get_absolute_url(self):
         return reverse('task', kwargs={'pk': self.pk})
 
-
-
-
-
-
-
-
-
 class Original_Task(models.Model):
     parent = models.ForeignKey(Parent, on_delete=models.CASCADE)
     otask = models.CharField("Event / Task", max_length=500)
@@ -148,8 +198,27 @@ class Original_Task(models.Model):
     def get_absolute_url(self):
         return reverse('original_task', kwargs={'pk': self.pk})
 
+'''
+function: putListIntoOriginalTasks()
+    This function puts a list of strings into Original_Task table.
 
+    @parameter listOfStrings
+'''
+    def putListIntoOriginalTasks(listOfStrings):
+        #for each item in listOfStrings
+            #t = Original_Task(user="current_user", task=item)
+            #t.save()
 
+'''
+    This function takes checks which Original_Tasks need to be processed
+then processes them. Stores the processed tasks into Task table.
+'''
+    def processOriginalTasks():
+        #for each item in Original_Tasks table
+            #if it has not been processed
+                #process the task with spacy
+                #HIGH- use that info to fill in appropriate task fields
+                #save that into task table
 
 
 
