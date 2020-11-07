@@ -32,8 +32,7 @@ class Task(models.Model):
             added_tasks = True # tasks will be added below
             # May be multiple child tasks from one otask (one for each child)
             for task in tasks:
-                task_image = get_image_from_description(task.description)
-                t = Task(original_task = otask, parent = parent, child = task.child, name = task.name, description = task.description, status, image = task_image, date = task.date, location = task.location)
+                t = Task(original_task = otask, parent = parent, child = task.child, name = task.name, description = task.description, status, image = task.task_image, date = task.date, location = task.location)
                 t.save()
 
         return added_tasks
@@ -63,12 +62,13 @@ class Original_Task(models.Model):
         # task['people'] = people (a list of names)
         # task['date'] = date
         # task['location'] = location
-        task_details = extract_entities(otask)
+        task_details = entity_extraction.extract_entities(otask)
         # iterate through the list of identified people and make a new task for each child involved
         for person in task_details['people']
             try:
                 # Only get children that belong to the parent
                 child = Child.objects.get(name=person, parent = parent)
+
                 # Will this be an image or a file location? Django handles images well and can probably do this well
                 task_image = image_mapping.get_task_image(task_details['description'])
 
