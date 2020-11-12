@@ -9,7 +9,7 @@ from google.auth.transport.requests import Request
 
 
 '''
-function: login_and_getCalendarService()
+function: login_calendar()
         This function goes through google's login process.
     If it is the user's first time logging in, the user
     will be brought to sign into their account. Otherwise,
@@ -18,7 +18,7 @@ function: login_and_getCalendarService()
 
     @return service
 '''
-    def login_and_getCalendarService():
+    def login_calendar():
         creds = None
 
         if os.path.exists('token.pickle'):
@@ -37,7 +37,7 @@ function: login_and_getCalendarService()
         return build('calendar', 'v3', credentials=creds)
 
 '''
-function: getListOfEvents()
+function: get_list_of_events(service, n)
         This function accesses the specified amount of calendar events
     and puts them into a list of strings to be stored into DB.
 
@@ -45,7 +45,7 @@ function: getListOfEvents()
     @paremeter n - desired amount of events
     @return listOfEvents - array of strings
 '''
-    def getListOfEvents(service, n):
+    def get_list_of_events(service, n):
         now = datetime.now(tz).isoformat()
         events_result = service.events().list(calendarId='primary', timeMin=now,
                                             maxResults=n, singleEvents=True,
