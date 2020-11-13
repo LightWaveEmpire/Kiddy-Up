@@ -1,19 +1,7 @@
-... # other imports here
-
-
-# all functions that are not model specific can go in app/parent/utils/*.py
-# I put some stubs in there but not all
 from .utils import image_mapping, entity_extraction, reward_system, calendar_pull
 
 
-
-... # other classes here
-
-
-class Task(models.Model):
-
-    ... # other assigments/definitions here
-
+#belongs in Task
     def create_from_otask(parent: Parent, otask: Original_Task) -> bool:
         """
         Creates new tasks from the original task imported from the external source
@@ -39,13 +27,7 @@ class Task(models.Model):
 
 
 
-
-
-
-class Original_Task(models.Model):
-
-    ... # other assigments/definitions here
-
+#belongs in Original_Task
     def get_list_of_tasks(self: Original_Task) -> list:
         """
         Returns list of dict items with task details from an original task

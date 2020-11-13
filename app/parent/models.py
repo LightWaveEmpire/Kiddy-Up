@@ -135,3 +135,26 @@ class Original_Task(models.Model):
 
     def get_absolute_url(self):
         return reverse('original_task', kwargs={'pk': self.pk})
+
+    def has_created_task(self):
+        return Task.objects.filter(original_task=self).exists()
+
+    def turn_into_child_task(self):
+        #get task details
+        #for each child responsible
+            #enter task for that child
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
