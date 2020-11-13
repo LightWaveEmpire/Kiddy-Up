@@ -140,7 +140,8 @@ class Original_Task(models.Model):
         return Task.objects.filter(original_task=self).exists()
 
     def turn_into_child_task(self):
-        #get task details
+        pass
+        #get task details from SpaCy
         #for each child responsible
             #enter task for that child
 
