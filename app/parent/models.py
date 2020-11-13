@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.urls import reverse
+from parent.utils import entity_extraction
 
 class User(AbstractUser):
     is_parent = models.BooleanField(default=False)
@@ -140,22 +141,10 @@ class Original_Task(models.Model):
         return Task.objects.filter(original_task=self).exists()
 
     def turn_into_child_task(self):
-        pass
-        #get task details from SpaCy
-        #for each child responsible
-            #enter task for that child
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        task_details = entity_extraction.extract_entities(self.otask)
+        for kid_name in task_details['people']
+            k = table_access.get_child(self.parent, kid_name) 
+            if k is not None:   #if the parent's kid exists
+                #task_image is assigned to default
+                t = Task(original_task = self, parent = self.parent, child = k, name = task_details['name'], description = task_details['description'], status, image, date = task_details['date'], location = task_details['location']
+                t.save()
