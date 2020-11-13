@@ -1,3 +1,4 @@
+from parent.models import Child, Task, Original_Task
 
 #create child tasks from original_tasks
 def create_child_tasks_from_otask()
