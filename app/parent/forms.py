@@ -44,12 +44,25 @@ class ChildSignUpForm(UserCreationForm):
 class ChildUpdateForm(forms.ModelForm):
     class Meta:
         model = Child
-        fields = ['name', 'target_reward', 'age', 'comp_level', 'avatar', 'current_points']
+        fields = ['name', 'target_reward', 'age', 'comp_level', 'current_points']
 
     def __init__(self, user=None, *args, **kwargs):
         super(ChildUpdateForm, self).__init__(*args, **kwargs)
         if user:
             self.fields['target_reward'].choices = Reward.objects.filter(parent__user = user)
+
+
+class ChildUpdateProfileForm(forms.ModelForm):
+    class Meta:
+        model = Child
+        fields = ['name', 'target_reward', 'avatar']
+
+    def __init__(self, user=None, *args, **kwargs):
+        super(ChildUpdateProfileForm, self).__init__(*args, **kwargs)
+        if user:
+            self.fields['target_reward'].choices = Reward.objects.filter(parent__user = user)
+
+
 
 class TaskUpdateForm(forms.ModelForm):
     class Meta:

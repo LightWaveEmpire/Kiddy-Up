@@ -12,9 +12,12 @@ from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 
-from parent.forms import ParentSignUpForm, ChildSignUpForm, ChildUpdateForm, TaskUpdateForm
+from parent.forms import ParentSignUpForm, ChildSignUpForm, ChildUpdateForm, TaskUpdateForm, ChildUpdateProfileForm
 from parent.models import Child, Task, Reward, Parent, Original_Task, User, Earned_Reward
 
+from parent.utils import calendar_pull, task_factory, reward_system
+
+import threading
 
 
 
@@ -62,6 +65,25 @@ def redirect_on_login(request):
         return redirect('dashboard')
     else:
         return redirect('child-dashboard')
+
+
+def async_task_pull(user):
+    try:
+        service = calendar_pull.login_calendar(user)
+        list_of_events = calendar_pull.get_list_of_events(service,100)
+    except:
+        print("Unexpected error in Calendar Pull:")
+        raise
+    parent = Parent.objects.get(user = user)
+    task_factory.create_otasks_from_list(parent, list_of_events)
+
+
+def pull_tasks(request):
+    # Make the google task pull run in the background?
+    t = threading.Thread(target=async_task_pull, args=[request.user])
+    t.setDaemon(True)
+    t.start()
+    return redirect('dashboard')
 
 
 
@@ -512,9 +534,7 @@ class ChildProfileView(generic.TemplateView):
 
 class ChildUpdateProfileView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateView):
     model = Child
-#    form_class = ChildUpdateForm
-    fields = ['name', 'avatar', 'target_reward']
-
+    form_class = ChildUpdateProfileForm
     template_name = "parent/child_update_profile_form.html"
 
     def child(self):

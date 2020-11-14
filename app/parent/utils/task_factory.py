@@ -6,9 +6,9 @@ Creates Original_Task entries from a list if they do not already exist
 :param p_object: parent that owns the tasks
 :param listOfEvents: list of strings that will be turned into otasks
 '''
-def create_otasks_from_list(p_object, listOfEvents)
-    for item in listOfEvents
-        if not Original_Task.objects.filter(otask=item).exists()
+def create_otasks_from_list(p_object, listOfEvents):
+    for item in listOfEvents:
+        if not Original_Task.objects.filter(otask=item).exists():
             t = Original_Task(parent=p_object, otask=item)
             t.save()
 
@@ -17,9 +17,9 @@ Create child tasks from Original_Task table if they do not already exist
 
 :param p_object: parent that owns the tasks
 '''
-def create_child_tasks_from_otask(p_object)
-    for ot in Original_Task.objects.filter(parent=p_object)
-        if not ot.has_created_task()
+def create_child_tasks_from_otask(p_object):
+    for ot in Original_Task.objects.filter(parent=p_object):
+        if not ot.has_created_task():
             ot.turn_into_child_task()
 
 '''
@@ -28,6 +28,6 @@ This function takes a string that will be stored as an Original_Task.
 :param p_object: parent that will own the task
 :param task_string: string to be stored into otask
 '''
-def create_otask_manually(p_object, task_string)
+def create_otask_manually(p_object, task_string):
     ot = Original_Task(parent = p_object, otask = task_string)
     ot.save()

@@ -100,11 +100,11 @@ DATABASES = {
         'PASSWORD': 'password',
         'HOST': 'mysql',
         'PORT': 3306,
-#        'NAME': 'kiddyup',                      
-#        'USER': 'kiddyuproot',                      
-#        'PASSWORD': 'xXfXGxHYG2RWJdrt',                  
-#        'HOST': '',                      
-#        'PORT': '',                      
+#        'NAME': 'kiddyup',
+#        'USER': 'kiddyuproot',
+#        'PASSWORD': 'xXfXGxHYG2RWJdrt',
+#        'HOST': '',
+#        'PORT': '',
     }
 }
 

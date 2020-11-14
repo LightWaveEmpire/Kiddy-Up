@@ -15,8 +15,7 @@
 <li>Points: {{ task.point_value }}</li>
 <li>Image: {{ task.image }}</li>
 <li>Child: {{ task.child }}</li>
-<li><a href="{% url 'task-update' task.id%}">Edit</a></li>
-<li><a href="{% url 'task-delete' task.id%}">Delete</a></li>
+<li><a href="{% url 'task-delete' task.id%}">Complete</a></li>
 </ul>
 
 

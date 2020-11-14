@@ -7,7 +7,11 @@ from .views import *
 
 urlpatterns = [
     path('', views.DashboardView.as_view(), name="home"),
-    path("parent/redirect/", views.redirect_on_login, name="login-redirect"),
+    path('parent/redirect/', views.redirect_on_login, name='login-redirect'),
+    path('parent/pull_tasks', views.pull_tasks, name="pull_tasks"),
+
+
+
     path('parent/dashboard/', views.DashboardView.as_view(), name="dashboard"),
     path("parent/profile/", views.profile, name="profile"),
     path("parent/child_login/", views.child_login, name="child_login"),
