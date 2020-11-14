@@ -142,9 +142,33 @@ class Original_Task(models.Model):
 
     def turn_into_child_task(self):
         task_details = entity_extraction.extract_entities(self.otask)
-        for kid_name in task_details['people']
-            k = table_access.get_child(self.parent, kid_name) 
+        for kid_name in task_details['people']:
+            k = table_access.get_child(self.parent, kid_name)
             if k is not None:   #if the parent's kid exists
-                #task_image is assigned to default
-                t = Task(original_task = self, parent = self.parent, child = k, name = task_details['name'], description = task_details['description'], status, image, date = task_details['date'], location = task_details['location']
+                #task_image, status is assigned to default
+                t = Task(
+                         original_task=self,
+                         parent=self.parent,
+                         child=k,
+                         name=task_details['name'],
+                         description=task_details['description'],
+                         date=task_details['date'],
+                         location=task_details['location'])
                 t.save()
+
+
+
+class Earned_Reward(models.Model):
+    reward = models.ForeignKey(Reward, on_delete=models.CASCADE)
+    child = models.ForeignKey(Child, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'earned_reward'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return f"{self.child} earned {self.reward}"
+
+    def get_absolute_url(self):
+        return reverse('earned_reward', kwargs={'pk': self.pk})
+

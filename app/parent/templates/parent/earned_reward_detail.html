@@ -6,14 +6,13 @@
 
 {% block content %}
 
-  <h1>Reward</h1>
+  <h1>Earned Reward</h1>
 
 <ul>
-<li>Reward: {{ reward.rname }}</li>
-<li>Cost: {{ reward.cost }}</li>
-<li>Image: {{ reward.rimage }}</li>
-<li><a href="{% url 'reward-update' reward.id %}">Edit</a></li>
-<li><a href="{% url 'reward-delete' reward.id %}">Delete</a></li>
+<li>Reward: {{ earned_reward.child }}</li>
+<li>Cost: {{ earned_reward.reward }}</li>
+<!--<li>Image: {{ reward.rimage }}</li>-->
+<li><a href="{% url 'earned_reward-delete' earned_reward.id %}">Reward Given</a></li>
 </ul>
 
 

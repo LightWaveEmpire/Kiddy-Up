@@ -7,7 +7,7 @@ from .views import *
 
 urlpatterns = [
     path('', views.DashboardView.as_view(), name="home"),
-    # path("parent/dashboard/", views.parent, name="dashboard"),
+    path("parent/redirect/", views.redirect_on_login, name="login-redirect"),
     path('parent/dashboard/', views.DashboardView.as_view(), name="dashboard"),
     path("parent/profile/", views.profile, name="profile"),
     path("parent/child_login/", views.child_login, name="child_login"),
@@ -27,6 +27,11 @@ urlpatterns = [
     path('parent/reward/<int:pk>/delete/', RewardDelete.as_view(), name='reward-delete'),
 
 
+    path('parent/earned_rewards/', views.EarnedRewardListView.as_view(), name='earned_rewards'),
+    path('parent/earned_reward/<int:pk>/', views.EarnedRewardDetailView.as_view(), name='earned_reward'),
+    path('parent/earned_reward/<int:pk>/delete/', EarnedRewardDelete.as_view(), name='earned_reward-delete'),
+
+
     path('parent/tasks/', views.TaskListView.as_view(), name='tasks'),
     path('parent/task/<int:pk>/', views.TaskDetailView.as_view(), name='task'),
     path('parent/task/add/', TaskCreate.as_view(), name='task-add'),
@@ -43,17 +48,17 @@ urlpatterns = [
 
     path('parent/children/', views.ChildListView.as_view(), name='children'),
     path('parent/child/<int:pk>/', views.ChildDetailView.as_view(), name='child'),
-#     path('child/add/', ChildCreate.as_view(), name='child-add'),
+    #     path('child/add/', ChildCreate.as_view(), name='child-add'),
     path('parent/child/<int:pk>/update/', ChildUpdate.as_view(), name='child-update'),
     path('parent/child/<int:pk>/delete/', ChildDelete.as_view(), name='child-delete'),
 
     path('parents/', views.ParentListView.as_view(), name='parents'),
     path('parent/<int:pk>/', views.ParentDetailView.as_view(), name='parent'),
-#    path('parent/add/', ParentCreate.as_view(), name='parent-add'),
+    #    path('parent/add/', ParentCreate.as_view(), name='parent-add'),
     path('parent/<int:pk>/update/', ParentUpdate.as_view(), name='parent-update'),
     path('parent/<int:pk>/delete/', ParentDelete.as_view(), name='parent-delete'),
 
-#    path('link-source/', LinkSource.as_view(), name='link-source'),
+    #    path('link-source/', LinkSource.as_view(), name='link-source'),
 
 
 # Child Views

@@ -13,7 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 
 from parent.forms import ParentSignUpForm, ChildSignUpForm, ChildUpdateForm, TaskUpdateForm
-from parent.models import Child, Task, Reward, Parent, Original_Task, User
+from parent.models import Child, Task, Reward, Parent, Original_Task, User, Earned_Reward
 
 
 
@@ -54,6 +54,14 @@ def profile(request):
 @user_passes_test(is_in_group_parent)
 def child_login(request):
     return render(request, "parent/child_login.html")
+
+
+@login_required
+def redirect_on_login(request):
+    if request.user.is_parent ==  True:
+        return redirect('dashboard')
+    else:
+        return redirect('child-dashboard')
 
 
 
@@ -101,6 +109,42 @@ class RewardDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
 
     def test_func(self):
         return self.request.user.is_parent == True
+
+
+
+# Earned Reward Views
+
+
+
+class EarnedRewardListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
+    model=Earned_Reward
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Earned_Reward.objects.filter(child__parent__user=self.request.user)
+
+    def test_func(self):
+        return self.request.user.is_parent == True
+
+
+
+class EarnedRewardDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailView):
+    model = Earned_Reward
+
+    def test_func(self):
+        return self.request.user.is_parent == True
+
+
+class EarnedRewardDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
+    model = Earned_Reward
+    success_url = reverse_lazy('earned-rewards')
+
+    def test_func(self):
+        return self.request.user.is_parent == True
+
+
+
+
 
 
 
@@ -468,8 +512,10 @@ class ChildProfileView(generic.TemplateView):
 
 class ChildUpdateProfileView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateView):
     model = Child
-    form_class = ChildUpdateForm
-    template_name = "parent/child_update_form.html"
+#    form_class = ChildUpdateForm
+    fields = ['name', 'avatar', 'target_reward']
+
+    template_name = "parent/child_update_profile_form.html"
 
     def child(self):
         return Child.objects.filter(user = self.request.user)

@@ -164,7 +164,7 @@ DEBUG_TOOLBAR_CONFIG = {
 """
 
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/parent/redirect/'
 
 
 # Handle Email Requests for password reset
