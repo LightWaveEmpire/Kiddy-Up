@@ -3,7 +3,7 @@
 
 {% load has_perms %}
 
-{% block title %}Task{% endblock %}
+{% block title %}Original Task - {{ block.super }} {% endblock %}
 
 {% block content %}
 
@@ -11,10 +11,8 @@
 
 <ul>
 <li>Original Task: {{ original_task.otask }}</li>
-<li>{{ original_task.owner }}</li>
-
-<li><a href="{% url 'original_task-update' task.id%}">Edit</a></li>
-<li><a href="{% url 'original_task-delete' task.id%}">Delete</a></li>
+<li><a href="{% url 'original_task-update' original_task.id%}">Edit</a></li>
+<li><a href="{% url 'original_task-delete' original_task.id%}">Delete</a></li>
 </ul>
 
 

@@ -123,9 +123,10 @@ class Task(models.Model):
     def get_absolute_url(self):
         return reverse('task', kwargs={'pk': self.pk})
 
+
 class Original_Task(models.Model):
     parent = models.ForeignKey(Parent, on_delete=models.CASCADE)
-    otask = models.CharField("Event / Task", max_length=500)
+    otask = models.TextField("Event / Task", blank=True, null=True)
 
     class Meta:
         db_table = 'original_task'

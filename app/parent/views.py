@@ -14,15 +14,14 @@ from parent.forms import ParentSignUpForm, ChildSignUpForm, ChildUpdateForm, Tas
 from parent.models import Child, Task, Reward, Parent, Original_Task, User, Earned_Reward
 from parent.utils import calendar_pull, task_factory, reward_system
 
-import threading
-
 import google_apis_oauth
 import os
 import os.path
 import sys
 
-# Create views here.
-
+'''
+Views to authenticate with Google and pull events and tasks
+'''
 
 # The url where the google oauth should redirect
 # after a successful login.
@@ -87,6 +86,10 @@ def pull_tasks(request):
     parent = Parent.objects.get(user = request.user)
     task_factory.create_otasks_from_list(parent, list_of_events)
     return redirect('dashboard')
+
+
+
+
 
 
 # Require Login
@@ -262,7 +265,7 @@ class Original_TaskUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.Updat
 
 class Original_TaskDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
     model = Original_Task
-    success_url = reverse_lazy('original_task')
+    success_url = reverse_lazy('original_tasks')
 
     def test_func(self):
         return self.request.user.is_parent == True
@@ -276,14 +279,18 @@ class Original_TaskDelete(LoginRequiredMixin, UserPassesTestMixin, generic.Delet
 
 
 ## Task Views
-#@login_required
-#@user_passes_test(is_in_group_parent)
-#def tasks_list(request):
-#    tasks = Task.objects.all()
-#    context = {
-#         'tasks':tasks,
-#            }
-#    return render(request, "parent/task_list.html", context)
+
+class CompletedTaskListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
+    model=Task
+    paginate_by = 10
+    template_name = "parent/completed_task_list.html"
+
+    def get_queryset(self):
+        return Task.objects.filter(parent__user=self.request.user, status='COMP')
+
+    def test_func(self):
+        return self.request.user.is_parent == True
+
 
 class TaskListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
     model=Task

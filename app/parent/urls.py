@@ -39,13 +39,15 @@ urlpatterns = [
     path('parent/earned_reward/<int:pk>/', views.EarnedRewardDetailView.as_view(), name='earned_reward'),
     path('parent/earned_reward/<int:pk>/delete/', EarnedRewardDelete.as_view(), name='earned_reward-delete'),
 
-
+    path('parent/tasks/complete', views.CompletedTaskListView.as_view(), name='completed_tasks'),
     path('parent/tasks/', views.TaskListView.as_view(), name='tasks'),
     path('parent/task/<int:pk>/', views.TaskDetailView.as_view(), name='task'),
     path('parent/task/add/', TaskCreate.as_view(), name='task-add'),
     path('parent/task/<int:pk>/update/', TaskUpdate.as_view(), name='task-update'),
     path('parent/task/<int:pk>/delete/', TaskDelete.as_view(), name='task-delete'),
 
+
+    path('parent/manual_add/', Original_TaskCreate.as_view(), name='manual_add'),
 
     path('parent/original_tasks/', views.Original_TaskListView.as_view(), name='original_tasks'),
     path('parent/original_task/<int:pk>/', views.Original_TaskDetailView.as_view(), name='original_task'),

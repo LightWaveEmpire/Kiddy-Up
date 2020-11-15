@@ -3,13 +3,12 @@
 
 {% load has_perms %}
 
-{% block title %} Parent Dashboard{% endblock %}
+{% block title %} Profile - {{ block.super }}{% endblock %}
 
 {% block content %}
 
 <h1>Profile</h1>
 <ul>
-<li>Name:  {{ user.first_name }} {{user.last_name}}</li>
 <li>Username:  {{ user.username }}</li>
 <li>Email Address: {{user.email}}</li>
 <li>Password: **** </li>
