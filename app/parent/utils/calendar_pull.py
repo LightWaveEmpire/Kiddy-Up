@@ -1,23 +1,25 @@
 from __future__ import print_function
-from datetime import datetime
+from datetime import datetime, tzinfo
 from pytz import timezone
 import pickle
 import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+import google_apis_oauth
+from django.conf import settings
+from parent.models import Parent
+
+# current_path = os.path.dirname(__file__)
+# credential_path = os.path.join(current_path, 'credentials.json')
 
 
-current_path = os.path.dirname(__file__)
-credential_path = os.path.join(current_path, 'credentials.json')
 
 
-
-
-# If modifying these scopes, delete the file token.pickle.
-SCOPES = [
-    'https://www.googleapis.com/auth/calendar.readonly',
-    'https://www.googleapis.com/auth/tasks.readonly']
+# # If modifying these scopes, delete the file token.pickle.
+# SCOPES = [
+#     'https://www.googleapis.com/auth/calendar.readonly',
+#     'https://www.googleapis.com/auth/tasks.readonly']
 
 
 '''
@@ -31,27 +33,8 @@ function: login_calendar()
     @return service
 '''
 def login_calendar(user):
-    creds = None
-    try:
-        token_path = os.path.join(current_path, user_tokens, f'{user.username}.pickle')
-        raise Exception('TEST 1')
-    except Exception as e:
-        print('Caught error: ' + repr(e))
-
-
-    if os.path.exists('token.pickle'):
-        with open(token_path, 'rb') as token:
-            creds = pickle.load(token)
-
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(credential_path, SCOPES)
-            creds = flow.run_local_server(port=0)
-        with open(token_path, 'wb') as token:
-            pickle.dump(creds, token)
-
+    parent = Parent.objects.get(user = user)
+    creds = google_apis_oauth.load_credentials(parent.account_creds)
     return build('calendar', 'v3', credentials=creds)
 
 '''
@@ -64,7 +47,7 @@ and puts them into a list of strings to be stored into DB.
 @return listOfEvents - array of strings
 '''
 def get_list_of_events(service, n):
-    now = datetime.now(tz).isoformat()
+    now = datetime.now(timezone(settings.TIME_ZONE)).isoformat()
     events_result = service.events().list(calendarId='primary', timeMin=now,
                                         maxResults=n, singleEvents=True,
                                         orderBy='startTime').execute()
@@ -73,7 +56,7 @@ def get_list_of_events(service, n):
     listOfEvents = []
 
     for event in events:
-        string = "testing" #event.summary, description, start, end
+        string = "Johnny and Sally Soccer Practice at 5pm on Friday, the 15th of December" #event.summary, description, start, end
         listOfEvents.append(string)
 
     return listOfEvents

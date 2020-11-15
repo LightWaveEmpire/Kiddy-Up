@@ -1,5 +1,5 @@
 # views.py
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import login
@@ -10,18 +10,83 @@ from .permissions import is_in_group_parent
 #from .models import Child, Task, Reward, Parent, Original_Task
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-
-
 from parent.forms import ParentSignUpForm, ChildSignUpForm, ChildUpdateForm, TaskUpdateForm, ChildUpdateProfileForm
 from parent.models import Child, Task, Reward, Parent, Original_Task, User, Earned_Reward
-
 from parent.utils import calendar_pull, task_factory, reward_system
 
 import threading
 
-
+import google_apis_oauth
+import os
+import os.path
+import sys
 
 # Create views here.
+
+
+# The url where the google oauth should redirect
+# after a successful login.
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+REDIRECT_URI = 'http://localhost:8080/google_oauth/callback/'
+
+# Authorization scopes required
+SCOPES = [
+    'https://www.googleapis.com/auth/calendar.readonly',
+    'https://www.googleapis.com/auth/tasks.readonly']
+
+# Path of the "client_id.json" file
+current_path = os.path.dirname(__file__)
+JSON_FILEPATH = os.path.join(current_path, 'client_id.json')
+
+
+def RedirectOauthView(request):
+    oauth_url = google_apis_oauth.get_authorization_url(
+        JSON_FILEPATH, SCOPES, REDIRECT_URI)
+    return HttpResponseRedirect(oauth_url)
+
+
+def CallbackView(request):
+    try:
+        # Get user credentials
+        credentials = google_apis_oauth.get_crendentials_from_callback(
+            request,
+            JSON_FILEPATH,
+            SCOPES,
+            REDIRECT_URI
+        )
+
+        # Stringify credentials for storing them in the DB
+        stringified_token = google_apis_oauth.stringify_credentials(
+            credentials)
+
+        # Store the credentials safely in the DB
+        parent = Parent.objects.get(user = request.user)
+        parent.account_creds = stringified_token
+        parent.save()
+
+        # Now that you have stored the user credentials you
+        # can redirect user to your main application.
+        return redirect('settings')
+    except:
+        print(f'Error occurred when getting oauth credentials')
+        raise
+        return redirect('settings')
+
+
+
+
+def pull_tasks(request):
+    try:
+        service = calendar_pull.login_calendar(request.user)
+        list_of_events = calendar_pull.get_list_of_events(service, 100)
+        for event in list_of_events:
+            print(f'\n\nDEBUG: {event}\n\n', file=sys.stderr)
+    except:
+        print("Unexpected error in Calendar Pull:")
+        raise
+    parent = Parent.objects.get(user = request.user)
+    task_factory.create_otasks_from_list(parent, list_of_events)
+    return redirect('dashboard')
 
 
 # Require Login
@@ -65,25 +130,6 @@ def redirect_on_login(request):
         return redirect('dashboard')
     else:
         return redirect('child-dashboard')
-
-
-def async_task_pull(user):
-    try:
-        service = calendar_pull.login_calendar(user)
-        list_of_events = calendar_pull.get_list_of_events(service,100)
-    except:
-        print("Unexpected error in Calendar Pull:")
-        raise
-    parent = Parent.objects.get(user = user)
-    task_factory.create_otasks_from_list(parent, list_of_events)
-
-
-def pull_tasks(request):
-    # Make the google task pull run in the background?
-    t = threading.Thread(target=async_task_pull, args=[request.user])
-    t.setDaemon(True)
-    t.start()
-    return redirect('dashboard')
 
 
 

@@ -113,7 +113,29 @@
     <br />
     <br />
     <h2>Link Calendar and Task List</h2>
-	<a href="{% url 'pull_tasks' %}" >Get Tasks</a>
+          {% for parent in view.parent %}
+
+	<ul>
+    <li>
+    {% if parent.account_creds %}
+      Account Linked Successfully! ->
+      <a href="{% url 'google_oauth' %}" >Link Again</a>
+    {% else %}
+      <a href="{% url 'google_oauth' %}" >Link Google Account</a>
+    {%endif %}
+    </li>
+
+    <li>
+        {% if parent.account_creds %}
+          <a href="{% url 'pull_tasks' %}" >Get Calendar Events and Tasks</a>
+        {% else %}
+
+        {% endif %}
+        {% endfor %}
+    </li>
+
+  </ul>
+
 
 
 

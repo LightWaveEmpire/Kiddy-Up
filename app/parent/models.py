@@ -17,7 +17,7 @@ class Parent(models.Model):
     # reevaluate field type on info re: acct storage
     # still need to work on things, not sure how this will work out
     # Will likely need changes when we get to it
-    accounts = models.JSONField(blank=True, null=True)
+    account_creds = models.JSONField(blank=True, null=True)
 
     class Meta:
         db_table = 'parent'
