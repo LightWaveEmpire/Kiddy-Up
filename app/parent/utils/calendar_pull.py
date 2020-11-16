@@ -6,7 +6,6 @@ import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
-import google_apis_oauth
 from django.conf import settings
 from parent.models import Parent
 
@@ -56,7 +55,10 @@ def get_list_of_events(service, n):
     listOfEvents = []
 
     for event in events:
-        string = "Johnny and Sally Soccer Practice at 5pm on Friday, the 15th of December" #event.summary, description, start, end
+        #string = "Johnny and Sally Soccer Practice at 5pm on Friday, the 15th of December"
+        start_date = event['start']['datetime']
+        end_date = event['end']['datetime']
+        string = event['summary'] + " " + event['description'] + " Starts on " + start_date + " and ends on " + end_date + "."
         listOfEvents.append(string)
 
     return listOfEvents
