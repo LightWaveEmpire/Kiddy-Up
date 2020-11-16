@@ -55,10 +55,14 @@ def get_list_of_events(service, n):
     listOfEvents = []
 
     for event in events:
-        #string = "Johnny and Sally Soccer Practice at 5pm on Friday, the 15th of December"
         start_date = event['start']['datetime']
         end_date = event['end']['datetime']
-        string = event['summary'] + " " + event['description'] + " Starts on " + start_date + " and ends on " + end_date + "."
+        
+        #formatted as "05:00PM on Friday, December 15"
+        start_string = start_date.strftime("%I:%M%p on %A, %B %d")
+        end_string = end_date.strftime("%I:%M%p on %A, %B %d")
+
+        string = event['summary'] + ". " + event['description'] + ". Starts at " + start_string + ". Ends at " + end_string + "."
         listOfEvents.append(string)
 
     return listOfEvents
