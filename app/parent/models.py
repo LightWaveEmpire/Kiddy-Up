@@ -3,13 +3,14 @@ from django.contrib.auth.models import AbstractUser, UserManager
 from django.urls import reverse
 from parent.utils import entity_extraction
 
+
 class User(AbstractUser):
     is_parent = models.BooleanField(default=False)
     is_child = models.BooleanField(default=False)
 
-
 class Parent(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='parent')
+    active_child = models.ForeignKey('Child', on_delete=models.SET_NULL, blank=True, null=True, related_name='logged_in_child')
     zip_code = models.CharField(
         "ZIP / Postal code",
         max_length=12,
@@ -51,9 +52,9 @@ class Reward(models.Model):
 
 class Child(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='child')
-    parent = models.ForeignKey(Parent, on_delete=models.CASCADE)
+    parent = models.ForeignKey(Parent, on_delete=models.CASCADE, related_name ='parent')
     name = models.CharField("Child Name", max_length=20)
-    target_reward = models.ForeignKey('Reward', on_delete=models.PROTECT, blank=True, null=True)
+    target_reward = models.ForeignKey('Reward', on_delete=models.SET_NULL, blank=True, null=True)
     age = models.IntegerField("Age")
     comp_level = models.IntegerField("Comprehension Level", blank=True, null=True)
     owned_rewards = models.JSONField(blank=True, null=True)
@@ -94,7 +95,7 @@ class Task(models.Model):
         (COMPLETE, "Complete")
     ]
 
-    original_task = models.ForeignKey('Original_Task', on_delete=models.CASCADE, null=True, default=None)
+    original_task = models.ForeignKey('Original_Task', on_delete=models.SET_NULL, null=True, default=None)
     parent = models.ForeignKey(Parent, on_delete=models.CASCADE, related_name='creator')
     child = models.ForeignKey(Child, on_delete=models.CASCADE, related_name='actioner')
 
@@ -122,6 +123,10 @@ class Task(models.Model):
 
     def get_absolute_url(self):
         return reverse('task', kwargs={'pk': self.pk})
+
+    def set_complete(self):
+        self.child__current_points += self.point_value
+        self.status = 'COMP'
 
 
 class Original_Task(models.Model):

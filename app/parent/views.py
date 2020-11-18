@@ -14,7 +14,7 @@ from parent.forms import ParentSignUpForm, ChildSignUpForm, ChildUpdateForm, Tas
 from parent.models import Child, Task, Reward, Parent, Original_Task, User, Earned_Reward
 from parent.utils import calendar_pull, task_factory, reward_system
 
-#import google_apis_oauth
+import google_apis_oauth
 import os
 import os.path
 import sys
@@ -37,13 +37,15 @@ SCOPES = [
 current_path = os.path.dirname(__file__)
 JSON_FILEPATH = os.path.join(current_path, 'client_id.json')
 
-
+@login_required
+@user_passes_test(is_in_group_parent)
 def RedirectOauthView(request):
     oauth_url = google_apis_oauth.get_authorization_url(
         JSON_FILEPATH, SCOPES, REDIRECT_URI)
     return HttpResponseRedirect(oauth_url)
 
-
+@login_required
+@user_passes_test(is_in_group_parent)
 def CallbackView(request):
     try:
         # Get user credentials
@@ -73,7 +75,8 @@ def CallbackView(request):
 
 
 
-
+@login_required
+@user_passes_test(is_in_group_parent)
 def pull_tasks(request):
     try:
         service = calendar_pull.login_calendar(request.user)

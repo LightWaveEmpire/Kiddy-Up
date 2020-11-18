@@ -1,11 +1,16 @@
 from __future__ import print_function
 from datetime import datetime, tzinfo
+from dateutil.parser import parse as dtparse
 from pytz import timezone
 import pickle
 import os.path
+import sys
+
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+import google_apis_oauth
+
 from django.conf import settings
 from parent.models import Parent
 
@@ -47,6 +52,7 @@ and puts them into a list of strings to be stored into DB.
 '''
 def get_list_of_events(service, n):
     now = datetime.now(timezone(settings.TIME_ZONE)).isoformat()
+    out_time_format = "%I:%M%p on %A, %B %d"
     events_result = service.events().list(calendarId='primary', timeMin=now,
                                         maxResults=n, singleEvents=True,
                                         orderBy='startTime').execute()
@@ -55,14 +61,32 @@ def get_list_of_events(service, n):
     listOfEvents = []
 
     for event in events:
-        start_date = event['start']['datetime']
-        end_date = event['end']['datetime']
-        
+        summary = location = description = end_date = start_date = ""
+        print(f'\n\nDEBUG: {event}\n\n', file=sys.stderr)
+        if 'start' in event:
+            if 'date' in event['start']:
+                start_date = event['start']['date']
+            if 'dateTime' in event['start']:
+                start_date = event['start']['dateTime']
         #formatted as "05:00PM on Friday, December 15"
-        start_string = start_date.strftime("%I:%M%p on %A, %B %d")
-        end_string = end_date.strftime("%I:%M%p on %A, %B %d")
+        start_string = datetime.strftime(dtparse(start_date), format=out_time_format)
+        if 'end' in event:
+            if 'date' in event['end']:
+                end_date = event['end']['date']
+            if 'dateTime' in event['end']:
+                end_date = event['end']['dateTime']
+        #formatted as "05:00PM on Friday, December 15"
+        end_string = datetime.strftime(dtparse(end_date), format=out_time_format)
+        if 'location' in event:
+            location = event['location']
+        if 'summary' in event:
+            summary = event['summary']
+        if 'description' in event:
+            description = event['description']
 
-        string = event['summary'] + ". " + event['description'] + ". Starts at " + start_string + ". Ends at " + end_string + "."
+
+
+        string = f'{summary} . {description} . {location} . Starts at {start_string} . Ends at {end_string}.'
         listOfEvents.append(string)
 
     return listOfEvents
