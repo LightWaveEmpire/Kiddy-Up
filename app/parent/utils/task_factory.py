@@ -7,9 +7,9 @@ Creates Original_Task entries from a list if they do not already exist
 :param listOfEvents: list of strings that will be turned into otasks
 '''
 def create_otasks_from_list(p_object, listOfEvents):
-    for item in listOfEvents:
-        if not Original_Task.objects.filter(otask=item, parent=p_object).exists():
-            t = Original_Task(parent=p_object, otask=item)
+    for event, event_json in listOfEvents:
+        if not Original_Task.objects.filter(otask=event, raw_otask=event_json, parent=p_object).exists():
+            t = Original_Task(parent=p_object, otask= event, raw_otask=event_json)
             t.save()
 
 '''

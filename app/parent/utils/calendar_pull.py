@@ -87,6 +87,6 @@ def get_list_of_events(service, n):
 
 
         string = f'{summary} . {description} . {location} . Starts at {start_string} . Ends at {end_string}.'
-        listOfEvents.append(string)
-
+        listOfEvents.append((string, event))
+    # return a tuple of event
     return listOfEvents

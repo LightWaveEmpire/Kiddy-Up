@@ -81,8 +81,8 @@ def pull_tasks(request):
     try:
         service = calendar_pull.login_calendar(request.user)
         list_of_events = calendar_pull.get_list_of_events(service, 100)
-        for event in list_of_events:
-            print(f'\n\nDEBUG: {event}\n\n', file=sys.stderr)
+        for event, json_event in list_of_events:
+            print(f'\n\nDEBUG: {event}\n\n{json_event}\n\n', file=sys.stderr)
     except:
         print("Unexpected error in Calendar Pull:")
         raise

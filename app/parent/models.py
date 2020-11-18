@@ -132,6 +132,7 @@ class Task(models.Model):
 class Original_Task(models.Model):
     parent = models.ForeignKey(Parent, on_delete=models.CASCADE)
     otask = models.TextField("Event / Task", blank=True, null=True)
+    raw_otask = models.JSONField(blank=True, null=True)
 
     class Meta:
         db_table = 'original_task'
@@ -147,6 +148,7 @@ class Original_Task(models.Model):
         return Task.objects.filter(original_task=self).exists()
 
     def turn_into_child_task(self):
+        # May need to call with self.raw_otask
         task_details = entity_extraction.extract_entities(self.otask)
         for kid_name in task_details['people']:
             k = table_access.get_child(self.parent, kid_name)
