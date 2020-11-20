@@ -20,3 +20,14 @@ def complete_task(c_object, t_object):
     #mark the task as completed
     t.status = "COMP"
     t.save()
+
+def purchase_reward(c_object, r_object):
+    c = c_object
+    r = r_object
+    targetPoints = r.cost
+    currentPoints = c.current_points
+    if currentPoints >= targetPoints:
+        c.current_points = currentPoints - targetPoints
+    c.save()
+        
+    
