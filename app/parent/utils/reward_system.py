@@ -21,13 +21,16 @@ def complete_task(c_object, t_object):
     t.status = "COMP"
     t.save()
 
-def purchase_reward(c_object, r_object):
+def purchase_reward(c_object):
     c = c_object
-    r = r_object
-    targetPoints = r.cost
+    targetPoints = c.target_rewards.cost
     currentPoints = c.current_points
     if currentPoints >= targetPoints:
         c.current_points = currentPoints - targetPoints
     c.save()
+    '''
+    Not sure how this is done with Foreign Key
+    earnedRewards = Earned_Reward()
+    '''
         
     
