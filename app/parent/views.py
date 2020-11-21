@@ -18,6 +18,7 @@ import google_apis_oauth
 import os
 import os.path
 import sys
+import requests
 
 '''
 Views to authenticate with Google and pull events and tasks
@@ -104,6 +105,34 @@ def pull_tasks(request):
 
 class DashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateView):
     template_name = 'parent/dashboard.html'
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     # context["weather"] = weather
+    #     return context
+
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
+        print(f'\n\nDEBUG: ZIP CODE = {zip_code}\n\n', file=sys.stderr)
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        print(f'\n\nDEBUG: JSON WEATHER = {day_weather}\n\n', file=sys.stderr)
+        weather = {
+            'city': day_weather['name'],
+            'now_temp': day_weather['main']['feels_like'],
+            'min_temp': day_weather['main']['temp_min'],
+            'max_temp': day_weather['main']['temp_max'],
+            'description': day_weather['weather'][0]['description'],
+            'icon': day_weather['weather'][0]['icon']
+        }
+        print(f'\n\nDEBUG: WEATHER = {weather}\n\n', file=sys.stderr)
+        return weather
+
 
     def children(self):
         return Child.objects.filter(parent__user = self.request.user)

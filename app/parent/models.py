@@ -62,6 +62,7 @@ class Child(models.Model):
     current_points = models.IntegerField("Point Balance", default=0)
     class Meta:
         db_table = 'child'
+        verbose_name_plural = 'children'
 
         constraints = [
             # ensures a parent can't have multiple children with same name

@@ -8,6 +8,16 @@
 {% block content %}
 
 {{ block.super }}
+
+            <p>
+                <span class="title">Weather for {{ view.weather.city }}</span>
+                <figure class="image is-50x50">
+                    <img src="http://openweathermap.org/img/w/{{ view.weather.icon }}.png" alt="Image"> {{ view.weather.now_temp }}° F</br>{{ view.weather.description }}
+                </figure>
+                Low: {{ view.weather.min_temp }}° F</br> High: {{ view.weather.max_temp }}° F</br>
+                </figure>
+            </p>
+
 {% if parent.account_creds %}
                             <div class="d-sm-flex justify-content-between align-items-center mb-3">
                             <!--h4 class="text-dark mb-0">Dashboard</h3--><a class="btn btn-primary btn-sm d-none d-sm-inline-block" role="button" href="{% url 'settings'%}"><i class="far fa-sun fa-sm text-white-50"></i>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Set up</a></div>
