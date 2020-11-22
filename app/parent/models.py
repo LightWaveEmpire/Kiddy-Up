@@ -54,12 +54,15 @@ class Child(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='child')
     parent = models.ForeignKey(Parent, on_delete=models.CASCADE, related_name ='parent')
     name = models.CharField("Child Name", max_length=20)
+    is_authenticated = models.BooleanField(default=False)
     target_reward = models.ForeignKey('Reward', on_delete=models.SET_NULL, blank=True, null=True)
     age = models.IntegerField("Age")
     comp_level = models.IntegerField("Comprehension Level", blank=True, null=True)
     owned_rewards = models.JSONField(blank=True, null=True)
     avatar = models.ImageField("Avatar", max_length=20)
     current_points = models.IntegerField("Point Balance", default=0)
+    pin = models.CharField(max_length=6, default='123')
+
     class Meta:
         db_table = 'child'
         verbose_name_plural = 'children'
@@ -71,6 +74,14 @@ class Child(models.Model):
             # ensures age of child is between 5-12, inclusive
             models.CheckConstraint(check=models.Q(age__range=(5, 12)), name='age_5_12')
         ]
+
+    def authenticate(self, pin):
+        # We'll need to do logic to test if pin is correct and then authenticate
+        if pin == self.pin:
+            self.is_authenticated = True
+        return self.is_authenticated
+
+
 
     def __str__(self):
         """String for representing the Model object."""

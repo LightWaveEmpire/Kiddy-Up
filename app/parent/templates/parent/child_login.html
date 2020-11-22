@@ -1,30 +1,110 @@
-
-{% extends "parent/parent_base.html" %}
-
+{% extends "parent/child_base.html" %}
 {% load has_perms %}
-
-{% block title %} Child Login {% endblock %}
-
+{% block title %} Child Login - {{ block.super }} {% endblock %}
 {% block content %}
-
-  <h1>Child Login</h1>
-<p>Needs to have a login mechanism, display all children avatars and a 3x3 grid of pictures. Child chooses avatar then can select picture pattern. Login once correct sequesnce selected><p/>
-<ul>
-<li>Pictures</li>
-<li>Pattern</li>
-<li>Reset (ask parent)</li>
-<li>...</li>
-<li>...</li>
-<li>...</li>
-
-</ul>
+{{ block.super }}
+<!--    {% if request.user|has_perms %}-->
+<!--        <li class="nav-item">-->
+<!--                <span data-i18n="nav.dash.main">Authenticated</span>-->
+<!--        </li>-->
+<!--    {% endif %}-->
+<div style="margin: 20px 0px 0px;">
+    <div class="container" style="padding: 100px;">
+        <form method="post">
+    {% csrf_token %}
 
 
-{% endblock %}
+        <table>
+            <tr>
+                <td>
+                    <div class="row" style="padding: 10px;">
+                        <div class="col-md-4">
+                            <h2 style="width: 343px;">Welcome to Kiddy-Up!</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table id="example" class="table " width="100%">
+                                <thead>
 
-
-{% block sidebar_content %}
-<!-- no sidebar for registration page -->
-{% endblock %}
-
-
+                                </thead>
+                                <tbody>
+                                    {% for child in view.children %}
+                                    <tr>
+                                        <td>{{child.name}} {{child.avatar}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </td>
+                <td >
+                    <div class="row" style="padding: 10px; text-align: center;">
+                        <div class="col-md-12">
+                                                        ​
+                            <script>
+                                function input(e)
+                                    {
+                                        var tbInput = document.getElementById("tbInput");
+                                        tbInput.value = tbInput.value + e.value;
+                                    }
+                                    ​
+                                    function del()
+                                    {
+                                        var tbInput = document.getElementById("tbInput");
+                                        tbInput.value = tbInput.value.substr(0,tbInput.value.length-1);
+                                    }
+                            </script>
+                            ​
+                            <div id="VirtualKey" style="margin: 15px">
+                                <input id="btn1" type="button" value="1" onclick="input(this);">
+                                <input id="btn2" type="button" value="2" onclick="input(this);">
+                                <input id="btn3" type="button" value="3" onclick="input(this);">
+                                <br>
+                                <input id="btn4" type="button" value="4" onclick="input(this);">
+                                <input id="btn5" type="button" value="5" onclick="input(this);">
+                                <input id="btn6" type="button" value="6" onclick="input(this);">
+                                <br>
+                                <input id="btn7" type="button" value="7" onclick="input(this);">
+                                <input id="btn8" type="button" value="8" onclick="input(this);">
+                                <input id="btn9" type="button" value="9" onclick="input(this);">
+                                <br>
+                                <input id="btnDel" type="button" value="Backspace" onclick="del();">
+                                <br>
+                                <input id="tbInput" type="text">
+                                <input type="submit" value="Log In">
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        </form>
+    </div>
+    <footer class="footer text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-5 mb-lg-0">
+                    <h4 class="text-uppercase mb-4"></h4>
+                    <p></p>
+                </div>
+                <div class="col-md-4 mb-5 mb-lg-0">
+                    <h4 class="text-uppercase"></h4>
+                    <ul class="list-inline">
+                        <li class="list-inline-item"><a class="btn btn-outline-light btn-social text-center rounded-circle" role="button" href="#"><i class="fa fa-facebook fa-fw"></i></a></li>
+                        <li class="list-inline-item"><a class="btn btn-outline-light btn-social text-center rounded-circle" role="button" href="#"><i class="fa fa-google-plus fa-fw"></i></a></li>
+                        <li class="list-inline-item"><a class="btn btn-outline-light btn-social text-center rounded-circle" role="button" href="#"><i class="fa fa-twitter fa-fw"></i></a></li>
+                        <li class="list-inline-item"><a class="btn btn-outline-light btn-social text-center rounded-circle" role="button" href="#"><i class="fa fa-dribbble fa-fw"></i></a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h4 class="text-uppercase mb-4"></h4>
+                    <p class="lead mb-0"><span></span></p>
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+        {% block sidebar_content %}
+        <!-- no sidebar for registration page -->
+        {% endblock %}

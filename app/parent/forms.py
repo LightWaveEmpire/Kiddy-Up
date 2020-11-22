@@ -73,3 +73,17 @@ class TaskUpdateForm(forms.ModelForm):
         super(TaskUpdateForm, self).__init__(*args, **kwargs)
         if user:
             self.fields['child'].choices = Child.objects.filter(parent__user = user)
+
+
+class ChildLoginForm(forms.ModelForm):
+    class Meta:
+        model = Child
+        fields = ['pin']
+
+    def __init__(self, user=None, *args, **kwargs):
+        super(ChildLoginForm, self).__init__(*args, **kwargs)
+
+
+
+
+

@@ -18,7 +18,7 @@ urlpatterns = [
 
     path('parent/dashboard/', views.DashboardView.as_view(), name="dashboard"),
     path("parent/profile/", views.profile, name="profile"),
-    path("parent/child_login/", views.child_login, name="child_login"),
+    path("parent/child_login/", views.ChildLoginView.as_view(), name="child_login"),
 
 
     path("register/", views.ParentSignUpView.as_view(), name="register"),
