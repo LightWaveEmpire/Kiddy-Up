@@ -1,4 +1,4 @@
- {% extends "parent/child_base.html" %} {% load has_perms %} {% block title %} Child Tasks {{ block.super }} {% endblock %} {% block content %}
+ {% extends "parent/child_base.html" %} {% load has_perms %} {% block title %} Child Tasks - {{ block.super }} {% endblock %} {% block content %}
 
 <h1>My Tasks</h1>
 
@@ -9,16 +9,18 @@
                 <th>Location</th>
                 <th>Due</th>
                 <th>Value</th>
+                <th>Status</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
-        {% for task in object_list %}
+        {% for task in view.tasks %}
         <tr>
             <td><a href="{% url 'child-task' task.id %}">{{task.name}}</a></td>
             <td>Location TBD</td>
             <td>{{ task.date }}</td>
             <td>{{ task.point_value }}</td>
+            <td>{{ task.status }}</td>
             <td><button type="button" class="btn btn-danger"><i class="far fa-trash-alt d-xl-flex justify-content-xl-center align-items-xl-center"></i></button>
 <button type="button" class="btn btn-warning"><i class="fas fa-pencil-alt d-xl-flex justify-content-xl-center align-items-xl-center"></i></button></td>
         </tr>

@@ -3,16 +3,16 @@
 
 {% load has_perms %}
 
-{% block title %}Child{% endblock %}
+{% block title %}Child - {{ block.super }}{% endblock %}
 
 {% block content %}
 
   <h1>Add Child</h1>
 
-<form method="post"> 
-    {% csrf_token %} 
-    {{ form.as_p }} 
-    <input type="submit" value="Save"> 
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Save">
 </form>
 
 {% endblock %}

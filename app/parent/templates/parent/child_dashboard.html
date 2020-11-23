@@ -59,7 +59,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <h2 style="width: 343px;">Rewards</h2>
-                </div>
+                </div>Balance = {{view.child.current_points}}
                 <div class="col-md-4 d-flex justify-content-end align-self-start"><i class="fas fa-search d-xl-flex justify-content-xl-center align-items-xl-center"></i><input class="border rounded d-xl-flex justify-content-xl-center align-items-xl-center search-field" type="search" id="search-field-1" style="background-color: #eaeaea;width: 80%;height: 38px;padding: 0px;margin-left: 17px;"
                         name="search"></div>
             </div>
@@ -75,10 +75,9 @@
 
         </thead>
         <tbody>
-        {% for reward in views.rewards %}
+        {% for reward in view.rewards %}
         <tr>
-            <td><a href="{% url 'child-reward' task.id %}">{{reward.name}}</a></td>
-            <td>Earned</td>
+            <td><a href="{% url 'child-reward' reward.id %}">{{reward.name}}</a></td>
             <td>{{ reward.cost }}</td>
             <td><button type="button" class="btn btn-danger"><i class="far fa-trash-alt d-xl-flex justify-content-xl-center align-items-xl-center"></i></button>
 <button type="button" class="btn btn-warning"><i class="fas fa-pencil-alt d-xl-flex justify-content-xl-center align-items-xl-center"></i></button>

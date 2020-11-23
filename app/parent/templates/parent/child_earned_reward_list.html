@@ -1,39 +1,26 @@
 
-{% extends "parent/parent_base.html" %}
-
+{% extends "parent/child_base.html" %}
 
 {% load has_perms %}
 
-
-{% block title %} Children - {{ block.super }} {% endblock %}
+{% block title %} Child Dashboard - {{ block.super }}{% endblock %}
 
 {% block content %}
+
 {{ block.super }}
 
-  <h1>Children</h1>
-
-<p><a href="{% url 'child-add' %}">Add a Child</a></p>
+  <h1>My Earned Rewards</h1>
 
 <table class="table table-bordered">
   <thead>
     <tr>
-      <th>Child Name</th>
-      <th>Age</th>
-      <th>Comprehension Level</th>
-      <th>Current Points</th>
-      <th>Target Reward</th>
-      <th>Action</th>
+      <th>Reward</th>
     </tr>
   </thead>
   <tbody>
-    {% for child in object_list %}
+    {% for earned_reward in object_list %}
       <tr>
-        <td><a href="{% url 'child' child.id %}">{{child.name}}</a></td>
-        <td>{{ child.age }}</td>
-        <td>{{ child.comp_level }}</td>
-        <td>{{ child.current_points }}</td>
-        <td>{{ child.target_reward }}</td>
-        <td><a href="{% url 'child-update' child.id %}">Edit</a></td>
+        <td>{{ earned_reward.reward }}</td>
       </tr>
     {% endfor %}
   </tbody>
@@ -58,7 +45,6 @@
   {% endblock %}
 
 {% endblock %}
-
 
 
 

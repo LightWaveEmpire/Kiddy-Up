@@ -3,7 +3,7 @@
 
 {% load has_perms %}
 
-{% block title %}Settings{% endblock %}
+{% block title %}Settings - {{ block.super }} {% endblock %}
 
 {% block content %}
 
@@ -27,18 +27,17 @@
         </tr>
       </thead>
 
-    {% for parent in view.parent %}
-	    {% if parent.user ==  user %}
+
+	    {% if view.parent.user ==  user %}
 	    <tbody>
 	      <tr>
-	        <td>{{parent.user.username}}</td>
-	        <td>{{parent.user.first_name}} {{parent.user.last_name}}</td>
-	        <td>{{parent.user.email}}</td>
-	        <td><a href="{% url 'parent-update' parent.user_id%}">Edit</a></td>
+	        <td>{{view.parent.user.username}}</td>
+	        <td>{{view.parent.user.first_name}} {{view.parent.user.last_name}}</td>
+	        <td>{{view.parent.user.email}}</td>
+	        <td><a href="{% url 'parent-update' view.parent.user_id%}">Edit</a></td>
 
 	      </tr>
 	    {% endif %}
-    {% endfor %}
 
     </tbody>
     </table>
@@ -49,7 +48,7 @@
 
           <h2>Children</h2>
 
-          <p><a href="{% url 'child_register' %}">Add a Child</a></p>
+          <p><a href="{% url 'child-add' %}">Add a Child</a></p>
 
         {% if view.children %}
 
@@ -67,12 +66,12 @@
           <tbody>
           {% for child in view.children %}
             <tr>
-              <td><a href="{% url 'child' child.user_id %}">{{child.name}}</a></td>
+              <td><a href="{% url 'child' child.id %}">{{child.name}}</a></td>
               <td>{{ child.age }}</td>
               <td>{{ child.comp_level }}</td>
               <td>{{ child.current_points }}</td>
               <td>{{ child.target_reward }}</td>
-              <td><a href="{% url 'child-update' child.user_id%}">Edit</a></td>
+              <td><a href="{% url 'child-update' child.id%}">Edit</a></td>
             </tr>
           {% endfor %}
           </tbody>
@@ -113,11 +112,9 @@
     <br />
     <br />
     <h2>Link Calendar and Task List</h2>
-          {% for parent in view.parent %}
-
 	<ul>
     <li>
-    {% if parent.account_creds %}
+    {% if view.parent.account_creds %}
       Account Linked Successfully! ->
       <a href="{% url 'google_oauth' %}" >Link Again</a>
     {% else %}
@@ -126,12 +123,12 @@
     </li>
 
     <li>
-        {% if parent.account_creds %}
+        {% if view.parent.account_creds %}
           <a href="{% url 'pull_tasks' %}" >Get Calendar Events and Tasks</a>
         {% else %}
 
         {% endif %}
-        {% endfor %}
+
     </li>
 
   </ul>

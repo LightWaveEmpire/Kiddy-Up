@@ -1,6 +1,18 @@
 {% extends "parent/child_base.html" %}
 {% load has_perms %}
+
+
 {% block title %} Child Login - {{ block.super }} {% endblock %}
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>
+            function set_active_child(child_id) {
+                    $.get('SetActiveChildView/'+child_id+'/', function (data) {
+                    alert("counter updated!");
+                });
+            }
+        </script>
+
 {% block content %}
 {{ block.super }}
 <!--    {% if request.user|has_perms %}-->
@@ -10,77 +22,83 @@
 <!--    {% endif %}-->
 <div style="margin: 20px 0px 0px;">
     <div class="container" style="padding: 100px;">
-        <form method="post">
-    {% csrf_token %}
 
-
-        <table>
-            <tr>
-                <td>
-                    <div class="row" style="padding: 10px;">
-                        <div class="col-md-4">
-                            <h2 style="width: 343px;">Welcome to Kiddy-Up!</h2>
+            <table>
+                <tr>
+                    <td>
+                        <div class="row" style="padding: 10px;">
+                            <div class="col-md-4">
+                                <h2 style="width: 343px;">Welcome to Kiddy-Up!</h2>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <table id="example" class="table " width="100%">
-                                <thead>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table id="example" class="table " width="100%">
+                                    <thead>
+                                    </thead>
+                                    <tbody>
+                                        Choose your user:
+                                        {% for child in children %}
+                                        <tr>
 
-                                </thead>
-                                <tbody>
-                                    {% for child in view.children %}
-                                    <tr>
-                                        <td>{{child.name}} {{child.avatar}}</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                                            {% if parent.active_child == child.name %}
+                                                <td style="color:Tomato;"><b>X</b>{{child.name}} {{child.avatar}}</td>
+                                            {% else %}
+                                                <td><a href="{% url 'set_active_child' child.id  %}"> {{child.name}} {{child.avatar}} </a></td>
+                                            {% endif %}
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-                </td>
-                <td >
-                    <div class="row" style="padding: 10px; text-align: center;">
-                        <div class="col-md-12">
-                                                        ​
-                            <script>
-                                function input(e)
+                    </td>
+                    <td>
+                        <div class="row" style="padding: 10px; text-align: center;">
+                            <div class="col-md-12">
+                                ​
+                                <script>
+                                    function input(e)
                                     {
                                         var tbInput = document.getElementById("tbInput");
                                         tbInput.value = tbInput.value + e.value;
                                     }
-                                    ​
+
                                     function del()
                                     {
                                         var tbInput = document.getElementById("tbInput");
                                         tbInput.value = tbInput.value.substr(0,tbInput.value.length-1);
                                     }
                             </script>
-                            ​
-                            <div id="VirtualKey" style="margin: 15px">
-                                <input id="btn1" type="button" value="1" onclick="input(this);">
-                                <input id="btn2" type="button" value="2" onclick="input(this);">
-                                <input id="btn3" type="button" value="3" onclick="input(this);">
-                                <br>
-                                <input id="btn4" type="button" value="4" onclick="input(this);">
-                                <input id="btn5" type="button" value="5" onclick="input(this);">
-                                <input id="btn6" type="button" value="6" onclick="input(this);">
-                                <br>
-                                <input id="btn7" type="button" value="7" onclick="input(this);">
-                                <input id="btn8" type="button" value="8" onclick="input(this);">
-                                <input id="btn9" type="button" value="9" onclick="input(this);">
-                                <br>
-                                <input id="btnDel" type="button" value="Backspace" onclick="del();">
-                                <br>
-                                <input id="tbInput" type="text">
-                                <input type="submit" value="Log In">
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    Enter your code, {{parent.active_child}}
+
+                                    <div id="VirtualKey" style="margin: 15px">
+                                    <input id="btn1" type="button" value="1" onclick="input(this);">
+                                    <input id="btn2" type="button" value="2" onclick="input(this);">
+                                    <input id="btn3" type="button" value="3" onclick="input(this);">
+                                    <br>
+                                    <input id="btn4" type="button" value="4" onclick="input(this);">
+                                    <input id="btn5" type="button" value="5" onclick="input(this);">
+                                    <input id="btn6" type="button" value="6" onclick="input(this);">
+                                    <br>
+                                    <input id="btn7" type="button" value="7" onclick="input(this);">
+                                    <input id="btn8" type="button" value="8" onclick="input(this);">
+                                    <input id="btn9" type="button" value="9" onclick="input(this);">
+                                    <br>
+                                    <input id="btnDel" type="button" value="Backspace" onclick="del();">
+                                    <br>
+                                    <input id="tbInput" name='form_pin' type="text">
+                                    <input type="submit" value="Log In">
+                                </form>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </td>
-            </tr>
-        </table>
-        </form>
+                    </td>
+                </tr>
+            </table>
+
     </div>
     <footer class="footer text-center">
         <div class="container">

@@ -3,15 +3,15 @@
 
 {% load has_perms %}
 
-{% block title %}Reward - {{ block.super }} {% endblock %}
+{% block title %}Earned Reward - {{ block.super }} {% endblock %}
 
 {% block content %}
 
-  <h1>Delete Reward</h1>
+  <h1>Reward Claimed</h1>
 
 
 <form method="post">{% csrf_token %}
-    <p>Are you sure you want to delete? "{{ object }}"?</p>
+    <p>Are you sure you want to mark this reward as claimed? "{{ object }}"?</p>
     <input type="submit" value="Confirm">
 </form>
 

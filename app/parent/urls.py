@@ -16,13 +16,15 @@ urlpatterns = [
     path('google_oauth/callback/', CallbackView, name='google_callback'),
 
 
+
     path('parent/dashboard/', views.DashboardView.as_view(), name="dashboard"),
     path("parent/profile/", views.profile, name="profile"),
+    path("parent/child_login/pre", views.pre_child_login, name="pre_child_login"),
     path("parent/child_login/", views.ChildLoginView.as_view(), name="child_login"),
-
+    path('parent/set_active/<int:pk>/', SetActiveChildView, name='set_active_child'),
 
     path("register/", views.ParentSignUpView.as_view(), name="register"),
-    path("parent/child_register/", views.ChildSignUpView.as_view(), name="child_register"),
+    # path("parent/child_register/", views.ChildSignUpView.as_view(), name="child_register"),
 
 
     path('parent/settings/', views.SettingsView.as_view(), name='settings'),
@@ -58,7 +60,7 @@ urlpatterns = [
 
     path('parent/children/', views.ChildListView.as_view(), name='children'),
     path('parent/child/<int:pk>/', views.ChildDetailView.as_view(), name='child'),
-    #     path('child/add/', ChildCreate.as_view(), name='child-add'),
+    path('parent/child/add/', ChildCreate.as_view(), name='child-add'),
     path('parent/child/<int:pk>/update/', ChildUpdate.as_view(), name='child-update'),
     path('parent/child/<int:pk>/delete/', ChildDelete.as_view(), name='child-delete'),
 
@@ -73,10 +75,14 @@ urlpatterns = [
 
 # Child Views
     path('child/profile/', views.ChildProfileView.as_view(), name='child-profile'),
-    path('child/update/profile/', views.ChildUpdateProfileView.as_view(), name='child-profile-update'),
+    path('child/update/profile/<int:pk>/', views.ChildUpdateProfileView.as_view(), name='child-profile-update'),
     path('child/tasks/', views.ChildTaskListView.as_view(), name='child-tasks'),
     path('child/task/<int:pk>/', views.ChildTaskDetailView.as_view(), name='child-task'),
+    path('child/task/<int:pk>/complete/', TaskCompleteView, name='task-complete'),
     path('child/rewards/', views.ChildRewardListView.as_view(), name='child-rewards'),
+    path('child/reward/<int:pk>/', views.ChildRewardDetailView.as_view(), name='child-reward'),
+    path('child/reward/<int:pk>/buy/', views.ChildRewardBuyView, name='reward-buy'),
     path('child/dashboard/', views.ChildDashboardView.as_view(), name="child-dashboard"),
+    path('child/earned_rewards/', views.ChildEarnedRewardListView.as_view(), name='child_earned_rewards'),
 
 ]

@@ -51,7 +51,7 @@ class Reward(models.Model):
 
 
 class Child(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='child')
+    # user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='child')
     parent = models.ForeignKey(Parent, on_delete=models.CASCADE, related_name ='parent')
     name = models.CharField("Child Name", max_length=20)
     is_authenticated = models.BooleanField(default=False)
@@ -59,7 +59,7 @@ class Child(models.Model):
     age = models.IntegerField("Age")
     comp_level = models.IntegerField("Comprehension Level", blank=True, null=True)
     owned_rewards = models.JSONField(blank=True, null=True)
-    avatar = models.ImageField("Avatar", max_length=20)
+    avatar = models.ImageField("Avatar", max_length=20, blank=True, null=True)
     current_points = models.IntegerField("Point Balance", default=0)
     pin = models.CharField(max_length=6, default='123')
 
@@ -69,7 +69,7 @@ class Child(models.Model):
 
         constraints = [
             # ensures a parent can't have multiple children with same name
-            models.UniqueConstraint(fields=['parent', 'user'], name='unique_sibling'),
+            models.UniqueConstraint(fields=['parent', 'name'], name='unique_sibling'),
 
             # ensures age of child is between 5-12, inclusive
             models.CheckConstraint(check=models.Q(age__range=(5, 12)), name='age_5_12')
@@ -136,9 +136,6 @@ class Task(models.Model):
     def get_absolute_url(self):
         return reverse('task', kwargs={'pk': self.pk})
 
-    def set_complete(self):
-        self.child__current_points += self.point_value
-        self.status = 'COMP'
 
 
 class Original_Task(models.Model):

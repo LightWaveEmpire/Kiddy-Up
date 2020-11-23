@@ -14,6 +14,7 @@ from parent.forms import ParentSignUpForm, ChildSignUpForm, ChildUpdateForm, Tas
 from parent.models import Child, Task, Reward, Parent, Original_Task, User, Earned_Reward
 from parent.utils import calendar_pull, task_factory, reward_system
 
+
 import google_apis_oauth
 import os
 import os.path
@@ -106,22 +107,17 @@ def pull_tasks(request):
 class DashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateView):
     template_name = 'parent/dashboard.html'
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     # context["weather"] = weather
-    #     return context
-
     def weather(self):
         parent = Parent.objects.get(user = self.request.user)
         zip_code = '90210'
         if parent.zip_code:
             zip_code = parent.zip_code
-        print(f'\n\nDEBUG: ZIP CODE = {zip_code}\n\n', file=sys.stderr)
+        #print(f'\n\nDEBUG: ZIP CODE = {zip_code}\n\n', file=sys.stderr)
         now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
 
         day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
 
-        print(f'\n\nDEBUG: JSON WEATHER = {day_weather}\n\n', file=sys.stderr)
+        #print(f'\n\nDEBUG: JSON WEATHER = {day_weather}\n\n', file=sys.stderr)
         weather = {
             'city': day_weather['name'],
             'now_temp': day_weather['main']['feels_like'],
@@ -130,12 +126,13 @@ class DashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateVie
             'description': day_weather['weather'][0]['description'],
             'icon': day_weather['weather'][0]['icon']
         }
-        print(f'\n\nDEBUG: WEATHER = {weather}\n\n', file=sys.stderr)
+        #print(f'\n\nDEBUG: WEATHER = {weather}\n\n', file=sys.stderr)
         return weather
 
-
     def children(self):
-        return Child.objects.filter(parent__user = self.request.user)
+        parent = Parent.objects.get(user = self.request.user)
+        children = Child.objects.filter(parent = parent)
+        return children
 
     def rewards(self):
         return Reward.objects.filter(parent__user = self.request.user)
@@ -145,6 +142,7 @@ class DashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateVie
 
     def test_func(self):
         return self.request.user.is_parent == True
+        # return not self.request.user.active_child
 
 
 @login_required
@@ -161,10 +159,14 @@ def profile(request):
 
 @login_required
 def redirect_on_login(request):
+    parent = Parent.objects.get(user=request.user)
     if request.user.is_parent ==  True:
-        return redirect('dashboard')
+        if parent.active_child:
+            return redirect('child-dashboard')
+        else:
+            return redirect('dashboard')
     else:
-        return redirect('child-dashboard')
+        return redirect('about')
 
 
 
@@ -243,7 +245,7 @@ class EarnedRewardDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.De
 
 class EarnedRewardDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
     model = Earned_Reward
-    success_url = reverse_lazy('earned-rewards')
+    success_url = reverse_lazy('earned_rewards')
 
     def test_func(self):
         return self.request.user.is_parent == True
@@ -402,7 +404,7 @@ class ChildDetailView(generic.DetailView):
 
 class ChildCreate(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
     model = Child
-    fields = ['age', 'comp_level', 'target_reward']
+    fields = ['name', 'age', 'comp_level', 'target_reward', 'pin']
 
     def form_valid(self, form):
         form.instance.parent = Parent.objects.get(user=self.request.user)
@@ -522,34 +524,34 @@ class ParentSignUpView(generic.CreateView):
         login(self.request, user)
         return redirect('dashboard')
 
-class ChildSignUpView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
-    model = User
-    form_class = ChildSignUpForm
-    template_name = "parent/child_register.html"
+# class ChildSignUpView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
+#     model = User
+#     form_class = ChildSignUpForm
+#     template_name = "parent/child_register.html"
 
-    def get_initial(self):
-        initial = super().get_initial()
-        initial['parent'] = Parent.objects.get(user=self.request.user)
-        return initial
+#     def get_initial(self):
+#         initial = super().get_initial()
+#         initial['parent'] = Parent.objects.get(user=self.request.user)
+#         return initial
 
-#    def get_context_date(self, **kwargs):
-#        kwargs['user_type'] = 'child'
-#        kwargs['parent'] = Parent.objects.get(user=self.request.user)
+# #    def get_context_date(self, **kwargs):
+# #        kwargs['user_type'] = 'child'
+# #        kwargs['parent'] = Parent.objects.get(user=self.request.user)
 
-#        return super().get_context_data(**kwargs)
+# #        return super().get_context_data(**kwargs)
 
-    def form_valid(self, form):
-        age = form.cleaned_data['age']
-        comp_level = form.cleaned_data['comp_level']
-        name = form.cleaned_data['name']
-        user = form.save()
-        user.is_child=True
-        parent = Parent.objects.get(user=self.request.user)
-        child = Child.objects.create(user=user, parent=parent, age=age, name=name, comp_level=comp_level)
-        return redirect('dashboard')
+#     def form_valid(self, form):
+#         age = form.cleaned_data['age']
+#         comp_level = form.cleaned_data['comp_level']
+#         name = form.cleaned_data['name']
+#         user = form.save()
+#         user.is_child=True
+#         parent = Parent.objects.get(user=self.request.user)
+#         child = Child.objects.create(user=user, parent=parent, age=age, name=name, comp_level=comp_level)
+#         return redirect('dashboard')
 
-    def test_func(self):
-        return self.request.user.is_parent == True
+#     def test_func(self):
+#         return self.request.user.is_parent == True
 
 
 
@@ -576,13 +578,16 @@ class SettingsView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateView
     template_name = 'parent/settings.html'
 
     def parent(self):
-        return Parent.objects.filter(user = self.request.user)
+        return Parent.objects.get(user = self.request.user)
     def rewards(self):
-        return Reward.objects.filter(parent__user = self.request.user)
+        parent = Parent.objects.get(user = self.request.user)
+        return Reward.objects.filter(parent=parent)
     def tasks(self):
-        return Task.objects.filter(parent__user = self.request.user)
+        parent = Parent.objects.get(user = self.request.user)
+        return Task.objects.filter(parent=parent)
     def children(self):
-        return Child.objects.filter(parent__user = self.request.user)
+        parent = Parent.objects.get(user = self.request.user)
+        return Child.objects.filter(parent = parent)
 
     def test_func(self):
         return self.request.user.is_parent == True
@@ -590,43 +595,83 @@ class SettingsView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateView
 
 
 # Child Login Page (New)
+def pre_child_login(request):
+    parent = Parent.objects.get(user = request.user)
+    parent.active_child = None
+    parent.save()
+    print(f'\n\nPARENT: {parent}\n\n', file=sys.stderr)
+    print(f'\n\nACTIVE_CHILD: {parent.active_child}\n\n', file=sys.stderr)
+    children = Child.objects.filter(parent = parent)
+    for child in children:
+        print(f'\n\nCHILD: {child.is_authenticated}\n\n', file=sys.stderr)
+        child.is_authenticated = False
+        child.save()
+    return redirect('child_login')
+
 
 class ChildLoginView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateView):
     template_name = 'parent/child_login.html'
-    form_class = ChildLoginForm
-    initial = {'key': 'value'}
+    # form_class = ChildLoginForm
 
-    def parent(self):
-        parent = Parent.objects.get(user = self.request.user)
-        parent.active_child = None
-        parent.save()
-        return Parent.objects.filter(user = self.request.user)
-
-    def children(self):
-        return Child.objects.filter(parent__user = self.request.user)
-
-    def get(self, request, *args, **kwargs):
-        form = self.form_class(initial=self.initial)
-        return render(request, self.template_name, {'form': form})
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['parent'] = parent = Parent.objects.get(user = self.request.user)
+        data['children'] = Child.objects.filter(parent=parent)
+        print(f'\n\nDEBUG: Parent = {parent}\n\n', file=sys.stderr)
+        print(f'\n\nDEBUG: Active Child = {parent.active_child}\n\n', file=sys.stderr)
+        if parent.active_child:
+            child = parent.active_child
+            data['pin'] = pin = child.pin
+            print(f'\n\nDEBUG: PIN = {pin}\n\n', file=sys.stderr)
+        return data
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        if form.is_valid():
+        pin_guess = request.POST.get('form_pin')
+        # form = ChildLoginForm(request.POST)
+        parent = Parent.objects.get(user = self.request.user)
+        active_child = Child.objects.get(id = parent.active_child_id)
+        if pin_guess == active_child.pin:
+            print(f'\n\nDEBUG: PIN MATCH\n\n', file=sys.stderr)
             #active_child = form.cleaned_data['id']
+            # and pin entered is child pin
+            children = Child.objects.filter(parent__user = self.request.user)
+            for child in children:
+                print(f'\n\nUNAUTH SET FOR: {child} \n\n', file=sys.stderr)
+                child.is_authenticated = False
+                child.save()
+            active_child.is_authenticated = True
+            active_child.save()
+            print(f'\n\nAUTH SET FOR: {active_child} \n\n', file=sys.stderr)
+
             return redirect('child-dashboard')
 
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name)
 
     def test_func(self):
         return self.request.user.is_parent == True
 
 
 
+def SetActiveChildView(request, pk):
+    parent = Parent.objects.get(user = request.user)
+    print(f'\n\nDEBUG: Parent = {parent}\n\n', file=sys.stderr)
+    child = Child.objects.get(id = pk)
+    print(f'\n\nDEBUG: Child = {child}\n\n', file=sys.stderr)
+    parent.active_child = child
+    print(f'\n\nDEBUG: Active Child = {parent.active_child}\n\n', file=sys.stderr)
+    parent.save()
+    return redirect('child_login')
 
 
-
-
-
+def CheckPinView(request, pk):
+    parent = Parent.objects.get(user = request.user)
+    print(f'\n\nDEBUG: Parent = {parent}\n\n', file=sys.stderr)
+    child = Child.objects.get(id = pk)
+    print(f'\n\nDEBUG: Child = {child}\n\n', file=sys.stderr)
+    parent.active_child = child
+    print(f'\n\nDEBUG: Active Child = {parent.active_child}\n\n', file=sys.stderr)
+    parent.save()
+    return redirect('child_login')
 
 # Child Views
 
@@ -634,33 +679,61 @@ class ChildDashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.Templa
     template_name = 'parent/child_dashboard.html'
 
     def child(self):
-        return Child.objects.filter(user = self.request.user)
+        parent = Parent.objects.get(user = self.request.user)
+        return parent.active_child
+
     def rewards(self):
-        return Reward.objects.filter(parent__user = self.request.user)
+        parent = Parent.objects.get(user = self.request.user)
+        return Reward.objects.filter(parent = parent)
+
     def tasks(self):
-        return Task.objects.filter(child__user = self.request.user)
+        parent = Parent.objects.get(user = self.request.user)
+        active_child = parent.active_child
+        return Task.objects.filter(child = active_child, status='OPEN')
 
     def test_func(self):
         return self.request.user.is_active == True
+
+
+
+
 
 class ChildProfileView(generic.TemplateView):
     model = Child
     template_name = 'parent/child_profile.html'
 
     def child(self):
-        return Child.objects.filter(user = self.request.user)
+        parent = Parent.objects.get(user = self.request.user)
+        return parent.active_child
 
     def test_func(self):
         return self.request.user.is_active == True
 
 
-class ChildUpdateProfileView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateView):
+# class ChildUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
+#     model = Child
+#     form_class = ChildUpdateForm
+#     template_name = "parent/child_form.html"
+
+#     def test_func(self):
+#         return self.request.user.is_parent == True
+
+
+
+class ChildUpdateProfileView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     model = Child
     form_class = ChildUpdateProfileForm
     template_name = "parent/child_update_profile_form.html"
+    success_url = reverse_lazy('child-dashboard')
+
+    # def child(self):
+    #     parent = Parent.objects.get(user = self.request.user)
+    #     active_child = parent.active_child
+    #     return Child.objects.get(active_child)
 
     def child(self):
-        return Child.objects.filter(user = self.request.user)
+        parent = Parent.objects.get(user = self.request.user)
+        return parent.active_child
 
     def test_func(self):
         return self.request.user.is_active == True
@@ -671,8 +744,14 @@ class ChildTaskListView(LoginRequiredMixin, UserPassesTestMixin, generic.Templat
     template_name = 'parent/child_task_list.html'
     paginate_by = 10
 
-    def get_queryset(self):
-        return Task.objects.filter(child__user=self.request.user)
+    def child(self):
+        parent = Parent.objects.get(user = self.request.user)
+        return parent.active_child
+
+    def tasks(self):
+        parent = Parent.objects.get(user = self.request.user)
+        active_child = parent.active_child
+        return Task.objects.filter(child = active_child)
 
     def test_func(self):
         return self.request.user.is_active == True
@@ -682,6 +761,10 @@ class ChildRewardListView(LoginRequiredMixin, UserPassesTestMixin, generic.Templ
     template_name = 'parent/child_reward_list.html'
     paginate_by = 10
 
+    def child(self):
+        parent = Parent.objects.get(user = self.request.user)
+        return parent.active_child
+
     def test_func(self):
         return self.request.user.is_active == True
 
@@ -690,5 +773,55 @@ class ChildTaskDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.Detai
     model = Task
     template_name = 'parent/child_task.html'
 
+    def child(self):
+        parent = Parent.objects.get(user = self.request.user)
+        return parent.active_child
+
     def test_func(self):
         return self.request.user.is_active == True
+
+
+class ChildRewardDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailView):
+    model = Reward
+    template_name = 'parent/child_reward.html'
+
+    def child(self):
+        parent = Parent.objects.get(user = self.request.user)
+        return parent.active_child
+
+    def test_func(self):
+        return self.request.user.is_active == True
+
+def ChildRewardBuyView(request, pk):
+    reward = Reward.objects.get(id=pk)
+    parent = Parent.objects.get(user = request.user)
+    active_child = parent.active_child
+    reward_system.purchase_reward(active_child, reward)
+    return redirect('child-dashboard')
+
+
+
+def TaskCompleteView(request, pk):
+    parent = Parent.objects.get(user = request.user)
+    active_child = parent.active_child
+    task = Task.objects.get(id=pk)
+    reward_system.complete_task(active_child, task)
+    return redirect('child-tasks')
+
+
+class ChildEarnedRewardListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
+    model=Earned_Reward
+    paginate_by = 10
+    template_name = 'parent/child_earned_reward_list.html'
+
+    def child(self):
+        parent = Parent.objects.get(user = self.request.user)
+        return parent.active_child
+
+    def get_queryset(self):
+        parent = Parent.objects.get(user = self.request.user)
+        active_child = parent.active_child
+        return Earned_Reward.objects.filter(child=active_child)
+
+    def test_func(self):
+        return self.request.user.is_parent == True

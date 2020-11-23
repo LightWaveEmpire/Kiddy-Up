@@ -7,20 +7,20 @@
 
 {% block content %}
 
-{% for child in view.child %}
+{# {% for child in view.child %} #}
 
-  <h1>{{ child.name }}</h1>
+  <h1>{{ view.child.name }}</h1>
 
 <ul>
-<li>Age: {{ child.age }}</li>
-<li>Avatar: {{ child.avatar }}</li>
-<li>Target Reward: {{ child.target_reward }}</li>
-<li><a href="{% url 'child-profile-update' %}">Edit</a></li>
+<li>Age: {{ view.child.age }}</li>
+<li>Avatar: {{ view.child.avatar }}</li>
+<li>Target Reward: {{ view.child.target_reward }}</li>
+<li><a href="{% url 'child-profile-update' view.child.id%}">Edit</a></li>
 {# <li><a href="{% url 'child-delete' child.id %}">Delete</a></li> #}
 
 </ul>
 
-{% endfor %}
+{# {% endfor %} #}
 
 {% endblock %}
 

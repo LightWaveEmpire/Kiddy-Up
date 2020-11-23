@@ -3,7 +3,7 @@
 
 {% load has_perms %}
 
-{% block title %}Child{% endblock %}
+{% block title %}Child - {{ block.super }} {% endblock %}
 
 {% block content %}
 
@@ -14,7 +14,7 @@
 <li>Age: {{ child.age }}</li>
 <li>Avatar: {{ child.avatar }}</li>
 <li>Comprehension: {{ child.comp_level }}</li>
-<li><a href="{% url 'child-update' child.user_id %}">Edit</a></li>
+<li><a href="{% url 'child-update' child.id %}">Edit</a></li>
 {# <li><a href="{% url 'child-delete' child.id %}">Delete</a></li> #}
 
 </ul>
