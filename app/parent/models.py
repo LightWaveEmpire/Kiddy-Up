@@ -1,8 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, UserManager
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 from parent.utils import entity_extraction
 
+
+User = get_user_model()
 
 class User(AbstractUser):
     is_parent = models.BooleanField(default=False)
