@@ -67,7 +67,8 @@ urlpatterns = [
     path('parents/', views.ParentListView.as_view(), name='parents'),
     path('parent/<int:pk>/', views.ParentDetailView.as_view(), name='parent'),
     #    path('parent/add/', ParentCreate.as_view(), name='parent-add'),
-    path('parent/<int:pk>/update/', ParentUpdate.as_view(), name='parent-update'),
+    # path('parent/<int:pk>/update/', ParentUpdate.as_view(), name='parent-update'),
+    path('parent/update/', UpdateProfileView.as_view(), name='profile-update'),
     path('parent/<int:pk>/delete/', ParentDelete.as_view(), name='parent-delete'),
 
     #    path('link-source/', LinkSource.as_view(), name='link-source'),

@@ -11,9 +11,11 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
-from django.contrib.auth import get_user_model
+import sys
 
-User = get_user_model()
+# from django.contrib.auth import get_user_model
+
+# User = get_user_model()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -112,7 +114,7 @@ DATABASES = {
 }
 
 
-AUTH_USER_MODEL = 'parent.User'
+# AUTH_USER_MODEL = 'parent.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators

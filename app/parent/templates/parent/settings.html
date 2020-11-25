@@ -21,7 +21,7 @@
       <thead>
         <tr>
           <th>Username</th>
-          <th>Name</th>
+          <th>Zip Code</th>
           <th>Email</th>
           <th>Action</th>
         </tr>
@@ -32,9 +32,9 @@
 	    <tbody>
 	      <tr>
 	        <td>{{view.parent.user.username}}</td>
-	        <td>{{view.parent.user.first_name}} {{view.parent.user.last_name}}</td>
+	        <td>{{view.parent.zip_code}}</td>
 	        <td>{{view.parent.user.email}}</td>
-	        <td><a href="{% url 'parent-update' view.parent.user_id%}">Edit</a></td>
+	        <td><a href="{% url 'profile-update' %}">Edit</a></td>
 
 	      </tr>
 	    {% endif %}

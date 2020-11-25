@@ -3,16 +3,18 @@ from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRe
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import login
-# from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 #from .forms import ParentCreationForm
 from django.urls import reverse, reverse_lazy
 from .permissions import is_in_group_parent
 #from .models import Child, Task, Reward, Parent, Original_Task
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from parent.forms import ParentSignUpForm, ChildSignUpForm, ChildUpdateForm, TaskUpdateForm, ChildUpdateProfileForm, ChildLoginForm
-from parent.models import Child, Task, Reward, Parent, Original_Task, User, Earned_Reward
+from parent.forms import ParentSignUpForm, ChildSignUpForm, ChildUpdateForm, TaskUpdateForm, ChildUpdateProfileForm, ChildLoginForm, UpdateProfileForm
+from parent.models import Child, Task, Reward, Parent, Original_Task, Earned_Reward
 from parent.utils import calendar_pull, task_factory, reward_system
+
+
 
 
 import google_apis_oauth
@@ -20,6 +22,11 @@ import os
 import os.path
 import sys
 import requests
+
+
+
+def is_member(user):
+    return user.groups.filter(name='Parent').exists()
 
 '''
 Views to authenticate with Google and pull events and tasks
@@ -112,21 +119,33 @@ class DashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateVie
         zip_code = '90210'
         if parent.zip_code:
             zip_code = parent.zip_code
-        #print(f'\n\nDEBUG: ZIP CODE = {zip_code}\n\n', file=sys.stderr)
+
         now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
 
         day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
 
-        #print(f'\n\nDEBUG: JSON WEATHER = {day_weather}\n\n', file=sys.stderr)
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
         weather = {
-            'city': day_weather['name'],
-            'now_temp': day_weather['main']['feels_like'],
-            'min_temp': day_weather['main']['temp_min'],
-            'max_temp': day_weather['main']['temp_max'],
-            'description': day_weather['weather'][0]['description'],
-            'icon': day_weather['weather'][0]['icon']
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
         }
-        #print(f'\n\nDEBUG: WEATHER = {weather}\n\n', file=sys.stderr)
+
         return weather
 
     def children(self):
@@ -141,8 +160,8 @@ class DashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateVie
         return Task.objects.filter(parent__user = self.request.user)
 
     def test_func(self):
-        return self.request.user.is_parent == True
-        # return not self.request.user.active_child
+        return is_member(self.request.user)
+
 
 
 @login_required
@@ -150,11 +169,6 @@ class DashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateVie
 def profile(request):
     return render(request, "parent/profile.html")
 
-
-# @login_required
-# @user_passes_test(is_in_group_parent)
-# def child_login(request):
-#     return render(request, "parent/child_login.html")
 
 
 @login_required
@@ -180,7 +194,8 @@ class RewardListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
         return Reward.objects.filter(parent__user=self.request.user)
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 
@@ -188,7 +203,8 @@ class RewardDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailVi
     model = Reward
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 class RewardCreate(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
@@ -200,7 +216,8 @@ class RewardCreate(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
         return super().form_valid(form)
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 class RewardUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
@@ -208,7 +225,8 @@ class RewardUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     fields = ['name', 'cost']
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 class RewardDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
@@ -216,7 +234,8 @@ class RewardDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
     success_url = reverse_lazy('rewards')
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 
@@ -232,7 +251,8 @@ class EarnedRewardListView(LoginRequiredMixin, UserPassesTestMixin, generic.List
         return Earned_Reward.objects.filter(child__parent__user=self.request.user)
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 
@@ -240,7 +260,8 @@ class EarnedRewardDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.De
     model = Earned_Reward
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 class EarnedRewardDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
@@ -248,7 +269,8 @@ class EarnedRewardDelete(LoginRequiredMixin, UserPassesTestMixin, generic.Delete
     success_url = reverse_lazy('earned_rewards')
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 
@@ -263,7 +285,8 @@ class Original_TaskListView(LoginRequiredMixin, UserPassesTestMixin, generic.Lis
         return Original_Task.objects.filter(parent__user=self.request.user)
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 
@@ -271,7 +294,8 @@ class Original_TaskDetailView(generic.DetailView):
     model = Original_Task
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 class Original_TaskCreate(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
@@ -280,11 +304,11 @@ class Original_TaskCreate(LoginRequiredMixin, UserPassesTestMixin, generic.Creat
 
     def form_valid(self, form):
         form.instance.parent = Parent.objects.get(user=self.request.user)
-#        form.instance.parent = self.request.user
         return super().form_valid(form)
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 class Original_TaskUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
@@ -292,7 +316,8 @@ class Original_TaskUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.Updat
     fields = ['otask']
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 class Original_TaskDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
@@ -300,7 +325,8 @@ class Original_TaskDelete(LoginRequiredMixin, UserPassesTestMixin, generic.Delet
     success_url = reverse_lazy('original_tasks')
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 
@@ -321,7 +347,8 @@ class CompletedTaskListView(LoginRequiredMixin, UserPassesTestMixin, generic.Lis
         return Task.objects.filter(parent__user=self.request.user, status='COMP')
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 class TaskListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
@@ -332,7 +359,8 @@ class TaskListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
         return Task.objects.filter(parent__user=self.request.user)
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 
@@ -340,7 +368,8 @@ class TaskDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailView
     model = Task
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 class TaskCreate(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
@@ -349,11 +378,11 @@ class TaskCreate(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
 
     def form_valid(self, form):
         form.instance.parent = Parent.objects.get(user=self.request.user)
-#        form.instance.parent = self.request.user
         return super().form_valid(form)
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 
@@ -363,14 +392,16 @@ class TaskUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     template_name = "parent/task_form.html"
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 class TaskDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
     model = Task
     success_url = reverse_lazy('tasks')
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 
@@ -388,7 +419,8 @@ class ChildListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
         return Child.objects.filter(parent__user=self.request.user)
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 
@@ -396,7 +428,8 @@ class ChildDetailView(generic.DetailView):
     model = Child
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 
@@ -408,11 +441,12 @@ class ChildCreate(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
 
     def form_valid(self, form):
         form.instance.parent = Parent.objects.get(user=self.request.user)
-#        form.instance.parent = self.request.user
+
         return super().form_valid(form)
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 
@@ -423,7 +457,8 @@ class ChildUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     template_name = "parent/child_form.html"
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 
@@ -433,7 +468,8 @@ class ChildDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
     success_url = reverse_lazy('children')
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 
@@ -449,7 +485,8 @@ class ParentListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
         return Parent.objects.filter(user=self.request.user)
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 
@@ -457,17 +494,9 @@ class ParentDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailVi
     model = Parent
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
 
 
-
-#class ParentCreate(LoginRequiredMixin, generic.CreateView):
-#    model = Parent
-#    fields = ['zip_code']
-#
-#    def form_valid(self, form):
-#        form.instance.user = self.request.user
-#        return super().form_valid(form)
 
 
 class ParentUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
@@ -475,7 +504,33 @@ class ParentUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     fields = ['zip_code']
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
+
+class UpdateProfileView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateView):
+    model = Parent
+    form_class = UpdateProfileForm
+    template_name = "parent/update_profile_form.html"
+    success_url = reverse_lazy('settings')
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['parent'] = parent = Parent.objects.get(user = self.request.user)
+        return data
+
+    def post(self, request, *args, **kwargs):
+
+        zip_code = request.POST.get('zip_code')
+        parent = Parent.objects.get(user = self.request.user)
+        parent.zip_code = zip_code
+        parent.save()
+
+        return redirect('settings')
+
+
+    def test_func(self):
+        return self.request.user.is_active == True
+
 
 
 class ParentDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
@@ -483,7 +538,8 @@ class ParentDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
     success_url = reverse_lazy('home')
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 
@@ -496,19 +552,6 @@ def home(request):
     return render(request, "parent/index.html")
 
 
-# def register(request):
-#     if request.method == "GET":
-#        return render(
-#         request, "parent/register.html",
-#            {"form": ParentCreationForm}
-#        )
-#    elif request.method == "POST":
-#        form = ParentCreationForm(request.POST)
-#        if form.is_valid():
-#            user = form.save()
-#            login(request, user)
-#            return redirect("home")
-#
 
 class ParentSignUpView(generic.CreateView):
     model = User
@@ -524,51 +567,6 @@ class ParentSignUpView(generic.CreateView):
         login(self.request, user)
         return redirect('dashboard')
 
-# class ChildSignUpView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
-#     model = User
-#     form_class = ChildSignUpForm
-#     template_name = "parent/child_register.html"
-
-#     def get_initial(self):
-#         initial = super().get_initial()
-#         initial['parent'] = Parent.objects.get(user=self.request.user)
-#         return initial
-
-# #    def get_context_date(self, **kwargs):
-# #        kwargs['user_type'] = 'child'
-# #        kwargs['parent'] = Parent.objects.get(user=self.request.user)
-
-# #        return super().get_context_data(**kwargs)
-
-#     def form_valid(self, form):
-#         age = form.cleaned_data['age']
-#         comp_level = form.cleaned_data['comp_level']
-#         name = form.cleaned_data['name']
-#         user = form.save()
-#         user.is_child=True
-#         parent = Parent.objects.get(user=self.request.user)
-#         child = Child.objects.create(user=user, parent=parent, age=age, name=name, comp_level=comp_level)
-#         return redirect('dashboard')
-
-#     def test_func(self):
-#         return self.request.user.is_parent == True
-
-
-
-
-
-# class ChildUpdateView(generic.UpdateView):
-#     model = Child
-#     form_class = ChildSignUpForm
-#     template_name = "parent/child_register.html"
-
-#     def form_valid(self, form):
-#         age = form.cleaned_data['age']
-#         user = form.save()
-#         user.is_child=True
-#         parent = Parent.objects.get(user=self.request.user)
-#         child = Child.objects.create(user=user, parent=parent, age=age)
-#         return redirect('dashboard')
 
 
 # Settings
@@ -590,7 +588,8 @@ class SettingsView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateView
         return Child.objects.filter(parent = parent)
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 
@@ -631,24 +630,24 @@ class ChildLoginView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateVi
         parent = Parent.objects.get(user = self.request.user)
         active_child = Child.objects.get(id = parent.active_child_id)
         if pin_guess == active_child.pin:
-            print(f'\n\nDEBUG: PIN MATCH\n\n', file=sys.stderr)
+
             #active_child = form.cleaned_data['id']
             # and pin entered is child pin
             children = Child.objects.filter(parent__user = self.request.user)
             for child in children:
-                print(f'\n\nUNAUTH SET FOR: {child} \n\n', file=sys.stderr)
+
                 child.is_authenticated = False
                 child.save()
             active_child.is_authenticated = True
             active_child.save()
-            print(f'\n\nAUTH SET FOR: {active_child} \n\n', file=sys.stderr)
 
             return redirect('child-dashboard')
 
         return render(request, self.template_name)
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+
 
 
 
@@ -710,14 +709,6 @@ class ChildProfileView(generic.TemplateView):
         return self.request.user.is_active == True
 
 
-# class ChildUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
-#     model = Child
-#     form_class = ChildUpdateForm
-#     template_name = "parent/child_form.html"
-
-#     def test_func(self):
-#         return self.request.user.is_parent == True
-
 
 
 class ChildUpdateProfileView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
@@ -726,10 +717,6 @@ class ChildUpdateProfileView(LoginRequiredMixin, UserPassesTestMixin, generic.Up
     template_name = "parent/child_update_profile_form.html"
     success_url = reverse_lazy('child-dashboard')
 
-    # def child(self):
-    #     parent = Parent.objects.get(user = self.request.user)
-    #     active_child = parent.active_child
-    #     return Child.objects.get(active_child)
 
     def child(self):
         parent = Parent.objects.get(user = self.request.user)
@@ -824,4 +811,5 @@ class ChildEarnedRewardListView(LoginRequiredMixin, UserPassesTestMixin, generic
         return Earned_Reward.objects.filter(child=active_child)
 
     def test_func(self):
-        return self.request.user.is_parent == True
+        return is_member(self.request.user)
+

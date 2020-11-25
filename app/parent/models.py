@@ -1,15 +1,15 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, UserManager
+from django.contrib.auth.models import User #, AbstractUser, UserManager
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from parent.utils import entity_extraction
 
 
-User = get_user_model()
+# User = settings.AUTH_USER_MODEL
 
-class User(AbstractUser):
-    is_parent = models.BooleanField(default=False)
-    is_child = models.BooleanField(default=False)
+# class User(AbstractUser):
+#     is_parent = models.BooleanField(default=False)
+#     is_child = models.BooleanField(default=False)
 
 class Parent(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='parent')

@@ -30,6 +30,17 @@ class ParentSignUpForm(UserCreationForm):
 
 
 
+class UpdateProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = Parent
+        fields = ['zip_code']
+
+    def __init__(self, user=None, *args, **kwargs):
+        super(UpdateProfileForm, self).__init__(*args, **kwargs)
+
+
+
 class ChildSignUpForm(UserCreationForm):
     name = forms.CharField()
     age = forms.IntegerField()
