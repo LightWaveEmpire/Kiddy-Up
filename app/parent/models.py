@@ -12,7 +12,7 @@ from parent.utils import entity_extraction
 #     is_child = models.BooleanField(default=False)
 
 class Parent(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='parent')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     active_child = models.ForeignKey('Child', on_delete=models.SET_NULL, blank=True, null=True, related_name='logged_in_child')
     zip_code = models.CharField(
         "ZIP / Postal code",
@@ -111,8 +111,8 @@ class Task(models.Model):
     ]
 
     original_task = models.ForeignKey('Original_Task', on_delete=models.SET_NULL, null=True, default=None)
-    parent = models.ForeignKey(Parent, on_delete=models.CASCADE, related_name='creator')
-    child = models.ForeignKey(Child, on_delete=models.CASCADE, related_name='actioner')
+    parent = models.ForeignKey(Parent, on_delete=models.CASCADE)
+    child = models.ForeignKey(Child, on_delete=models.CASCADE)
 
     name = models.CharField("Task Name", max_length=20)
     description = models.TextField("Task Description", )
