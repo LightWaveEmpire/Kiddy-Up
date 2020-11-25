@@ -174,7 +174,7 @@ def profile(request):
 @login_required
 def redirect_on_login(request):
     parent = Parent.objects.get(user=request.user)
-    if request.user.is_parent ==  True:
+    if is_member(request.user):
         if parent.active_child:
             return redirect('child-dashboard')
         else:
@@ -689,6 +689,46 @@ class ChildDashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.Templa
         parent = Parent.objects.get(user = self.request.user)
         active_child = parent.active_child
         return Task.objects.filter(child = active_child, status='OPEN')
+
+    def earned_rewards(self):
+        parent = Parent.objects.get(user = self.request.user)
+        active_child = parent.active_child
+        return Earned_Reward.objects.filter(child=active_child)
+
+
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
+
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
     def test_func(self):
         return self.request.user.is_active == True

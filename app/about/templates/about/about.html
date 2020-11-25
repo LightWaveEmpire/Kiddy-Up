@@ -1,6 +1,6 @@
-{% extends "about/about_base.html" %} {% block title %} About Us{% endblock %} {% block topnav %} {% endblock %} {% block content %}
+{% extends "about/about_base.html" %} {% block title %} About Us{% endblock %} {% block topnav %} {{ block.super }}{% endblock %} {% block content %}
 
-
+<center>
 <div class="jumbotron" style="padding: 64px 32px;margin: 0px 0px 0px;">
     <div class="jumbotron jumbotron-fluid jumbotron-main">
         <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
@@ -19,6 +19,6 @@
         </div>
     </div>
 </div>
-
+</center>
 
 {% endblock %}

@@ -1,6 +1,6 @@
 <!--users/templates/users/register.html-->
 
-{% extends 'base.html' %}
+{% extends 'registration/registration_base.html' %}
 
 {% block content %}
 {{ block.super }}
@@ -28,4 +28,6 @@
 </form>
 
 <a href="{% url 'login' %}">Back to login</a>
+
+
 {% endblock %}

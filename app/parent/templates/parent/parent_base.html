@@ -1,8 +1,52 @@
-{% extends "base.html" %} {% block title %} {{ block.super }}{% endblock %} {% block sidenav%} {{ block.super }} {% endblock %}
-
-
-
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+{{ block.super }}
+{% endblock %}
+{% block sidenav%}
+{{ block.super }}
+{% endblock %}
 <!-- Here we can overwrite sidenav or topnav, if needed for parent -->
+{% block topnav %}
+{{ block.super }}
+<ul class="nav navbar-nav flex-nowrap ml-auto">
+    {% if user.is_authenticated %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'dashboard'%}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+    {# <li class="nav-item"><a class="nav-link" href="{% url 'profile'%}?next={{request.path}}"><i class="fas fa-user"></i><span>Profile</span></a></li> #}
+    <li class="nav-item"><a class="nav-link" href="{% url 'tasks'%}"><i class="fas fa-table"></i><span>Tasks</span></a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'rewards'%}"><i class="far fa-user-circle"></i><span>Rewards</span></a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'children'%}"><i class="far fa-user-circle"></i><span>Children</span></a></li>
+    {# <li class="nav-item"><a class="nav-link" href="{% url 'settings'%}"><i class="fas fa-user-circle"></i><span>Setting</span></a></li> #}
+    <li class="nav-item"><a class="nav-link" href="{% url 'child_login'%}"><i class="far fa-user-circle"></i><span>Child Dashboard</span></a></li>
+    {% else %}
 
-
-{% block topnav %} {{ block.super }} {% endblock %} {% block content %} {{ block.super }} {% endblock %}
+    {% endif %}
+</ul>
+<ul class="nav navbar-nav flex-nowrap ml-auto">
+    {% if user.is_authenticated %}
+    {% if view.child.is_authenticated %}
+    <div class="d-none d-sm-block topbar-divider"></div>
+    <li class="nav-item dropdown no-arrow">
+        <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-1 text-gray-600 small">{{view.child.name}}</span><img class="border rounded-circle img-profile" src="{% static 'assets/img/avatars/avatar1.jpeg' %}"></a>
+            <div class="dropdown-menu shadow dropdown-menu-right animated--grow-in"><a class="dropdown-item" href="{% url 'child-profile'%}"><i class="fas fa-user fa-sm fa-fw mr-1 text-gray-400"></i>&nbsp;Profile</a><a class="dropdown-item" href="{% url 'child-profile-update' view.child.id%}"><i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Settings</a>
+                <div class="dropdown-divider"></div><a class="dropdown-item" href="{% url 'pre_child_login'%}"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-1 text-gray-400"></i>&nbsp;Logout/Switch Profile</a>
+            </div>
+        </div>
+    </li>
+    {% else %}
+    <div class="d-none d-sm-block topbar-divider"></div>
+    <li class="nav-item dropdown no-arrow">
+        <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-1 text-gray-600 small">{{user.username}}</span><img class="border rounded-circle img-profile" src="{% static 'assets/img/avatars/avatar1.jpeg' %}"></a>
+            <div class="dropdown-menu shadow dropdown-menu-right animated--grow-in"><a class="dropdown-item" href="{% url 'profile'%}"><i class="fas fa-user fa-sm fa-fw mr-1 text-gray-400"></i>&nbsp;Profile</a><a class="dropdown-item" href="{% url 'settings'%}"><i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Settings</a>
+                <div class="dropdown-divider"></div><a class="dropdown-item" href="{% url 'logout'%}"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-1 text-gray-400"></i>&nbsp;Logout</a>
+            </div>
+        </div>
+    </li>
+    {% endif %}
+    {% endif %}
+</ul>
+{% endblock %}
+{% block content %}
+{{ block.super }}
+{% endblock %}
