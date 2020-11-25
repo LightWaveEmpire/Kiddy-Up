@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+
 {% block title %} {{ block.super }}{% endblock %}
 {% block sidenav%}
 {{ block.super }}
@@ -35,7 +36,11 @@
                             {% if view.child.is_authenticated %}
                                 <div class="d-none d-sm-block topbar-divider"></div>
                                 <li class="nav-item dropdown no-arrow">
-                                    <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-1 text-gray-600 small">{{view.child.name}}</span><img class="border rounded-circle img-profile" src="{% static 'assets/img/avatars/avatar1.jpeg' %}"></a>
+                                    <div class="nav-item dropdown no-arrow">
+                                        <a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-1 text-gray-600 small">{{view.child.name}}</span>
+                                        <img class="border rounded-circle img-profile" src="{{view.child.avatar.url}}">
+
+                                        </a>
                                         <div class="dropdown-menu shadow dropdown-menu-right animated--grow-in"><a class="dropdown-item" href="{% url 'child-profile'%}"><i class="fas fa-user fa-sm fa-fw mr-1 text-gray-400"></i>&nbsp;Profile</a><a class="dropdown-item" href="{% url 'child-profile-update' view.child.id%}"><i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Settings</a>
                                             <div class="dropdown-divider"></div><a class="dropdown-item" href="{% url 'pre_child_login'%}"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-1 text-gray-400"></i>&nbsp;Logout/Switch Profile</a>
                                         </div>

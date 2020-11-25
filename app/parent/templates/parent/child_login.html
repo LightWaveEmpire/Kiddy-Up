@@ -1,4 +1,5 @@
 {% extends "parent/child_base.html" %}
+{% load static %}
 {% load has_perms %}
 
 
@@ -39,14 +40,20 @@
                                     <tbody>
                                         Choose your user:
                                         {% for child in children %}
+
                                         <tr>
 
+
+
                                             {% if parent.active_child == child.name %}
-                                                <td style="color:Tomato;"><b>X</b>{{child.name}} {{child.avatar}}</td>
+                                                <td style="color:Tomato;"><img class="border rounded-circle img-profile" src="{{child.avatar.url}}"> &nbsp;&nbsp;&nbsp;&nbsp;{{child.name}}</td>
                                             {% else %}
-                                                <td><a href="{% url 'set_active_child' child.id  %}"> {{child.name}} {{child.avatar}} </a></td>
+                                                <td><a class="nav-link"  href="{% url 'set_active_child' child.id  %}"> <img class="border rounded-circle img-profile" src="{{child.avatar.url}}"> &nbsp;&nbsp;&nbsp;&nbsp;{{child.name}}</a></td>
+
                                             {% endif %}
+
                                         </tr>
+
                                         {% endfor %}
                                     </tbody>
                                 </table>
@@ -72,7 +79,8 @@
                             </script>
                                 <form method="POST">
                                     {% csrf_token %}
-                                    Enter your code, {{parent.active_child}}
+                                    Enter your code, {{parent.active_child}}<br />
+                                    <img class="border rounded-circle img-profile" src="{{parent.active_child.avatar.url}}">
 
                                     <div id="VirtualKey" style="margin: 15px">
                                     <input id="btn1" type="button" value="1" onclick="input(this);">

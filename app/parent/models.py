@@ -62,7 +62,7 @@ class Child(models.Model):
     age = models.IntegerField("Age")
     comp_level = models.IntegerField("Comprehension Level", blank=True, null=True)
     owned_rewards = models.JSONField(blank=True, null=True)
-    avatar = models.ImageField("Avatar", max_length=20, blank=True, null=True)
+    avatar = models.ImageField("Avatar", upload_to = 'avatars', default='default.jpg')
     current_points = models.IntegerField("Point Balance", default=0)
     pin = models.CharField(max_length=6, default='123')
 

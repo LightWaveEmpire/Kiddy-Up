@@ -27,7 +27,7 @@
                                         id_pin.value = id_pin.value.substr(0,id_pin.value.length-1);
                                     }
                             </script>
-<form method="post">
+<form method="post" enctype='multipart/form-data'>
     {% csrf_token %}
 
                                     Enter new pin, {{parent.active_child}}

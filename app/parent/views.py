@@ -869,4 +869,3 @@ class ChildEarnedRewardListView(LoginRequiredMixin, UserPassesTestMixin, generic
 
     def test_func(self):
         return is_member(self.request.user)
-
