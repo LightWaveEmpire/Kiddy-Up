@@ -358,6 +358,8 @@ class TaskListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
     def get_queryset(self):
         return Task.objects.filter(parent__user=self.request.user)
 
+
+
     def test_func(self):
         return is_member(self.request.user)
 
@@ -783,7 +785,12 @@ class ChildTaskListView(LoginRequiredMixin, UserPassesTestMixin, generic.Templat
     def tasks(self):
         parent = Parent.objects.get(user = self.request.user)
         active_child = parent.active_child
-        return Task.objects.filter(child = active_child)
+        return Task.objects.filter(child = active_child, status='OPEN')
+
+    def completed_tasks(self):
+        parent = Parent.objects.get(user = self.request.user)
+        active_child = parent.active_child
+        return Task.objects.filter(child = active_child, status='COMP')
 
     def test_func(self):
         return self.request.user.is_active == True
@@ -833,7 +840,7 @@ def ChildRewardBuyView(request, pk):
     parent = Parent.objects.get(user = request.user)
     active_child = parent.active_child
     reward_system.purchase_reward(active_child, reward)
-    return redirect('child-dashboard')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 
@@ -842,7 +849,8 @@ def TaskCompleteView(request, pk):
     active_child = parent.active_child
     task = Task.objects.get(id=pk)
     reward_system.complete_task(active_child, task)
-    return redirect('child-tasks')
+    # return redirect('child-tasks')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 class ChildEarnedRewardListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):

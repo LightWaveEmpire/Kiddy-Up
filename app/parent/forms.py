@@ -78,7 +78,7 @@ class ChildUpdateProfileForm(forms.ModelForm):
 class TaskUpdateForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = ['name', 'description', 'point_value', 'child', 'date']
+        fields = ['name', 'description', 'status', 'point_value', 'child', 'date']
 
     def __init__(self, user=None, *args, **kwargs):
         super(TaskUpdateForm, self).__init__(*args, **kwargs)
