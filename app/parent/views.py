@@ -690,6 +690,11 @@ class ChildDashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.Templa
         active_child = parent.active_child
         return Task.objects.filter(child = active_child, status='OPEN')
 
+    def completed_tasks(self):
+        parent = Parent.objects.get(user = self.request.user)
+        active_child = parent.active_child
+        return Task.objects.filter(child = active_child, status='COMP')
+
     def earned_rewards(self):
         parent = Parent.objects.get(user = self.request.user)
         active_child = parent.active_child
@@ -791,6 +796,10 @@ class ChildRewardListView(LoginRequiredMixin, UserPassesTestMixin, generic.Templ
     def child(self):
         parent = Parent.objects.get(user = self.request.user)
         return parent.active_child
+
+    def rewards(self):
+        parent = Parent.objects.get(user = self.request.user)
+        return Reward.objects.filter(parent=parent)
 
     def test_func(self):
         return self.request.user.is_active == True

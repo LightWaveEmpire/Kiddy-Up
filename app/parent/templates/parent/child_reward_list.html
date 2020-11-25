@@ -15,10 +15,9 @@
 
         </thead>
         <tbody>
-        {% for reward in object_list %}
+        {% for reward in view.rewards %}
         <tr>
-            <td><a href="{% url 'child-reward' task.id %}">{{reward.name}}</a></td>
-            <td>Earned</td>
+            <td><a href="{% url 'child-reward' reward.id %}">{{reward.name}}</a></td>
             <td>{{ reward.cost }}</td>
             <td><button type="button" class="btn btn-danger"><i class="far fa-trash-alt d-xl-flex justify-content-xl-center align-items-xl-center"></i></button>
 <button type="button" class="btn btn-warning"><i class="fas fa-pencil-alt d-xl-flex justify-content-xl-center align-items-xl-center"></i></button>
