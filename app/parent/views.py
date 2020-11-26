@@ -760,13 +760,22 @@ class ChildDashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.Templa
         description = current_weather['weather'][0]['description']
         icon = current_weather['weather'][0]['icon']
 
-        '''
-        # Logic here
-        # if high >?? ->
-        # if rain ->
-
-        '''
-        help_image = 'weather/default.jpg'
+        notRain = True
+            rainBoolean = "rain" in description
+        if rainBoolean == True:
+            notRain =False
+        if max_temp > 80 and rainBoolean == True:
+            help_image = weather/greenumbrella.png
+        elif max_temp > 80 and rainBoolean == False:
+            help_image = weather/hotTemperature.png
+        elif max_temp > 55 and max_temp <= 80 and rainBoolean == True:
+            help_image = weather/greenumbrella.png
+        elif max_temp > 55 and max_temp <= 80 and rainBoolean == False:
+            help_image = mild.jpg
+        elif max_temp <= 55  and rainBoolean == True:
+            help_image = coldRain.png
+        elif max_temp <= 55  and rainBoolean == False:         
+            help_image = Cold.jpg
 
         weather_help = {
             'icon': icon,
