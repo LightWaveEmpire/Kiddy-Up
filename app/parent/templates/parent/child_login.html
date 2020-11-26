@@ -45,8 +45,8 @@
 
 
 
-                                            {% if parent.active_child == child.name %}
-                                                <td style="color:Tomato;"><img class="border rounded-circle img-profile" src="{{child.avatar.url}}"> &nbsp;&nbsp;&nbsp;&nbsp;{{child.name}}</td>
+                                            {% if active_child == child.name %}
+                                                <td style="border: 1px solid"><b><img class="border rounded-circle img-profile" src="{{child.avatar.url}}"> &nbsp;&nbsp;&nbsp;&nbsp;{{child.name}}</b></td>
                                             {% else %}
                                                 <td><a class="nav-link"  href="{% url 'set_active_child' child.id  %}"> <img class="border rounded-circle img-profile" src="{{child.avatar.url}}"> &nbsp;&nbsp;&nbsp;&nbsp;{{child.name}}</a></td>
 
@@ -60,50 +60,94 @@
                             </div>
                         </div>
                     </td>
+                    {% if active_child %}
                     <td>
                         <div class="row" style="padding: 10px; text-align: center;">
                             <div class="col-md-12">
-                                ​
                                 <script>
+
+                                    var count_presses = 0;
                                     function input(e)
                                     {
-                                        var tbInput = document.getElementById("tbInput");
-                                        tbInput.value = tbInput.value + e.value;
+                                        event.preventDefault();
+                                        console.log("pressed " + count_presses);
+                                        if (count_presses < 3) {
+                                            count_presses += 1;
+                                            var tbInput = document.getElementById("tbInput");
+                                            tbInput.value = tbInput.value + e.value;
+                                            showImage();
+
+                                        }
                                     }
 
                                     function del()
                                     {
-                                        var tbInput = document.getElementById("tbInput");
-                                        tbInput.value = tbInput.value.substr(0,tbInput.value.length-1);
+                                        if (count_presses > 0) {
+                                            count_presses -= 1;
+                                            var tbInput = document.getElementById("tbInput");
+                                            tbInput.value = tbInput.value.substr(0,tbInput.value.length-1);
+                                            hideImage();
+                                        }
                                     }
+
+                                    function showImage(){
+                                        console.log(count_presses);
+                                        switch ("add 1 = " + count_presses) {
+                                            case 1:
+                                                document.getElementById("pwimg1").style.visibility = "visible";
+                                            case 2:
+                                                document.getElementById("pwimg2").style.visibility = "visible";
+                                            case 3:
+                                                document.getElementById("pwimg3").style.visibility = "visible";
+                                            }
+                                    }
+                                    function hideImage(){
+                                        console.log("subtract 1 = " + count_presses);
+                                        switch (count_presses) {
+                                            case 1:
+                                                document.getElementById("pwimg1").style.visibility = "hidden";
+                                            case 2:
+                                                document.getElementById("pwimg2").style.visibility = "hidden";
+                                            case 3:
+                                                document.getElementById("pwimg3").style.visibility = "hidden";
+                                            }
+                                    }
+
                             </script>
-                                <form method="POST">
+
+                                <form method="POST" >
                                     {% csrf_token %}
-                                    Enter your code, {{parent.active_child}}<br />
-                                    <img class="border rounded-circle img-profile" src="{{parent.active_child.avatar.url}}">
+                                    Enter your code, {{active_child}}<br />
+                                    <img class="border rounded-circle img-profile" src="{{active_child.avatar.url}}">
 
                                     <div id="VirtualKey" style="margin: 15px">
-                                    <input id="btn1" type="button" value="1" onclick="input(this);">
-                                    <input id="btn2" type="button" value="2" onclick="input(this);">
-                                    <input id="btn3" type="button" value="3" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_image_1.jpg' %}" id="btn1" value="1" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_image_2.jpg' %}" id="btn1" value="2" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_image_3.jpg' %}" id="btn1" value="3" onclick="input(this);">
                                     <br>
-                                    <input id="btn4" type="button" value="4" onclick="input(this);">
-                                    <input id="btn5" type="button" value="5" onclick="input(this);">
-                                    <input id="btn6" type="button" value="6" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_image_4.jpg' %}" id="btn1" value="4" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_image_5.jpg' %}" id="btn1" value="5" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_image_6.jpg' %}" id="btn1" value="6" onclick="input(this);">
                                     <br>
-                                    <input id="btn7" type="button" value="7" onclick="input(this);">
-                                    <input id="btn8" type="button" value="8" onclick="input(this);">
-                                    <input id="btn9" type="button" value="9" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_image_7.jpg' %}" id="btn1" value="7" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_image_8.jpg' %}" id="btn1" value="8" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_image_9.jpg' %}" id="btn1" value="9" onclick="input(this);">
                                     <br>
-                                    <input id="btnDel" type="button" value="Backspace" onclick="del();">
+                                    <input id="btnDel" type="button" value="Backspace" onclick="del();" visibility=>
                                     <br>
-                                    <input id="tbInput" name='form_pin' type="text">
+
+                                    <input type="image" alt="*" src="{% static 'child_login_image_1.jpg' %}" id="pwimg1" style="visibility:hidden">
+                                    <input type="image" alt="*" src="{% static 'child_login_image_1.jpg' %}" id="pwimg2" style="visibility:hidden" >
+                                    <input type="image" alt="*" src="{% static 'child_login_image_1.jpg' %}" id="pwimg3" style="visibility:hidden" >
+                                    <br>
+                                    <input id="tbInput" name='form_pin' type="hidden" maxlength="3">
                                     <input type="submit" value="Log In">
                                 </form>
                                 </div>
                             </div>
                         </div>
                     </td>
+                    {%  endif %}
                 </tr>
             </table>
 

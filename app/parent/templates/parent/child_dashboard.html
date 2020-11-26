@@ -1,4 +1,5 @@
 {% extends "parent/child_base.html" %}
+{% load static %}
 {% load has_perms %}
 {% block title %} Child Dashboard - {{ block.super }}{% endblock %}
 {% block content %}
@@ -81,16 +82,27 @@
         </div>
     </div>
 
+
+
+
+
 <div class="dashboard_box">
-<p>
-                <span class="title">Weather for {{ view.weather.city }}</span>
+
+            <p>
                 <figure class="image is-50x50">
-                    <img src="http://openweathermap.org/img/w/{{ view.weather.icon }}.png" alt="Image"> {{ view.weather.now_temp }}° F</br>{{ view.weather.description }}
+                    <img src="http://openweathermap.org/img/w/{{ view.weather_help.icon }}.png" alt="Image">
                 </figure>
-                Low: {{ view.weather.min_temp }}° F</br> High: {{ view.weather.max_temp }}° F</br>
+                <figure class="image is-50x50">
+                    <img class="border rounded-circle img-profile" src="{% static view.weather_help.help_image %}" alt="Image">
                 </figure>
             </p>
 </div>
+
+
+
+
+
+
 
     <div class="dashboard_box">
         <h2 style="width: 343px;">Done</h2>
