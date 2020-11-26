@@ -46,9 +46,9 @@
 
 
                                             {% if active_child == child.name %}
-                                                <td style="border: 1px solid"><b><img class="border rounded-circle img-profile" src="{{child.avatar.url}}"> &nbsp;&nbsp;&nbsp;&nbsp;{{child.name}}</b></td>
+                                                <td style="border: 1px solid"><b><img class="border rounded-circle img-profile" src="{{child.avatar.url}}" width="99" height="99"> &nbsp;&nbsp;&nbsp;&nbsp;{{child.name}}</b></td>
                                             {% else %}
-                                                <td><a class="nav-link"  href="{% url 'set_active_child' child.id  %}"> <img class="border rounded-circle img-profile" src="{{child.avatar.url}}"> &nbsp;&nbsp;&nbsp;&nbsp;{{child.name}}</a></td>
+                                                <td><a class="nav-link"  href="{% url 'set_active_child' child.id  %}"> <img class="border rounded-circle img-profile" src="{{child.avatar.url}}" width="99" height="99"> &nbsp;&nbsp;&nbsp;&nbsp;{{child.name}}</a></td>
 
                                             {% endif %}
 
@@ -61,6 +61,7 @@
                         </div>
                     </td>
                     {% if active_child %}
+
                     <td>
                         <div class="row" style="padding: 10px; text-align: center;">
                             <div class="col-md-12">
@@ -114,11 +115,13 @@
                                     }
 
                             </script>
-
+<div>
+                        Enter your code, {{active_child}}<br />
+                                    <img class="border rounded-circle img-profile" src="{{active_child.avatar.url}}" width="150" height="150">
+                    </div>
                                 <form method="POST" >
                                     {% csrf_token %}
-                                    Enter your code, {{active_child}}<br />
-                                    <img class="border rounded-circle img-profile" src="{{active_child.avatar.url}}">
+
 
                                     <div id="VirtualKey" style="margin: 15px">
                                     <input type="image" src="{% static 'child_login_pin_images/child_login_image_1.png' %}" width="99" height="99" id="btn1" value="1" onclick="input(this);">

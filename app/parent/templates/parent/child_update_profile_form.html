@@ -1,6 +1,6 @@
 
 {% extends "parent/child_base.html" %}
-
+{% load static %}
 {% load has_perms %}
 
 {% block title %}Update Child Profile - {{ block.super}} {% endblock %}
@@ -14,38 +14,87 @@
 <!--    {{ form.as_p }}-->
 <!--    <input type="submit" value="Save">-->
 <!--</form>-->
-                                <script>
+<script>
+
+                                    var count_presses = 3;
                                     function input(e)
                                     {
-                                        var id_pin = document.getElementById("id_pin");
-                                        id_pin.value = id_pin.value + e.value;
+                                        event.preventDefault();
+                                        console.log("pressed " + count_presses);
+                                        var tbInput = document.getElementById("id_pin");
+                                        if (count_presses == 0) {
+                                            tbInput.value = ""
+                                        }
+                                        if (count_presses < 3) {
+                                            count_presses += 1;
+
+                                            tbInput.value = tbInput.value + e.value;
+                                            showImage();
+
+                                        }
                                     }
 
                                     function del()
                                     {
-                                        var id_pin = document.getElementById("id_pin");
-                                        id_pin.value = id_pin.value.substr(0,id_pin.value.length-1);
+                                        if (count_presses > 0) {
+                                            count_presses -= 1;
+                                            var tbInput = document.getElementById("id_pin");
+                                            tbInput.value = tbInput.value.substr(0,tbInput.value.length-1);
+                                            hideImage();
+                                        }
                                     }
+
+                                    function showImage(){
+                                        console.log(count_presses);
+                                        switch ("add 1 = " + count_presses) {
+                                            case 1:
+                                                document.getElementById("pwimg1").style.visibility = "visible";
+                                            case 2:
+                                                document.getElementById("pwimg2").style.visibility = "visible";
+                                            case 3:
+                                                document.getElementById("pwimg3").style.visibility = "visible";
+                                            }
+                                    }
+                                    function hideImage(){
+                                        console.log("subtract 1 = " + count_presses);
+                                        switch (count_presses) {
+                                            case 1:
+                                                document.getElementById("pwimg1").style.visibility = "hidden";
+                                            case 2:
+                                                document.getElementById("pwimg2").style.visibility = "hidden";
+                                            case 3:
+                                                document.getElementById("pwimg3").style.visibility = "hidden";
+                                            }
+                                    }
+
                             </script>
 <form method="post" enctype='multipart/form-data'>
     {% csrf_token %}
 
                                     Enter new pin, {{parent.active_child}}
 
+                                    <img class="border rounded-circle img-profile" src="{{active_child.avatar.url}}">
+
                                     <div id="VirtualKey" style="margin: 15px">
-                                    <input id="btn1" type="button" value="1" onclick="input(this);">
-                                    <input id="btn2" type="button" value="2" onclick="input(this);">
-                                    <input id="btn3" type="button" value="3" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_1.png' %}" width="99" height="99" id="btn1" value="1" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_2.png' %}" width="99" height="99" id="btn1" value="2" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_3.png' %}" width="99" height="99" id="btn1" value="3" onclick="input(this);">
                                     <br>
-                                    <input id="btn4" type="button" value="4" onclick="input(this);">
-                                    <input id="btn5" type="button" value="5" onclick="input(this);">
-                                    <input id="btn6" type="button" value="6" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_4.png' %}" width="99" height="99"  id="btn1" value="4" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_5.png' %}" width="99" height="99"  id="btn1" value="5" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_6.png' %}" width="99" height="99"  id="btn1" value="6" onclick="input(this);">
                                     <br>
-                                    <input id="btn7" type="button" value="7" onclick="input(this);">
-                                    <input id="btn8" type="button" value="8" onclick="input(this);">
-                                    <input id="btn9" type="button" value="9" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_7.png' %}" width="99" height="99"  id="btn1" value="7" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_8.png' %}" width="99" height="99"  id="btn1" value="8" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_9.png' %}" width="99" height="99"  id="btn1" value="9" onclick="input(this);">
                                     <br>
-                                    <input id="btnDel" type="button" value="Backspace" onclick="del();">
+                                    <input id="btnDel" type="button" value="Backspace" onclick="del();" visibility=>
+                                    <br>
+
+                                    <input type="image" alt="*" src="{% static 'child_login_image_1.jpg' %}" id="pwimg1" style="visibility:hidden">
+                                    <input type="image" alt="*" src="{% static 'child_login_image_1.jpg' %}" id="pwimg2" style="visibility:hidden" >
+                                    <input type="image" alt="*" src="{% static 'child_login_image_1.jpg' %}" id="pwimg3" style="visibility:hidden" >
+                                    <br>
                                         {{ form.as_p }}
 
 

@@ -458,7 +458,8 @@ class ChildDetailView(generic.DetailView):
 
 class ChildCreate(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
     model = Child
-    fields = ['name', 'age', 'comp_level', 'target_reward', 'pin']
+    form_class = ChildUpdateForm
+    template_name = "parent/child_form.html"
 
     def form_valid(self, form):
         form.instance.parent = Parent.objects.get(user=self.request.user)
