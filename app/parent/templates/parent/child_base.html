@@ -31,6 +31,11 @@
         {% endif %}
                                 </ul>
                     <ul class="nav navbar-nav flex-nowrap ml-auto">
+
+                    {% if view.child.is_authenticated %}
+                                            <p>Reward Progress Image here</p>
+                    {% endif %}
+
                     {% if user.is_authenticated %}
 
                             {% if view.child.is_authenticated %}

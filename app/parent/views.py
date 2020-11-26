@@ -759,11 +759,13 @@ class ChildDashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.Templa
         description = current_weather['weather'][0]['description']
         icon = current_weather['weather'][0]['icon']
 
+        '''
+        # Logic here
         # if high >?? ->
         # if rain ->
-        help_image = 'weather/default.jpg'
 
-        ##
+        '''
+        help_image = 'weather/default.jpg'
 
         weather_help = {
             'icon': icon,
