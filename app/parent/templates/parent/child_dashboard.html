@@ -148,14 +148,14 @@
                 {% if view.earned_rewards %}
 <table>
                 {% for reward in view.earned_rewards %}
-                    <tr><td>{{reward.reward}}</td></tr>
+                    <tr><td>{{reward.reward}} - EARNED!</td></tr>
                 {% endfor %}
 </table>
 {% else %}
                 You have no earned rewards.
 
-                {% endif %}
-                <p><a href="{% url 'child-rewards' %}">Buy a Reward</a></p>
+                {% endif %}<br>
+                <p><a href="{% url 'child-rewards' %}"><i>Buy a Reward</i></a></p>
             </div>
         </div>
     </div>
