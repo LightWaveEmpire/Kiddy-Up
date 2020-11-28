@@ -223,6 +223,39 @@ class RewardListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
+
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 
@@ -232,6 +265,39 @@ class RewardDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailVi
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
+
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 class RewardCreate(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
@@ -245,6 +311,39 @@ class RewardCreate(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
+
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 class RewardUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
@@ -254,6 +353,39 @@ class RewardUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
+
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 class RewardDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
@@ -263,7 +395,39 @@ class RewardDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
 
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 # Earned Reward Views
@@ -280,7 +444,39 @@ class EarnedRewardListView(LoginRequiredMixin, UserPassesTestMixin, generic.List
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
 
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 class EarnedRewardDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailView):
@@ -289,6 +485,39 @@ class EarnedRewardDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.De
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
+
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 class EarnedRewardDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
@@ -298,7 +527,39 @@ class EarnedRewardDelete(LoginRequiredMixin, UserPassesTestMixin, generic.Delete
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
 
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 
@@ -314,7 +575,39 @@ class Original_TaskListView(LoginRequiredMixin, UserPassesTestMixin, generic.Lis
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
 
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 class Original_TaskDetailView(generic.DetailView):
@@ -323,7 +616,39 @@ class Original_TaskDetailView(generic.DetailView):
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
 
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 class Original_TaskCreate(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
     model = Original_Task
@@ -336,6 +661,39 @@ class Original_TaskCreate(LoginRequiredMixin, UserPassesTestMixin, generic.Creat
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
+
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 class Original_TaskUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
@@ -344,6 +702,40 @@ class Original_TaskUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.Updat
 
     def test_func(self):
         return is_member(self.request.user)
+
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
+
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 
@@ -354,7 +746,39 @@ class Original_TaskDelete(LoginRequiredMixin, UserPassesTestMixin, generic.Delet
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
 
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 
@@ -376,6 +800,39 @@ class CompletedTaskListView(LoginRequiredMixin, UserPassesTestMixin, generic.Lis
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
+
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 class TaskListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
@@ -390,6 +847,39 @@ class TaskListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
+
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 
@@ -399,6 +889,39 @@ class TaskDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailView
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
+
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 class TaskCreate(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
@@ -412,7 +935,39 @@ class TaskCreate(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
 
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 class TaskUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
@@ -423,6 +978,40 @@ class TaskUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
+
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
+
 
 class TaskDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
     model = Task
@@ -431,7 +1020,39 @@ class TaskDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
 
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 
@@ -450,6 +1071,39 @@ class ChildListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
+
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 
@@ -459,7 +1113,39 @@ class ChildDetailView(generic.DetailView):
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
 
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 
@@ -477,7 +1163,39 @@ class ChildCreate(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
 
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 
@@ -489,7 +1207,39 @@ class ChildUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
 
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 
@@ -500,7 +1250,39 @@ class ChildDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
 
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 
@@ -517,7 +1299,39 @@ class ParentListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
 
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 class ParentDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailView):
@@ -526,7 +1340,39 @@ class ParentDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailVi
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
 
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 class ParentUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
@@ -535,6 +1381,41 @@ class ParentUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
 
     def test_func(self):
         return is_member(self.request.user)
+
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
+
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
+
 
 
 class UpdateProfileView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateView):
@@ -561,6 +1442,40 @@ class UpdateProfileView(LoginRequiredMixin, UserPassesTestMixin, generic.Templat
     def test_func(self):
         return self.request.user.is_active == True
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
+
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
+
 
 
 class ParentDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
@@ -570,7 +1485,39 @@ class ParentDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
 
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 # No Login Required
@@ -620,7 +1567,39 @@ class SettingsView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateView
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
 
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 # Child Login Page (New)
@@ -679,7 +1658,39 @@ class ChildLoginView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateVi
     def test_func(self):
         return is_member(self.request.user)
 
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
 
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
 
 
 def SetActiveChildView(request, pk):
