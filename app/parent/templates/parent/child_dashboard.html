@@ -87,14 +87,18 @@
 
 
 <div class="dashboard_box">
+<h2 style="width: 343px;"> Weather </h2>
+            <p> Today's Weather:
+                    <img src="http://openweathermap.org/img/w/{{ view.weather_help.icon }}.png" alt="Image" height=50px width=50px>
+                     {{view.weather_help.max_temp}}° F</br>
+            </p>
+            <p> Reminders:
 
-            <p>
-                <figure class="image is-50x50">
-                    <img src="http://openweathermap.org/img/w/{{ view.weather_help.icon }}.png" alt="Image">
-                </figure>
-                <figure class="image is-50x50">
-                    <img class="border rounded-circle img-profile" src="{% static view.weather_help.help_image %}" alt="Image">
-                </figure>
+                    <img class="border rounded-circle img-profile" src="{% static view.weather_help.help_image %}" alt="Image" height=50px width=50px>
+
+
+
+
             </p>
 </div>
 

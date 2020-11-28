@@ -761,21 +761,21 @@ class ChildDashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.Templa
         icon = current_weather['weather'][0]['icon']
 
         notRain = True
-            rainBoolean = "rain" in description
+        rainBoolean = "rain" in description
         if rainBoolean == True:
             notRain =False
         if max_temp > 80 and rainBoolean == True:
-            help_image = weather/greenumbrella.png
+            help_image = "weather/greenumbrella.png"
         elif max_temp > 80 and rainBoolean == False:
-            help_image = weather/hotTemperature.png
+            help_image = "weather/hotTemperature.png"
         elif max_temp > 55 and max_temp <= 80 and rainBoolean == True:
-            help_image = weather/greenumbrella.png
+            help_image = "weather/greenumbrella.png"
         elif max_temp > 55 and max_temp <= 80 and rainBoolean == False:
-            help_image = mild.jpg
+            help_image = "weather/mild.jpg"
         elif max_temp <= 55  and rainBoolean == True:
-            help_image = coldRain.png
-        elif max_temp <= 55  and rainBoolean == False:         
-            help_image = Cold.jpg
+            help_image = "weather/coldRain.png"
+        elif max_temp <= 55  and rainBoolean == False:
+            help_image = "weather/Cold.jpg"
 
         weather_help = {
             'icon': icon,
