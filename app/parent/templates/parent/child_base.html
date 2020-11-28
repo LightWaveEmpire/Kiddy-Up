@@ -15,7 +15,7 @@
                 <li class="nav-item"><a class="nav-link" href="{% url 'child-profile' %}"><i class="fas fa-user"></i><span>Profile</span></a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'child-tasks'%}"><i class="fas fa-table"></i><span>My Tasks</span></a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url 'child_earned_rewards'%}"><i class="far fa-user-circle"></i><span>My Rewards</span></a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'child-rewards'%}"><i class="far fa-user-circle"></i><span>Points: {{view.child.current_points}}</span></a></li>
+
             {% else %}
                 <li class="nav-item"><a class="nav-link" href="{% url 'logout'%}"><i class="far fa-user-circle"></i><span>Back to Parent Dashboard</span></a></li>
             {% endif %}
@@ -33,9 +33,19 @@
                     <ul class="nav navbar-nav flex-nowrap ml-auto">
 
                     {% if view.child.is_authenticated %}
-                                            <p>Reward Progress Image here</p>
-                    {% endif %}
+<li class="nav-item"><a class="nav-link" href="{% url 'child-rewards'%}">
+                    {% if view.child.target_reward %}
+                        <label for="reward">{{view.child.target_reward}}&nbsp;&nbsp;&nbsp;</label>
+                        <progress id="reward" value="{{view.child.current_points}}" max='{{view.child.target_reward.cost}}'>{{view.child.current_points}} </progress>
+                    {% else %}
+                        <label for="reward">No Goal Set</label>
+                        <progress id="reward" value="0" max='0'> 0% </progress>
+                    {% endif%}
+                    &nbsp;&nbsp;&nbsp;<i class="fas fa-certificate">{{view.child.current_points}}</i>
 
+
+                    {% endif %}
+</a></li>
                     {% if user.is_authenticated %}
 
                             {% if view.child.is_authenticated %}
