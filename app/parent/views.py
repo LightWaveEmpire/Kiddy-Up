@@ -175,8 +175,16 @@ class DashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateVie
     def rewards(self):
         return Reward.objects.filter(parent__user = self.request.user)
 
+    def earned_rewards(self):
+        parent = Parent.objects.get(user = self.request.user)
+        return Earned_Reward.objects.filter(child__parent = parent)
+
     def tasks(self):
         return Task.objects.filter(parent__user = self.request.user)
+
+    def completed_tasks(self):
+        parent = Parent.objects.get(user = self.request.user)
+        return Task.objects.filter(parent = parent, status='COMP')
 
     def test_func(self):
         return is_member(self.request.user)
