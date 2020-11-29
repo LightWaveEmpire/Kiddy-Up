@@ -1634,6 +1634,7 @@ class ChildLoginView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateVi
             print(f'\n\nDEBUG: PIN = {pin}\n\n', file=sys.stderr)
         return data
 
+
     def post(self, request, *args, **kwargs):
         pin_guess = request.POST.get('form_pin')
         # form = ChildLoginForm(request.POST)
@@ -1648,11 +1649,13 @@ class ChildLoginView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateVi
 
                 child.is_authenticated = False
                 child.save()
+
             active_child.is_authenticated = True
             active_child.save()
 
             return redirect('child-dashboard')
-
+        else:
+            return redirect('child_login')
         return render(request, self.template_name)
 
     def test_func(self):
