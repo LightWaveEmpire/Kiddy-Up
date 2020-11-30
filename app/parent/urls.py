@@ -2,12 +2,11 @@ from django.contrib import admin
 from django.urls import include, path
 from . import views
 from .views import *
+from django.conf.urls import include, url
 
 #from django.conf import settings
 
 urlpatterns = [
-
-
 
     path('', views.DashboardView.as_view(), name="home"),
     path('parent/redirect/', views.redirect_on_login, name='login-redirect'),
@@ -23,7 +22,9 @@ urlpatterns = [
     path("parent/child_login/", views.ChildLoginView.as_view(), name="child_login"),
     path('parent/set_active/<int:pk>/', SetActiveChildView, name='set_active_child'),
 
-    path("register/", views.ParentSignUpView.as_view(), name="register"),
+    path ("register/", views.ParentSignUpView.as_view(), name="register"),
+    path('activate/<uidb64>/<token>/', ActivateAccount.as_view(), name='activate'),
+
     # path("parent/child_register/", views.ChildSignUpView.as_view(), name="child_register"),
 
 

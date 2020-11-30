@@ -1,0 +1,14 @@
+<!-- auth_user_email.html -->
+
+{% autoescape off %}
+To initiate the Kiddy-Up account verification process for your {{ user.get_username }} TestSite Account,
+click the link below:
+
+http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+
+If clicking the link above doesn't work, please copy and paste the URL in a new browser
+window instead.
+
+Sincerely,
+The TestSite Team
+{% endautoescape %}

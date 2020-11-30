@@ -4,6 +4,9 @@ from django.db import transaction
 
 from parent.models import Parent, Child, Task, User
 
+from django.contrib.auth.models import User
+
+
 
 
 class ParentCreationForm(UserCreationForm):
@@ -12,13 +15,26 @@ class ParentCreationForm(UserCreationForm):
 
 
 class ParentSignUpForm(UserCreationForm):
-#    first_name = forms.CharField(label='First name')
-#    last_name = forms.CharField(label='Last name')
-#    email = forms.EmailField(help_text='A valid email address, please.')
+    # first_name = forms.CharField(max_length=30, required=False, help_text='Optional')
+    # last_name = forms.CharField(max_length=30, required=False, help_text='Optional')
+    email = forms.EmailField(max_length=254, help_text='Enter a valid email address')
 
-    class Meta(UserCreationForm.Meta):
+    class Meta:
         model = User
-        fields = 'username', 'email'
+        fields = [
+            'username', 
+            'email', 
+            'password1', 
+            'password2', 
+            ]
+    def as_p(self):
+        "Returns this form rendered as HTML <p>s."
+        return self._html_output(
+            normal_row = u'<p style=" margin-left: 15px" %(html_class_attr)s>  %(label)s%(field)s</p> <p style=" margin-left: 37px;"%(help_text)s</p> <br/>',
+            error_row = u'%s',
+            row_ender = '</p>',
+            help_text_html = u' <span style=" opacity: 0.5;" class="helptext">%s</span>',
+            errors_on_separate_row = True)
 
     @transaction.atomic
     def save(self):
@@ -27,8 +43,6 @@ class ParentSignUpForm(UserCreationForm):
         user.save()
         parent = Parent.objects.create(user=user)
         return user
-
-
 
 class UpdateProfileForm(forms.ModelForm):
 
