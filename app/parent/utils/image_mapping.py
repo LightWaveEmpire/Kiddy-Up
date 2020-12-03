@@ -1,9 +1,8 @@
 import os
 from array import *
+from parent.models import Task
 
-from parent.models import *
-
-def get_task_image(task_description: str) -> str:
+def get_task_image(task: Task) -> str:
     """
     Returns some reference for an image based on the task description
 
@@ -20,18 +19,19 @@ def get_task_image(task_description: str) -> str:
     # step 3: search filename for each word
     # step 4: return filename if words match
 
-    # curr_user = Child.objects.get(pk=this_object_id)
+    # task_description = task.description
+    # curr_user = task.child
     # comp_level = curr_user.comp_level
     # newlist = []
 
     # newlist.append(task_description.split())
 
     # for root, dirs, files in os.walk(r'static/task_images/'):
-    # 	for file in files:
-    # 		if file.startswith(str(comp_level)):
-    # 			if all(x in newlist for x in file):
-    # 				return file
-    # 			else:
-   	# 				return "static/task_images/default_task_image.jpg"
+    #     for file in files:
+    #         if file.startswith(str(comp_level)):
+    #             if all(x in newlist for x in file):
+    #                 return file
+    #             else:
+    #                 return "static/task_images/default_task_image.jpg"
 
 return "static/task_images/default_task_image.jpg"

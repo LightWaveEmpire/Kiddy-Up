@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User #, AbstractUser, UserManager
 from django.contrib.auth import get_user_model
 from django.urls import reverse
-from parent.utils import entity_extraction, image_mapping
+from parent.utils import entity_extraction
 
 
 # User = settings.AUTH_USER_MODEL
@@ -123,7 +123,8 @@ class Task(models.Model):
     )
     # get details on image storage from Samuel
     image = models.CharField("Task Image", max_length=20, default='default_img')
-    # image = image_mapping.get_task_image(description)
+    # from parent.utils import image_mapping
+    # image = image_mapping.get_task_image(self)
 
     # Will need to change to DateTimeField
     date = models.DateTimeField("Task Date", )
