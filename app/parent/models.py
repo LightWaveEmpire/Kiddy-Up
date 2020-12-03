@@ -4,6 +4,8 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 from parent.utils import entity_extraction
 
+import os
+from array import *
 
 # User = settings.AUTH_USER_MODEL
 
@@ -123,8 +125,6 @@ class Task(models.Model):
     )
     # get details on image storage from Samuel
     image = models.CharField("Task Image", max_length=20, default='default_img')
-    # from parent.utils import image_mapping
-    # image = image_mapping.get_task_image(self)
 
     # Will need to change to DateTimeField
     date = models.DateTimeField("Task Date", )
@@ -140,6 +140,22 @@ class Task(models.Model):
 
     def get_absolute_url(self):
         return reverse('task', kwargs={'pk': self.pk})
+
+    def get_task_image(self):
+        task_description = self.description
+        curr_user = self.child
+        comp_level = curr_user.comp_level
+        newlist = []
+
+        newlist.append(task_description.split())
+
+        for root, dirs, files in os.walk(r'static/task_images/'):
+            for file in files:
+                if file.startswith(str(comp_level)):
+                    if all(x in newlist for x in file):
+                        return file
+                    else:
+                        return "static/task_images/default_task_image.jpg"
 
 
 
@@ -175,7 +191,8 @@ class Original_Task(models.Model):
                          name=task_details['name'],
                          description=task_details['description'],
                          date=task_details['date'],
-                         location=task_details['location'])
+                         location=task_details['location'],
+                         image=get_task_image(t))
                 t.save()
 
 

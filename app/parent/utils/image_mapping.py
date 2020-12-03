@@ -1,8 +1,8 @@
-import os
-from array import *
-from parent.models import Task
+# import os
+# from array import *
+# from parent.models import Task, Child, Parent
 
-def get_task_image(task: Task) -> str:
+def get_task_image(task_description : str) -> str:
     """
     Returns some reference for an image based on the task description
 
@@ -15,7 +15,7 @@ def get_task_image(task: Task) -> str:
     # step 0: if condition for child level.
     	# if file.startswith(condition): 
     # step 1: read in task_description
-    # Step 2: split task_description into individual words
+    # step 2: split task_description into individual words
     # step 3: search filename for each word
     # step 4: return filename if words match
 
@@ -34,4 +34,4 @@ def get_task_image(task: Task) -> str:
     #             else:
     #                 return "static/task_images/default_task_image.jpg"
 
-return "static/task_images/default_task_image.jpg"
+    return "static/task_images/default_task_image.jpg"
