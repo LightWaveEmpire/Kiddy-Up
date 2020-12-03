@@ -41,7 +41,7 @@ class ParentSignUpForm(UserCreationForm):
         new_user = super().save(commit=False)
         new_user.is_parent = True
         new_user.save()
-        parent = Parent(user=new_user)
+        parent = Parent.objects.create(user=new_user)
         return new_user
 
 class UpdateProfileForm(forms.ModelForm):
