@@ -1,4 +1,7 @@
 
+import spacy
+from spacy.pipeline import EntityRuler
+import json
 
 
 def extract_entities(otask: str) -> dict:
@@ -10,9 +13,85 @@ def extract_entities(otask: str) -> dict:
     :return: a reference to an image to use for the child view
 
     """
-    default_task['name'] = "default task name"
-    default_task['description'] = "default task description"
-    default_task['people'] = ["default task person 1", "default task person 2"]
-    default_task['date'] = "12/02/2021"
-    default_task['location'] = "default task location"
-    return default_task
+
+    user_ents_raw = '''{
+
+        "CHILD": []
+    ,
+        "SCHOOL": []
+    ,
+        "WORK": []
+    ,
+        "RACT": []
+        }'''
+
+    task = {}
+    task['name'] = "Untitled Task"
+    task['description'] = ""
+    task['people'] = []
+    task['date'] = "12/02/2021"
+    task['location'] = "no location given"
+
+    nlp = spacy.load("en_core_web_lg")
+
+    user_ents_ruler = EntityRuler(nlp, phrase_matcher_attr="LOWER", overwrite_ents=True)
+    user_ents = json.loads(user_ents_raw)
+
+    for category in user_ents:
+        MATCH_ID = category.upper()
+        docs = []
+        for item in user_ents[category]:
+            docs.append(nlp(item))
+        user_ents_ruler.phrase_matcher.add(MATCH_ID, docs)
+    #    print(MATCH_ID, docs)
+
+    nlp.add_pipe(user_ents_ruler)
+
+    doc = nlp(otask)
+
+    for ent in doc.ents:
+
+        if ent.label_ == "CHILD":
+            task['people'].append(ent.text)
+
+        if ent.label_ == "PERSON":
+            task['people'].append(ent.text)
+
+        if ent.label_ == "WORK":
+            task['location'] = ent.text
+
+        if ent.label_ == "SCHOOL":
+            task['location'] = ent.text
+
+        # this is shoddy and needs tweaking
+        if ent.label_ == "GPE":
+            task['location'] = ent.text
+
+        if ent.label_ == "RACT":
+            task['name'] = task['description'] = ent.text
+
+        if ent.label_ == "DATE":
+            task['date'] = ent.text
+
+            if task['name'] == "Untitled Task":
+
+                headOfPrep = ent.root.head.head
+                referencePoint = headOfPrep
+
+                if headOfPrep.pos_ == "VERB":
+                    for child in headOfPrep.children:
+                        if child.dep_ == "dobj":
+                            referencePoint = child
+
+                if referencePoint is headOfPrep:
+                    for token in headOfPrep.sent:
+                        if token.dep_ == "nsubj":
+                            referencePoint = token
+
+                for chunk in referencePoint.sent.as_doc().noun_chunks:
+                    if chunk.root.text == referencePoint.text:
+                        # print(chunk.text, ent.text)
+                        task['name'] = task['description'] = (chunk.text)
+
+    return task
+
