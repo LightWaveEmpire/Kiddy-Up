@@ -38,11 +38,11 @@ class ParentSignUpForm(UserCreationForm):
 
     @transaction.atomic
     def save(self):
-        user = super().save(commit=False)
-        user.is_parent = True
-        user.save()
-        parent = Parent.objects.create(user=user)
-        return user
+        new_user = super().save(commit=False)
+        new_user.is_parent = True
+        new_user.save()
+        parent = Parent(user=new_user)
+        return new_user
 
 class UpdateProfileForm(forms.ModelForm):
 
