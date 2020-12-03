@@ -1,9 +1,9 @@
  {% extends "parent/parent_base.html" %} {% load has_perms %} {% block title %} Tasks  - {{ block.super }} {% endblock %} {% block content %}
 
-<h1>Tasks</h1>
+<h1><p style="margin-left: 15px"> Tasks</h1>
 
-<p><a href="{% url 'completed_tasks' %}">Completed Tasks</a></p>
-<p><a href="{% url 'manual_add' %}">Add a Task</a></p>
+<p><a style="margin-left: 20px" href="{% url 'completed_tasks' %}">Completed Tasks</a></p>
+<p><a style="margin-left: 20px" href="{% url 'manual_add' %}">Add a Task</a></p>
 
 
 <table class="table table-bordered">

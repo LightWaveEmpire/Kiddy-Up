@@ -7,7 +7,7 @@
 
 {% block content %}
 
-  <h1>Settings</h1>
+  <h1><p style="margin-left: 15px"> Settings</h1>
 
 
   <br />
@@ -15,7 +15,7 @@
   <br />
 
 
-  <h2> Profile </h2>
+  <h2> <p style="margin-left: 25px"> Profile </h2>
 
     <table class="table table-bordered">
       <thead>
@@ -46,9 +46,9 @@
         <br />
         <br />
 
-          <h2>Children</h2>
+          <h2> <p style="margin-left: 15px"> Children</h2>
 
-          <p><a href="{% url 'child-add' %}">Add a Child</a></p>
+          <p><a style="margin-left: 25px" href="{% url 'child-add' %}">Add a Child</a></p>
 
         {% if view.children %}
 
@@ -82,8 +82,8 @@
     <br />
     <br />
     <br />
-    <h2>Rewards</h2>
-    <p><a href="{% url 'reward-add' %}">Add a Reward</a></p>
+    <h2> <p style="margin-left: 15px"> Rewards</h2>
+    <p><a style="margin-left: 25px" href="{% url 'reward-add' %}">Add a Reward</a></p>
 
 
 
@@ -111,7 +111,7 @@
     <br />
     <br />
     <br />
-    <h2>Link Calendar and Task List</h2>
+    <h2> <p style="margin-left: 15px"> Link Calendar and Task List</h2>
 	<ul>
     <li>
     {% if view.parent.account_creds %}
