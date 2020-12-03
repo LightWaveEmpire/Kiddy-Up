@@ -3,23 +3,17 @@ from parent.utils import table_access
 import sys
 
 '''
-Call this to mark a task as completed for a child.
+Call this to mark a task as *Pending* for a child.
 
 :param c_object: the child that owns the task
 :param t_object: the task object to be completed
 '''
 def complete_task(c_object, t_object):
-    #give points to the child
     c = c_object
     t = t_object
-    old_points = c.current_points
-    new_points = t.point_value
 
-    c.current_points = old_points + new_points
-    c.save()
-
-    #mark the task as completed
-    t.status = "COMP"
+    #mark the task as pending 
+    t.status = "PEND"
     t.save()
 
 def purchase_reward(c_object, r_object):
@@ -40,3 +34,17 @@ def purchase_reward(c_object, r_object):
     earnedRewards = Earned_Reward()
     '''
 
+def parent_validate_task(t_object):
+    t = t_object
+    t.status = "COMP"
+    t.save()
+
+    c = t.child_set.all().get()
+    old_points = c.current_points
+    c.current_points = old_points + t.point_value
+    c.save()
+
+def parent_invalidate_task(t_object):
+    t = t_object
+    t.status = "OPEN"
+    t.save()
