@@ -49,8 +49,8 @@ urlpatterns = [
     path('parent/task/<int:pk>/update/', TaskUpdate.as_view(), name='task-update'),
     path('parent/task/<int:pk>/delete/', TaskDelete.as_view(), name='task-delete'),
     
-    path('parent/task/<int:pk>/validate/', TaskValidate.as_view(), name='task-validate'),
-    path('parent/task/<int:pk>/invalidate/', TaskInvalidate.as_view(), name='task-invalidate'),
+    path('parent/task/<int:pk>/validate/', TaskValidate, name='task-validate'),
+    path('parent/task/<int:pk>/invalidate/', TaskInvalidate, name='task-invalidate'),
 
     path('parent/manual_add/', Original_TaskCreate.as_view(), name='manual_add'),
 
