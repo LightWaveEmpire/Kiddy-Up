@@ -6,7 +6,7 @@
         padding: 0;
         box-sizing: border-box;
     }
-    
+
     .dashboard_container {
         margin: 20px auto;
         padding: 25px;
@@ -19,7 +19,7 @@
         grid-column-gap: 20px;
         grid-row-gap: 20px;
     }
-    
+
     .dashboard_box {
         background-color: #333;
         padding: 20px;
@@ -39,7 +39,7 @@
 <!--    {% endif %}-->
 <div class="dashboard_container">
     <div class="dashboard_box">
-        <h2 style=" color:#000000; width: 343px;">ToDo</h2>
+        <h2 style=" color:#fff; width: 343px;">ToDo</h2>
         <div class="row">
             <div class="col-md-12">
                 {% if view.tasks %}
@@ -74,7 +74,7 @@
 
 
 
-<<<<<<< Updated upstream
+
 <div class="dashboard_box">
 <h2 style="color:#87CEEB ;"> Weather </h2>
             <p> <p style=" color:#87CEEB" > Today's Weather:
@@ -82,14 +82,7 @@
                      {{view.weather_help.max_temp}}° F</br>
             </p>
             <p> <p style=" color:#FF3333" > Reminders:
-=======
-    <div class="dashboard_box">
-        <h2 style="width: 343px;"> Weather </h2>
-        <p> Today's Weather:
-            <img src="http://openweathermap.org/img/w/{{ view.weather_help.icon }}.png" alt="Image" height=50px width=50px> {{view.weather_help.max_temp}}° F</br>
-        </p>
-        <p> Reminders:
->>>>>>> Stashed changes
+
 
             <img class="border rounded-circle img-profile" src="{% static view.weather_help.help_image %}" alt="Image" height=50px width=50px>
 
@@ -141,7 +134,7 @@
         <div>
             <div class="col-md-12">
                 {% if view.earned_rewards %}
-<<<<<<< Updated upstream
+
 <table>
                 {% for reward in view.earned_rewards %}
                     <tr><td>{{reward.reward}} - EARNED!</td></tr>
@@ -151,16 +144,7 @@
                 <p style="color:#FF9933;">You have no earned rewards.
 
                 {% endif %}<br>
-=======
-                <table>
-                    {% for reward in view.earned_rewards %}
-                    <tr>
-                        <td>{{reward.reward}} - EARNED!</td>
-                    </tr>
-                    {% endfor %}
-                </table>
-                {% else %} You have no earned rewards. {% endif %}<br>
->>>>>>> Stashed changes
+
                 <p><a href="{% url 'child-rewards' %}"><i>Buy a Reward</i></a></p>
             </div>
         </div>
