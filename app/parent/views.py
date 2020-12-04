@@ -195,8 +195,12 @@ class DashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateVie
         return Earned_Reward.objects.filter(child__parent = parent)
 
     def tasks(self):
-        return Task.objects.filter(parent__user = self.request.user)
+        return Task.objects.filter(parent__user = self.request.user, status='OPEN')
 
+    def pending_tasks(self):
+        parent = Parent.objects.get(user = self.request.user)
+        return Task.objects.filter(parent = parent, status='PEND')
+    
     def completed_tasks(self):
         parent = Parent.objects.get(user = self.request.user)
         return Task.objects.filter(parent = parent, status='COMP')
@@ -1798,6 +1802,11 @@ class ChildDashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.Templa
         active_child = parent.active_child
         return Task.objects.filter(child = active_child, status='COMP')
 
+    def pending_tasks(self):
+        parent = Parent.objects.get(user = self.request.user)
+        active_child = parent.active_child
+        return Task.objects.filter(child = active_child, status='PEND')
+
     def earned_rewards(self):
         parent = Parent.objects.get(user = self.request.user)
         active_child = parent.active_child
@@ -1975,6 +1984,15 @@ def TaskCompleteView(request, pk):
     # return redirect('child-tasks')
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+def TaskValidate(request, pk):
+    task = Task.objects.get(id=pk)
+    reward_system.parent_validate_task(task)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def TaskInvalidate(request, pk):
+    task = Task.objects.get(id=pk)
+    reward_system.parent_invalidate_task(task)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 class ChildEarnedRewardListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
     model=Earned_Reward
