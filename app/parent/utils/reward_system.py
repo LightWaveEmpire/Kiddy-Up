@@ -39,7 +39,7 @@ def parent_validate_task(t_object):
     t.status = "COMP"
     t.save()
 
-    c = t.child_set.all().get()
+    c = t.child
     old_points = c.current_points
     c.current_points = old_points + t.point_value
     c.save()
