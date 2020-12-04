@@ -12,7 +12,7 @@
         padding: 25px;
         width: 100%;
         height: 100%;
-        background-color: #fff;
+        background-color: #37B6F6;
         display: grid;
         grid-template-columns: 75% 25%;
         grid-row: auto auto;
@@ -21,7 +21,7 @@
     }
 
     .dashboard_box {
-        background-color: #333;
+        background-color: #FDFEFE;
         padding: 20px;
         border-radius: 10px;
         color: #fff;
@@ -39,7 +39,7 @@
 <!--    {% endif %}-->
 <div class="dashboard_container">
     <div class="dashboard_box">
-        <h2 style=" color:#fff; width: 343px;">ToDo</h2>
+        <h2 style=" color:#882FF6; width: 343px;">ToDo</h2>
         <div class="row">
             <div class="col-md-12">
                 {% if view.tasks %}
@@ -65,7 +65,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                {% else %} You completed all your tasks! {% endif %}
+                {% else %} <p style=" color:#17202A" > You completed all your tasks! {% endif %}
             </div>
         </div>
     </div>
@@ -76,8 +76,8 @@
 
 
 <div class="dashboard_box">
-<h2 style="color:#87CEEB ;"> Weather </h2>
-            <p> <p style=" color:#87CEEB" > Today's Weather:
+<h2 style="color:#ff5994 ;"> Weather </h2>
+            <p> <p style=" color:#ff5994" > Today's Weather:
                     <img src="http://openweathermap.org/img/w/{{ view.weather_help.icon }}.png" alt="Image" height=50px width=50px>
                      {{view.weather_help.max_temp}}° F</br>
             </p>
@@ -99,7 +99,11 @@
 
 
     <div class="dashboard_box">
+<<<<<<< Updated upstream
         <h2 style="width: 343px;">Waiting for Parent Approval</h2>
+=======
+        <h2 style="color:#17202A; width: 343px;">Done</h2>
+>>>>>>> Stashed changes
         <div class="row">
             <div class="col-md-12">
                 {% if view.pending_tasks %}
@@ -125,14 +129,14 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                {% else %} All completed tasks have been verified by your parent {% endif %}
+                {% else %} <p style=" color:#17202A" > All completed tasks have been verified by your parent {% endif %}
             </div>
         </div>
     </div>
     <div class="dashboard_box">
         <h2 style=" color:#FF9933; width: 343px;">Earned Rewards</h2>
         <div>
-            <div class="col-md-12">
+            <div class="col-md-18">
                 {% if view.earned_rewards %}
 
 <table>
@@ -145,7 +149,7 @@
 
                 {% endif %}<br>
 
-                <p><a href="{% url 'child-rewards' %}"><i>Buy a Reward</i></a></p>
+                <p><a style="color:#FF9933;" href="{% url 'child-rewards' %}"><i>Buy a Reward</i></a></p>
             </div>
         </div>
     </div>

@@ -33,9 +33,9 @@
                     <ul class="nav navbar-nav flex-nowrap ml-auto">
 
                     {% if view.child.is_authenticated %}
-<li class="nav-item"><a class="nav-link" href="{% url 'child-rewards'%}">
+<li class="nav-item" ><a class="nav-link" style=" color:#35D461" href="{% url 'child-rewards'%}">
                     {% if view.child.target_reward %}
-                        <label for="reward">{{view.child.target_reward}}&nbsp;&nbsp;&nbsp;</label>
+                        <label for="reward">{{view.child.target_reward}}&nbsp;&nbsp;&nbsp; </label>
                         <progress id="reward" value="{{view.child.current_points}}" max='{{view.child.target_reward.cost}}'>{{view.child.current_points}} </progress>
                     {% else %}
                         <label for="reward">No Goal Set</label>
