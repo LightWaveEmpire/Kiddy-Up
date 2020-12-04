@@ -1,46 +1,36 @@
-{% extends "parent/child_base.html" %}
-{% load static %}
-{% load has_perms %}
-{% block title %} Child Dashboard - {{ block.super }}{% endblock %}
-{% block content %}
-{{ block.super }}
+{% extends "parent/child_base.html" %} {% load static %} {% load has_perms %} {% block title %} Child Dashboard - {{ block.super }}{% endblock %} {% block content %} {{ block.super }}
 
 <style>
-
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-
-.dashboard_container{
-  margin: 20px auto;
-  padding:25px;
-  width:100%;
-  height:100%;
-  background-color:#fff;
-  display:grid;
-  grid-template-columns: 75% 25%;
-  grid-row: auto auto;
-  grid-column-gap: 20px;
-  grid-row-gap: 20px;
-
-    .dashboard_box{
-        background-color:#333;
-        padding:20px;
-        border-radius:10px;
-        color:#fff;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        font-size:10px;
-        font-family:sans-serif;
-      }
-
-}
-
-
-
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    .dashboard_container {
+        margin: 20px auto;
+        padding: 25px;
+        width: 100%;
+        height: 100%;
+        background-color: #fff;
+        display: grid;
+        grid-template-columns: 75% 25%;
+        grid-row: auto auto;
+        grid-column-gap: 20px;
+        grid-row-gap: 20px;
+    }
+    
+    .dashboard_box {
+        background-color: #333;
+        padding: 20px;
+        border-radius: 10px;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-family: sans-serif;
+    }
 </style>
 <!--    {% if request.user|has_perms %}-->
 <!--        <li class="nav-item">-->
@@ -69,15 +59,13 @@
                             <td>Location TBD</td>
                             <td>{{ task.date }}</td>
                             <td>
-                                <button type="button" class="btn btn-warning" onclick="location.href=&quot;{% url 'task-complete' task.id%}&quot;" ><i class="fas fa-pencil-alt d-xl-flex justify-content-xl-center align-items-xl-center">&nbsp;Complete</i></button>
+                                <button type="button" class="btn btn-warning" onclick="location.href=&quot;{% url 'task-complete' task.id%}&quot;"><i class="fas fa-pencil-alt d-xl-flex justify-content-xl-center align-items-xl-center">&nbsp;Complete</i></button>
                             </td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
-                {% else %}
-                You completed all your tasks!
-                {% endif %}
+                {% else %} You completed all your tasks! {% endif %}
             </div>
         </div>
     </div>
@@ -86,6 +74,7 @@
 
 
 
+<<<<<<< Updated upstream
 <div class="dashboard_box">
 <h2 style="color:#87CEEB ;"> Weather </h2>
             <p> <p style=" color:#87CEEB" > Today's Weather:
@@ -93,14 +82,22 @@
                      {{view.weather_help.max_temp}}° F</br>
             </p>
             <p> <p style=" color:#FF3333" > Reminders:
+=======
+    <div class="dashboard_box">
+        <h2 style="width: 343px;"> Weather </h2>
+        <p> Today's Weather:
+            <img src="http://openweathermap.org/img/w/{{ view.weather_help.icon }}.png" alt="Image" height=50px width=50px> {{view.weather_help.max_temp}}° F</br>
+        </p>
+        <p> Reminders:
+>>>>>>> Stashed changes
 
-                    <img class="border rounded-circle img-profile" src="{% static view.weather_help.help_image %}" alt="Image" height=50px width=50px>
+            <img class="border rounded-circle img-profile" src="{% static view.weather_help.help_image %}" alt="Image" height=50px width=50px>
 
 
 
 
-            </p>
-</div>
+        </p>
+    </div>
 
 
 
@@ -135,9 +132,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                                {% else %}
-                All completed tasks have been verified by your parent
-                {% endif %}
+                {% else %} All completed tasks have been verified by your parent {% endif %}
             </div>
         </div>
     </div>
@@ -146,6 +141,7 @@
         <div>
             <div class="col-md-12">
                 {% if view.earned_rewards %}
+<<<<<<< Updated upstream
 <table>
                 {% for reward in view.earned_rewards %}
                     <tr><td>{{reward.reward}} - EARNED!</td></tr>
@@ -155,6 +151,16 @@
                 <p style="color:#FF9933;">You have no earned rewards.
 
                 {% endif %}<br>
+=======
+                <table>
+                    {% for reward in view.earned_rewards %}
+                    <tr>
+                        <td>{{reward.reward}} - EARNED!</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                {% else %} You have no earned rewards. {% endif %}<br>
+>>>>>>> Stashed changes
                 <p><a href="{% url 'child-rewards' %}"><i>Buy a Reward</i></a></p>
             </div>
         </div>
@@ -182,7 +188,6 @@
             </div>
         </div>
     </div>
-    {% endblock %}
-    {% block sidebar_content %}
+    {% endblock %} {% block sidebar_content %}
     <!-- no sidebar for registration page -->
     {% endblock %}
