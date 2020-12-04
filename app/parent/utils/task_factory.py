@@ -31,3 +31,4 @@ This function takes a string that will be stored as an Original_Task.
 def create_otask_manually(p_object, task_string):
     ot = Original_Task(parent = p_object, otask = task_string)
     ot.save()
+    ot.turn_into_child_task()
