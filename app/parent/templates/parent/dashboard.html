@@ -102,8 +102,8 @@
                             <td>{{ task.child }}</td>
 
 <td>
-                                <button type="button" class="btn btn-warning" onclick="location.href=&quot;{% url 'task-delete' task.id%}&quot;" ><i class="fas fa-pencil-alt d-xl-flex justify-content-xl-center align-items-xl-center">&nbsp;Mark as Complete</i></button>
-                                <button type="button" class="btn btn-warning" onclick="location.href=&quot;{% url 'task-delete' task.id%}&quot;" ><i class="fas fa-pencil-alt d-xl-flex justify-content-xl-center align-items-xl-center">&nbsp;Mark Unfinished</i></button>
+                                <button type="button" class="btn btn-warning" onclick="location.href=&quot;{% url 'task-validate' task.id%}&quot;" ><i class="fas fa-pencil-alt d-xl-flex justify-content-xl-center align-items-xl-center">&nbsp;Mark as Complete</i></button>
+                                <button type="button" class="btn btn-warning" onclick="location.href=&quot;{% url 'task-invalidate' task.id%}&quot;" ><i class="fas fa-pencil-alt d-xl-flex justify-content-xl-center align-items-xl-center">&nbsp;Mark Unfinished</i></button>
                             </td>
 
                         </tr>
