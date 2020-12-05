@@ -11,20 +11,14 @@ from .permissions import is_in_group_parent
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from parent.forms import ParentSignUpForm, ChildSignUpForm, ChildUpdateForm, TaskUpdateForm, ChildUpdateProfileForm, ChildLoginForm, UpdateProfileForm
-from parent.models import Child, Task, Reward, Parent, Original_Task, Earned_Reward
+from parent.models import Child, Task, Reward, Parent, Original_Task, Earned_Reward, Location
 from parent.utils import calendar_pull, task_factory, reward_system
-
-
-
 
 import google_apis_oauth
 import os
 import os.path
 import sys
 import requests
-
-
-
 
 from django.views.generic import View, UpdateView
 from .forms import ParentSignUpForm
@@ -124,18 +118,22 @@ def pull_tasks(request):
     try:
         service = calendar_pull.login_calendar(request.user)
         list_of_events = calendar_pull.get_list_of_events(service, 100)
-        for event, json_event in list_of_events:
-            print(f'\n\nDEBUG: {event}\n\n{json_event}\n\n', file=sys.stderr)
+        # for event, json_event in list_of_events:
+            # print(f'\n\nDEBUG: {event}\n\n{json_event}\n\n', file=sys.stderr)
     except:
         print("Unexpected error in Calendar Pull:")
         raise
+        call_entity_extraction(request)
+
     parent = Parent.objects.get(user = request.user)
     task_factory.create_otasks_from_list(parent, list_of_events)
+    children = Child.objects.filter(parent = parent)
+    locations = Location.objects.filter(parent = parent)
+    tasks = Task.objects.filter(parent = parent)
+    parent.update_entities(children, locations, tasks)
+    task_factory.create_child_tasks_from_otask(parent)
+
     return redirect('dashboard')
-
-
-
-
 
 
 # Require Login
@@ -200,7 +198,7 @@ class DashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateVie
     def pending_tasks(self):
         parent = Parent.objects.get(user = self.request.user)
         return Task.objects.filter(parent = parent, status='PEND')
-    
+
     def completed_tasks(self):
         parent = Parent.objects.get(user = self.request.user)
         return Task.objects.filter(parent = parent, status='COMP')
@@ -322,6 +320,7 @@ class RewardDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailVi
 class RewardCreate(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
     model = Reward
     fields = ['name', 'cost']
+    success_url = reverse_lazy('settings')
 
     def form_valid(self, form):
         form.instance.parent = Parent.objects.get(user=self.request.user)
@@ -410,6 +409,227 @@ class RewardUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
 class RewardDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
     model = Reward
     success_url = reverse_lazy('rewards')
+
+    def test_func(self):
+        return is_member(self.request.user)
+
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
+
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
+
+
+# Location Views
+
+class LocationListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
+    model=Location
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Location.objects.filter(parent__user=self.request.user)
+
+    def test_func(self):
+        return is_member(self.request.user)
+
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
+
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
+
+
+
+class LocationDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailView):
+    model = Location
+
+    def test_func(self):
+        return is_member(self.request.user)
+
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
+
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
+
+
+class LocationCreate(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
+    model = Location
+    fields = ['name', 'location_type', 'address']
+    success_url = reverse_lazy('settings')
+
+    def form_valid(self, form):
+        form.instance.parent = Parent.objects.get(user=self.request.user)
+        return super().form_valid(form)
+
+    def test_func(self):
+        return is_member(self.request.user)
+
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
+
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
+
+
+class LocationUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
+    model = Location
+    fields = ['name', 'location_type', 'address']
+    success_url = reverse_lazy('settings')
+
+    def test_func(self):
+        return is_member(self.request.user)
+
+    def weather(self):
+        parent = Parent.objects.get(user = self.request.user)
+        zip_code = '90210'
+        if parent.zip_code:
+            zip_code = parent.zip_code
+
+        now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+
+        day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the JSON to Python data types
+
+        if day_weather['cod'] == '404':
+            zip_code = '90210'
+            now_url = 'http://api.openweathermap.org/data/2.5/weather?zip={},us&units=imperial&appid=364040ff415088d88d047754583f0a7a'
+            day_weather = requests.get(now_url.format(zip_code)).json() #request the API data and convert the
+
+        city = day_weather['name']
+        now_temp = day_weather['main']['feels_like']
+        min_temp = day_weather['main']['temp_min']
+        max_temp = day_weather['main']['temp_max']
+        description = day_weather['weather'][0]['description']
+        icon = day_weather['weather'][0]['icon']
+
+
+        weather = {
+            'city': city,
+            'now_temp': now_temp,
+            'min_temp': min_temp,
+            'max_temp': max_temp,
+            'description': description,
+            'icon': icon
+        }
+
+        return weather
+
+
+class LocationDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
+    model = Location
+    success_url = reverse_lazy('settings')
 
     def test_func(self):
         return is_member(self.request.user)
@@ -673,8 +893,16 @@ class Original_TaskCreate(LoginRequiredMixin, UserPassesTestMixin, generic.Creat
     model = Original_Task
     fields = ['otask']
 
+    def get_success_url(self):
+        parent = self.parent
+        task_string = self.object.otask
+        task_factory.create_otask_manually(parent, task_string)
+        return reverse_lazy('tasks')
+
     def form_valid(self, form):
         form.instance.parent = Parent.objects.get(user=self.request.user)
+        this_otask = form.instance.otask
+        call_entity_extraction(request)
         return super().form_valid(form)
 
     def test_func(self):
@@ -1173,6 +1401,7 @@ class ChildCreate(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
     model = Child
     form_class = ChildUpdateForm
     template_name = "parent/child_form.html"
+    success_url = reverse_lazy('settings')
 
     def form_valid(self, form):
         form.instance.parent = Parent.objects.get(user=self.request.user)
@@ -1611,15 +1840,22 @@ class SettingsView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateView
 
     def parent(self):
         return Parent.objects.get(user = self.request.user)
+
     def rewards(self):
         parent = Parent.objects.get(user = self.request.user)
         return Reward.objects.filter(parent=parent)
+
     def tasks(self):
         parent = Parent.objects.get(user = self.request.user)
         return Task.objects.filter(parent=parent)
+
     def children(self):
         parent = Parent.objects.get(user = self.request.user)
         return Child.objects.filter(parent = parent)
+
+    def locations(self):
+        parent = Parent.objects.get(user = self.request.user)
+        return Location.objects.filter(parent = parent)
 
     def test_func(self):
         return is_member(self.request.user)

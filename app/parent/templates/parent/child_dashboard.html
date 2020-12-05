@@ -54,7 +54,7 @@
                     </thead>
                     <tbody>
                         {% for task in view.tasks %}
-                        <tr>
+                        <tr style=" color:#882FF6;">
                             <td><a href="{% url 'child-task' task.id %}">{{task.name}}</a></td>
                             <td>Location TBD</td>
                             <td>{{ task.date }}</td>
@@ -120,7 +120,7 @@
                     <tbody>
                         {% for task in view.pending_tasks %}
                         <tr>
-                            <td>{{task.name}}</td>
+                            <td style="color:#17202A;">{{task.name}}</td>
 
                             <td>{{ task.point_value }}</td>
 
@@ -141,7 +141,7 @@
 
 <table>
                 {% for reward in view.earned_rewards %}
-                    <tr><td>{{reward.reward}} - EARNED!</td></tr>
+                    <tr><td style=" color:#FF9933;">{{reward.reward}} - EARNED!</td></tr>
                 {% endfor %}
 </table>
 {% else %}

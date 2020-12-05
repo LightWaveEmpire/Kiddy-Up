@@ -156,7 +156,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
- ]
+]
 
 
 MEDIA_URL = '/media/'
@@ -195,3 +195,11 @@ EMAIL_HOST_USER = 'apikey'
 EMAIL_HOST_PASSWORD = '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'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'Kiddy-Up Support <kiddy.up.help@gmail.com>'
+
+import spacy
+import en_core_web_lg
+
+# load any spaCy models that are installed
+# this takes some time to load so doing it here and hopefully this improves performance
+
+NLP = spacy.load("en_core_web_lg")

@@ -22,10 +22,10 @@ class ParentSignUpForm(UserCreationForm):
     class Meta:
         model = User
         fields = [
-            'username', 
-            'email', 
-            'password1', 
-            'password2', 
+            'username',
+            'email',
+            'password1',
+            'password2',
             ]
     def as_p(self):
         "Returns this form rendered as HTML <p>s."

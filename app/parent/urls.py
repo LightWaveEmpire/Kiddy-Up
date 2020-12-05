@@ -37,6 +37,11 @@ urlpatterns = [
     path('parent/reward/<int:pk>/update/', RewardUpdate.as_view(), name='reward-update'),
     path('parent/reward/<int:pk>/delete/', RewardDelete.as_view(), name='reward-delete'),
 
+    path('parent/locations/', views.LocationListView.as_view(), name='locations'),
+    path('parent/location/<int:pk>/', views.LocationDetailView.as_view(), name='location'),
+    path('parent/location/add/', LocationCreate.as_view(), name='location-add'),
+    path('parent/location/<int:pk>/update/', LocationUpdate.as_view(), name='location-update'),
+    path('parent/location/<int:pk>/delete/', LocationDelete.as_view(), name='location-delete'),
 
     path('parent/earned_rewards/', views.EarnedRewardListView.as_view(), name='earned_rewards'),
     path('parent/earned_reward/<int:pk>/', views.EarnedRewardDetailView.as_view(), name='earned_reward'),
@@ -48,7 +53,7 @@ urlpatterns = [
     path('parent/task/add/', TaskCreate.as_view(), name='task-add'),
     path('parent/task/<int:pk>/update/', TaskUpdate.as_view(), name='task-update'),
     path('parent/task/<int:pk>/delete/', TaskDelete.as_view(), name='task-delete'),
-    
+
     path('parent/task/<int:pk>/validate/', TaskValidate, name='task-validate'),
     path('parent/task/<int:pk>/invalidate/', TaskInvalidate, name='task-invalidate'),
 
