@@ -61,7 +61,16 @@
 <!--                <span data-i18n="nav.dash.main">Authenticated</span>-->
 <!--        </li>-->
 <!--    {% endif %}-->
+
 <div class="dashboard_container">
+    <div class="dashboard_box" style=" color:#882FF6; font-size: 20pt">
+DATE GOES HERE
+    </div>
+<div class="dashboard_box" style=" color:#882FF6; font-size: 20pt">
+    <img src="http://openweathermap.org/img/w/{{ view.weather_help.icon }}.png" alt="Image" height=100px width=100px>
+                        {{view.weather_help.max_temp}}° F
+    </div>
+
     <div class="dashboard_box">
         <div class="dashboard_container_inner">
             <div class="dashboard_box_inner">
@@ -112,15 +121,12 @@
         <div class="dashboard_container_inner">
             <div class="dashboard_box_inner" style="color:#ff5994 ;">
                 <!-- Title  -->
-                <!-- <h2 style="color:#ff5994 ;"> Weather </h2> -->
+                <h2 style="color:#ff5994 ;"> Remember </h2>
 
             </div>
             <div class="dashboard_box_inner">
                 <!-- content  -->
-                    <div style=" color:#ff5994; font-size: 20px; white-space: nowrap;">
-                        <img src="http://openweathermap.org/img/w/{{ view.weather_help.icon }}.png" alt="Image" height=100px width=100px>
-                        {{view.weather_help.max_temp}}° F
-                    </div>
+
             </div>
             <div class="dashboard_box_inner">
                 <!-- blank  -->
