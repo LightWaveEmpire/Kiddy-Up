@@ -14,9 +14,10 @@
     <link rel="stylesheet" href="{% static 'assets/css/taskntodo.css' %}" media="screen">
 </head>
 
-<body id="page-top" onload="startTime()">
+<body id="page-top">
     <div id="wrapper">
-        {% block sidenav %} {% endblock %}
+        {% block sidenav %}
+        {% endblock %}
         <div class="d-flex flex-column" id="content-wrapper">
             <div id="content">
                 <nav class="navbar navbar-light navbar-expand bg-white shadow mb-3 topbar static-top">
@@ -27,21 +28,23 @@
                             <div class="sidebar-brand-icon rotate-n-14"><img src="https://www.cs.odu.edu/~dchamber/webimages/icon.png" width="30" height="30"></div>
                             <div class="sidebar-brand-text mx-2"><span>kiddy-up</span></div>
                         </a>
-                        <ul class="nav navbar-nav flex-nowrap ml-auto">
+<ul class="nav navbar-nav flex-nowrap ml-auto">
 
 
-                            {% if not user.is_authenticated %}
-                            <li class="nav-item"><a class="nav-link " href="{% url 'login'%}?next={{request.path}}">Login</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact Us</a></li>
-                            {% else %} {% endif %}
-                        </ul>
+                        {% if not user.is_authenticated %}
+    <li class="nav-item"><a class="nav-link " href="{% url 'login'%}?next={{request.path}}">Login</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact Us</a></li>
+    {% else %}
+    {% endif %}
+</ul>
                         {% endblock %}
                     </div>
                 </nav>
                 <div id="content">
-                    {% block content %} {% endblock %}
+                    {% block content %}
+                    {% endblock %}
                 </div>
             </div>
             <footer class="bg-white sticky-footer">
@@ -60,26 +63,6 @@
     <script src="{% static 'assets/js/bs-init.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/2.4.1/jquery.easing.js"></script>
     <script src="{% static 'assets/js/theme.js' %}"></script>
-    <script>
-        function startTime() {
-            var today = new Date();
-            var h = today.getHours();
-            var m = today.getMinutes();
-            var s = today.getSeconds();
-            m = checkTime(m);
-            s = checkTime(s);
-            document.getElementById('txt').innerHTML =
-                h + ":" + m + ":" + s;
-            var t = setTimeout(startTime, 500);
-        }
-
-        function checkTime(i) {
-            if (i < 10) {
-                i = "0" + i
-            }; // add zero in front of numbers < 10
-            return i;
-        }
-    </script>
 </body>
 
 </html>
