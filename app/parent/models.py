@@ -10,6 +10,8 @@ import os
 import sys
 from array import *
 
+import json
+
 # User = settings.AUTH_USER_MODEL
 
 # class User(AbstractUser):
@@ -51,16 +53,16 @@ class Parent(models.Model):
 
     def update_entities(self, children, locations, tasks):
         entities = {
-                "CHILD": [],
-                "SCHOOL": [],
-                "WORK": [],
-                "RACT": []
-            }
+            "CHILD": [],
+            "SCHOOL": [],
+            "WORK": [],
+            "RACT": []
+        }
 
         if self.entities is None:
-            self.entities = entities
+            self.entities = json.dumps(entities)
         else:
-            for k,v in self.entities.values:
+            for k, v in self.entities.values:
                 entities[k] = v
 
         for child in children:
@@ -79,7 +81,7 @@ class Parent(models.Model):
         for task in tasks:
             entities['RACT'].append(task.name)
 
-        self.entities = entities
+        self.entities = json.dumps(entities)
 
         print(f'\n\nDEBUG: {self.entities}\n\n', file=sys.stderr)
         return self.entities
@@ -267,7 +269,7 @@ class Original_Task(models.Model):
 
     def turn_into_child_task(self):
         # May need to call with self.raw_otask
-        task_details = entity_extraction.extract_entities(self.otask)
+        task_details = entity_extraction.extract_entities(self.otask, self.parent.entities)
         print(f'\n\nDEBUG Task Creation: {task_details}\n\n', file=sys.stderr)
         for kid_name in task_details['people']:
             parent = self.parent

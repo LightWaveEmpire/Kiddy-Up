@@ -20,12 +20,13 @@ fi
 
 
 echo "Clearing out old migrations"
-find . -path "*/migrations/*.py" -not -name "__init__.py" -delete 
+find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
 find . -path "*/migrations/*.pyc" -delete
 
 
 echo "Apply database migrations...."
 python manage.py makemigrations
+python manage.py makemigrations parent
 python manage.py migrate
 
 echo "Setting superuser"

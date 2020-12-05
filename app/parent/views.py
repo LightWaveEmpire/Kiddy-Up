@@ -111,7 +111,6 @@ def CallbackView(request):
         return redirect('settings')
 
 
-
 @login_required
 @user_passes_test(is_in_group_parent)
 def pull_tasks(request):
@@ -119,22 +118,24 @@ def pull_tasks(request):
         service = calendar_pull.login_calendar(request.user)
         list_of_events = calendar_pull.get_list_of_events(service, 100)
         # for event, json_event in list_of_events:
-            # print(f'\n\nDEBUG: {event}\n\n{json_event}\n\n', file=sys.stderr)
+        # print(f'\n\nDEBUG: {event}\n\n{json_event}\n\n', file=sys.stderr)
     except:
         print("Unexpected error in Calendar Pull:")
         raise
-        call_entity_extraction(request)
 
-    parent = Parent.objects.get(user = request.user)
+    parent = Parent.objects.get(user=request.user)
+
     task_factory.create_otasks_from_list(parent, list_of_events)
-    children = Child.objects.filter(parent = parent)
-    locations = Location.objects.filter(parent = parent)
-    tasks = Task.objects.filter(parent = parent)
+
+    children = Child.objects.filter(parent=parent)
+    locations = Location.objects.filter(parent=parent)
+    tasks = Task.objects.filter(parent=parent)
+
     parent.update_entities(children, locations, tasks)
+
     task_factory.create_child_tasks_from_otask(parent)
 
     return redirect('dashboard')
-
 
 # Require Login
 
@@ -894,15 +895,22 @@ class Original_TaskCreate(LoginRequiredMixin, UserPassesTestMixin, generic.Creat
     fields = ['otask']
 
     def get_success_url(self):
-        parent = self.parent
+        parent = Parent.objects.get(user=self.request.user)
         task_string = self.object.otask
+
+        children = Child.objects.filter(parent=parent)
+        locations = Location.objects.filter(parent=parent)
+        tasks = Task.objects.filter(parent=parent)
+
+        parent.update_entities(children, locations, tasks)
+        print(f'\n\nDEBUG: Parent = {parent.entities}\n\n', file=sys.stderr)
         task_factory.create_otask_manually(parent, task_string)
         return reverse_lazy('tasks')
 
     def form_valid(self, form):
         form.instance.parent = Parent.objects.get(user=self.request.user)
-        this_otask = form.instance.otask
-        call_entity_extraction(request)
+        # this_otask = form.instance.otask
+        # task_factory.create_otasks_from_item(parent, this_otask)
         return super().form_valid(form)
 
     def test_func(self):

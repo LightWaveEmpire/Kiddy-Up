@@ -12,6 +12,18 @@ def create_otasks_from_list(p_object, listOfEvents):
             t = Original_Task(parent=p_object, otask= event, raw_otask=event_json)
             t.save()
 
+
+'''
+Creates Original_Task entries from a list if they do not already exist
+
+:param p_object: parent that owns the tasks
+:param listOfEvents: list of strings that will be turned into otasks
+'''
+def create_otask_from_item(p_object, event):
+    if not Original_Task.objects.filter(otask=event, raw_otask=None, parent=p_object).exists():
+        t = Original_Task(parent=p_object, otask= event, raw_otask=event_json)
+        t.save()
+
 '''
 Create child tasks from Original_Task table if they do not already exist
 

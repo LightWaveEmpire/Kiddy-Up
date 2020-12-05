@@ -135,6 +135,17 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+
+# import spacy
+# from spacy.pipeline import EntityRuler
+
+# # load any spaCy models that are installed
+# # this takes some time to load so doing it here and hopefully this improves performance
+
+# NLP = spacy.load('en_core_web_lg')
+# user_ents_ruler = EntityRuler(NLP, phrase_matcher_attr="LOWER", overwrite_ents=True)
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
@@ -156,7 +167,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
- ]
+]
 
 
 MEDIA_URL = '/media/'
