@@ -26,6 +26,44 @@
         color: #fff;
         display: flex;
         align-items: center;
+        justify-content: left;
+        font-size: 10px;
+        font-family: sans-serif;
+    }
+
+        .dashboard_boxes_right {
+        background-color: #37B6F6;
+        padding: 0px;
+        border-radius: 0px;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-family: sans-serif;
+    }
+
+        .dashboard_container_right {
+        margin: 10px;
+        padding: 10px;
+        width: 100%;
+        height: 100%;
+        background-color: #37B6F6;
+        display: grid;
+        border-radius: 10px;
+        grid-template-columns: 100%;
+        grid-row: auto auto;
+        grid-column-gap: 20px;
+        grid-row-gap: 20px;
+    }
+
+    .dashboard_box_right {
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 10px;
+        color: #000;
+        display: flex;
+        align-items: center;
         justify-content: center;
         font-size: 10px;
         font-family: sans-serif;
@@ -38,7 +76,7 @@
         height: 100%;
         background-color: #fff;
         display: grid;
-        grid-template-columns: 15% 85%;
+        grid-template-columns: 100%;
         grid-row: auto auto;
         grid-column-gap: 20px;
         grid-row-gap: 20px;
@@ -51,7 +89,7 @@
         color: #000;
         display: flex;
         align-items: center;
-        justify-content: center;
+        /*justify-content: center;*/
         font-size: 10px;
         font-family: sans-serif;
     }
@@ -62,33 +100,35 @@
 <!--        </li>-->
 <!--    {% endif %}-->
 
-<div class="dashboard_container">
-    <div class="dashboard_box" style=" color:#882FF6; font-size: 20pt">
-DATE GOES HERE
+<div class="dashboard_container" >
+    <div class="dashboard_box" style=" color:#fff; font-size: 40pt; background-color:#37B6F6;">
+        <!-- Here is the Date Box -->
+
+Thursday, December 10th 2020
     </div>
 <div class="dashboard_box" style=" color:#882FF6; font-size: 20pt">
+    <!-- Here is the weather Box -->
+
+
     <img src="http://openweathermap.org/img/w/{{ view.weather_help.icon }}.png" alt="Image" height=100px width=100px>
                         {{view.weather_help.max_temp}}° F
     </div>
 
     <div class="dashboard_box">
+
+        <!-- Here is the Task Box -->
+
         <div class="dashboard_container_inner">
             <div class="dashboard_box_inner">
                 <!-- Title  -->
                 <h2 style=" color:#882FF6; ">Tasks</h2>
             </div>
-            <div class="dashboard_box_inner">
-                <!-- blank  -->
-            </div>
-            <div class="dashboard_box_inner">
-                <!-- blank  -->
-            </div>
+
             <div class="dashboard_box_inner">
                 <!-- content  -->
-                <div class="row">
-                    <div class="col-md-12">
+
                         {% if view.tasks %}
-                        <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                        <table class="table {# table-striped table-bordered #}" cellspacing="0" width="100%">
                             <thead>
                                 <tr>
                                     <th>Event</th>
@@ -110,89 +150,42 @@ DATE GOES HERE
                                 {% endfor %}
                             </tbody>
                         </table>
-                        {% else %} <p style=" color:#17202A"> You completed all your tasks! {% endif %}
-                    </div>
-                </div>
+                        {% else %} <p style=" color:#17202A"> You completed all your tasks! </p>{% endif %}
+
             </div>
+
         </div>
     </div>
+    <div class="dashboard_boxes_right" >
+        <!-- Here is the Right Side Boxes -->
+        <div class="dashboard_container_right">
+            <div class="dashboard_box_right">
+                <!-- Here is the Remember Box -->
+                <div class="dashboard_container_inner">
+                    <div class="dashboard_box_inner" style="color:#ff5994 ;">
+                        <!-- Title  -->
+                        <h2 style="color:#ff5994 ;"> Don't Forget </h2>
 
-    <div class="dashboard_box">
-        <div class="dashboard_container_inner">
-            <div class="dashboard_box_inner" style="color:#ff5994 ;">
-                <!-- Title  -->
-                <h2 style="color:#ff5994 ;"> Remember </h2>
-
-            </div>
-            <div class="dashboard_box_inner">
-                <!-- content  -->
-
-            </div>
-            <div class="dashboard_box_inner">
-                <!-- blank  -->
-            </div>
-            <div class="dashboard_box_inner" >
-
-
-                <div style=" color:#FF3333; font-size: 25px">
-                    <img class="border rounded-circle img-profile" src="{% static view.weather_help.help_image %}" alt="Image" height=100px width=100px>
-                </div>
-            </div>
-            </div>
-        </div>
-
-
-
-        <div class="dashboard_box">
-            <div class="dashboard_container_inner">
-            <div class="dashboard_box_inner" style="color:#ff5994 ;">
-                <!-- Title  -->
-           <h2>Getting Checking</h2>
-                       </div>
-            <div class="dashboard_box_inner">
-                <!-- blank  -->
-            </div>
-            <div class="dashboard_box_inner">
-                <!-- blank  -->
-            </div>
-            <div class="dashboard_box_inner" >
-                <div class="row">
-                    <div class="col-md-12">
-                        {% if view.pending_tasks %}
-                        <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                            <thead>
-                                <tr>
-                                    <th>Event</th>
-                                    <th>Points You Will Earn</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for task in view.pending_tasks %}
-                                <tr style=" color:#882FF6; font-size: 20pt;" width="100%">
-                                    <td style="color:#17202A;">{{task.name}}</td>
-                                    <td>{{ task.point_value }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                        {% else %} <p style=" color:#17202A"> All completed tasks have been verified by your parent {% endif %}</p>
                     </div>
-                </div>
+                    <div class="dashboard_box_inner" >
+
+                        <img class="border rounded-circle img-profile" src="{% static view.weather_help.help_image %}" alt="Image" height=100px width=100px>
+                    </div>
             </div>
+
+
         </div>
-    </div>
-        <div class="dashboard_box">
+
+
+        <div class="dashboard_box_right">
+            <!-- Here is the Rewards Box -->
+
             <div class="dashboard_container_inner">
-            <div class="dashboard_box_inner" style="color:#ff5994 ;">
-                <!-- Title  -->
-            <h2 style=" color:#FF9933;">Your Loot</h2>
-            </div>
-             <div class="dashboard_box_inner">
-                <!-- blank  -->
-            </div>
-            <div class="dashboard_box_inner">
-                <!-- blank  -->
-            </div>
+                <div class="dashboard_box_inner" style="color:#ff5994 ;">
+                    <!-- Title  -->
+                    <h2 style=" color:#FF9933;">Your Loot</h2>
+                </div>
+
             <div class="dashboard_box_inner">
                 <div class="col-md-18">
                     {% if view.earned_rewards %}
@@ -213,6 +206,44 @@ DATE GOES HERE
             </div>
         </div>
     </div>
+    <div class="dashboard_box_right">
+        <!-- Here is the Pending Task Box -->
+
+            <div class="dashboard_container_inner">
+            <div class="dashboard_box_inner" style="color:#ff5994 ;">
+                <!-- Title  -->
+           <h2>Getting Checked</h2>
+                       </div>
+
+            <div class="dashboard_box_inner" >
+                <div class="row">
+                    <div class="col-md-12">
+                        {% if view.pending_tasks %}
+                        <table class="table {# table-striped table-bordered #}" cellspacing="0" style="width: 100%;height: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>Task</th>
+                                    <th>Points You Will Earn</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for task in view.pending_tasks %}
+                                <tr style=" color:#882FF6; font-size: 20pt;">
+                                    <td style="color:#17202A;">{{task.name}}</td>
+
+                                    <td>{{ task.point_value }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% else %} <p style=" color:#17202A"> All completed tasks have been verified by your parent {% endif %}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
     <footer class="footer text-center">
         <div class="container">
             <div class="row">
