@@ -78,6 +78,38 @@
         </table>
         {% endif %}
 
+        <br />
+        <br />
+        <br />
+
+          <h2> <p style="margin-left: 15px"> Locations</h2>
+
+          <p><a style="margin-left: 25px" href="{% url 'location-add' %}">Add a Location</a></p>
+
+        {% if view.locations %}
+
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Location Name</th>
+                <th>Location Type</th>
+                <th>Location Address</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+          <tbody>
+          {% for location in view.locations %}
+            <tr>
+              <td><a href="{% url 'location' location.id %}">{{location.name}}</a></td>
+              <td>{{ location.location_type }}</td>
+              <td>{{ location.address }}</td>
+              <td><a href="{% url 'location-update' location.id%}">Edit</a></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+        {% endif %}
+
 
     <br />
     <br />

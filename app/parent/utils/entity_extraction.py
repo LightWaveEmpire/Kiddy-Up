@@ -2,6 +2,7 @@
 import spacy
 from spacy.pipeline import EntityRuler
 import json
+from django.conf import settings
 
 
 def extract_entities(otask: str) -> dict:
@@ -32,7 +33,9 @@ def extract_entities(otask: str) -> dict:
     task['date'] = "12/02/2021"
     task['location'] = "no location given"
 
-    nlp = spacy.load("en_core_web_lg")
+
+    # Question - Does this need to run each time or can we run it once somehow? Not sure what the delay is on running this line
+    nlp = settings.NLP
 
     user_ents_ruler = EntityRuler(nlp, phrase_matcher_attr="LOWER", overwrite_ents=True)
     user_ents = json.loads(user_ents_raw)

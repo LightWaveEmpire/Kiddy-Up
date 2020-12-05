@@ -4,7 +4,10 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 from parent.utils import entity_extraction
 
+from collections import defaultdict
+
 import os
+import sys
 from array import *
 
 # User = settings.AUTH_USER_MODEL
@@ -24,9 +27,20 @@ class Parent(models.Model):
     # still need to work on things, not sure how this will work out
     # Will likely need changes when we get to it
     account_creds = models.JSONField(blank=True, null=True)
+    entities = models.JSONField(blank=True, null=True)
 
     class Meta:
         db_table = 'parent'
+
+    def save(self, *args, **kwargs):
+        if not self.pk:  # object is being created, thus no primary key field yet
+            self.entities = {
+                "CHILD": [],
+                "SCHOOL": [],
+                "WORK": [],
+                "RACT": []
+            }
+        super(Parent, self).save(*args, **kwargs)
 
     def __str__(self):
         """String for representing the Model object."""
@@ -34,6 +48,41 @@ class Parent(models.Model):
 
     def get_absolute_url(self):
         return reverse('parent', kwargs={'pk': self.pk})
+
+    def update_entities(self, children, locations, tasks):
+        entities = {
+                "CHILD": [],
+                "SCHOOL": [],
+                "WORK": [],
+                "RACT": []
+            }
+
+        if self.entities is None:
+            self.entities = entities
+        else:
+            for k,v in self.entities.values:
+                entities[k] = v
+
+        for child in children:
+            entities['CHILD'].append(child.name)
+
+        # build list of schools, offices,
+        # and other locations
+
+        for location in locations:
+            if location.location_type is "School":
+                entities['SCHOOL'].append(location.name)
+            if location.location_type is "Work":
+                entities['WORK'].append(location.name)
+
+        # build list of task names
+        for task in tasks:
+            entities['RACT'].append(task.name)
+
+        self.entities = entities
+
+        print(f'\n\nDEBUG: {self.entities}\n\n', file=sys.stderr)
+        return self.entities
 
 
 class Reward(models.Model):
@@ -53,6 +102,43 @@ class Reward(models.Model):
     def get_absolute_url(self):
         return reverse('reward', kwargs={'pk': self.pk})
 
+
+class Location(models.Model):
+    parent = models.ForeignKey(Parent, on_delete=models.CASCADE)
+    name = models.CharField("Location Name", max_length=50)
+
+    SCHOOL = "School"
+    WORK = "Work"
+    CHURCH = "Church"
+    SPORT = "Sport"
+    OTHER="Other"
+
+    LOCATION_CHOICES = [
+        (SCHOOL, "School"),
+        (WORK, "Work"),
+        (CHURCH, "Church"),
+        (SPORT, "Sport"),
+        (OTHER, "Other")
+    ]
+
+    location_type = models.CharField(
+        "Type",
+        max_length=6,
+        choices=LOCATION_CHOICES,
+        default=OTHER
+    )
+
+    address = models.CharField("Location Address", max_length=75)
+
+    class Meta:
+        db_table = 'location'
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('location', kwargs={'pk': self.pk})
 
 
 class Child(models.Model):
@@ -118,11 +204,13 @@ class Task(models.Model):
 
     name = models.CharField("Task Name", max_length=20)
     description = models.TextField("Task Description", )
-    status = models.CharField("Status",
+    status = models.CharField(
+        "Status",
         max_length=8,
         choices=STATUS_CHOICES,
         default=OPEN
     )
+
     # get details on image storage from Samuel
     image = models.CharField("Task Image", max_length=20, default='default_img')
 
@@ -180,20 +268,27 @@ class Original_Task(models.Model):
     def turn_into_child_task(self):
         # May need to call with self.raw_otask
         task_details = entity_extraction.extract_entities(self.otask)
+        print(f'\n\nDEBUG Task Creation: {task_details}\n\n', file=sys.stderr)
         for kid_name in task_details['people']:
-            k = table_access.get_child(self.parent, kid_name)
-            if k is not None:   #if the parent's kid exists
-                #task_image, status is assigned to default
-                t = Task(
-                         original_task=self,
-                         parent=self.parent,
-                         child=k,
-                         name=task_details['name'],
-                         description=task_details['description'],
-                         date=task_details['date'],
-                         location=task_details['location'],
-                         image=get_task_image(t))
-                t.save()
+            parent = self.parent
+            try:
+                k = Child.objects.get(parent=parent, name=kid_name)
+                if k is not None:   #if the parent's kid exists
+                    #task_image, status is assigned to default
+                    t = Task(
+                             original_task=self,
+                             parent=self.parent,
+                             child=k,
+                             name=task_details['name'],
+                             description=task_details['description'],
+                             date=task_details['date'],
+                             location=task_details['location'],
+                             image=get_task_image(t))
+                    t.save()
+
+            except:
+                print(f'\n\nDEBUG: {kid_name} Does not exist, moving on\n\n', file=sys.stderr)
+
 
 
 
