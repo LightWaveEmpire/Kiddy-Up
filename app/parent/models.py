@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User #, AbstractUser, UserManager
 from django.contrib.auth import get_user_model
 from django.urls import reverse
-from parent.utils import entity_extraction
+from parent.utils import entity_extraction, image_mapping
 
 from collections import defaultdict
 
@@ -11,6 +11,18 @@ import sys
 from array import *
 
 import json
+
+
+
+# This list will be read into the parent.entities json structure for RACT on first call
+LIST_OF_DEFAULT_TASKS = [
+     "Sweep the floor",
+     "Mop the kitchen",
+     "Do Homework"
+ ]
+
+
+
 
 # User = settings.AUTH_USER_MODEL
 
@@ -40,7 +52,7 @@ class Parent(models.Model):
                 "CHILD": [],
                 "SCHOOL": [],
                 "WORK": [],
-                "RACT": []
+                "RACT": [LIST_OF_DEFAULT_TASKS]
             }
         super(Parent, self).save(*args, **kwargs)
 
@@ -52,36 +64,53 @@ class Parent(models.Model):
         return reverse('parent', kwargs={'pk': self.pk})
 
     def update_entities(self, children, locations, tasks):
-        entities = {
+        default_entities = {
+            "CHILD": [],
+            "SCHOOL": [],
+            "WORK": [],
+            "RACT": LIST_OF_DEFAULT_TASKS
+        }
+        temp_entities = {
             "CHILD": [],
             "SCHOOL": [],
             "WORK": [],
             "RACT": []
         }
-
         if self.entities is None:
-            self.entities = json.dumps(entities)
+            self.entities = json.dumps(default_entities)
         else:
-            for k, v in self.entities.values:
-                entities[k] = v
+
+            entities_from_parent = json.loads(self.entities)
+            print(f'\n\nDEBUG: {entities_from_parent}\n\n', file=sys.stderr)
+
+            for key, value_as_list in entities_from_parent.items():
+                for item in value_as_list:
+                    temp_entities[key].append(item)
 
         for child in children:
-            entities['CHILD'].append(child.name)
+            temp_entities['CHILD'].append(child.name)
+
+        temp_entities['CHILD'] = list(set(temp_entities['CHILD']))
 
         # build list of schools, offices,
         # and other locations
 
         for location in locations:
-            if location.location_type is "School":
-                entities['SCHOOL'].append(location.name)
-            if location.location_type is "Work":
-                entities['WORK'].append(location.name)
+            if location.location_type is "SCHOOL":
+                temp_entities['SCHOOL'].append(location.name)
+            if location.location_type is "WORK":
+                temp_entities['WORK'].append(location.name)
+        temp_entities['SCHOOL'] = list(set(temp_entities['SCHOOL']))
+
 
         # build list of task names
         for task in tasks:
-            entities['RACT'].append(task.name)
+            temp_entities['RACT'].append(task.name)
 
-        self.entities = json.dumps(entities)
+        temp_entities['RACT'] = list(set(temp_entities['RACT']))
+
+        self.entities = json.dumps(temp_entities)
+        self.save()
 
         print(f'\n\nDEBUG: {self.entities}\n\n', file=sys.stderr)
         return self.entities
@@ -214,11 +243,11 @@ class Task(models.Model):
     )
 
     # get details on image storage from Samuel
-    image = models.CharField("Task Image", max_length=20, default='default_img')
+    image = models.TextField("Task Image", default='default_img')
 
     # Will need to change to DateTimeField
     date = models.DateTimeField("Task Date", )
-    point_value = models.IntegerField("Point Value", default=0)
+    point_value = models.IntegerField("Point Value", default=1)
     location = models.CharField("Location", max_length=40)
 
     class Meta:
@@ -277,19 +306,23 @@ class Original_Task(models.Model):
                 k = Child.objects.get(parent=parent, name=kid_name)
                 if k is not None:   #if the parent's kid exists
                     #task_image, status is assigned to default
+                    print(f'\n\nDEBUG: {k} - If Block', file=sys.stderr)
                     t = Task(
-                             original_task=self,
-                             parent=self.parent,
-                             child=k,
-                             name=task_details['name'],
-                             description=task_details['description'],
-                             date=task_details['date'],
-                             location=task_details['location'],
-                             image=get_task_image(t))
+                        original_task=self,
+                        parent=self.parent,
+                        child=k,
+                        name=task_details['name'],
+                        description=task_details['description'],
+                        #date=task_details['date'],
+                        date="2020-12-15",
+                        location=task_details['location'],
+                        image=''
+                    )
+                    t.image = image_mapping.get_task_image(t)
                     t.save()
 
-            except:
-                print(f'\n\nDEBUG: {kid_name} Does not exist, moving on\n\n', file=sys.stderr)
+            except Exception as e:
+                print(f'\n\nDEBUG: Except block {kid_name} \n\nError: {e}', file=sys.stderr)
 
 
 
