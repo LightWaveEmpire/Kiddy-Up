@@ -132,8 +132,100 @@
 <div class="dashboard_container" >
     <div class="dashboard_box" style=" color:#fff; font-size: 40pt; background-color:#37B6F6;">
         <!-- Here is the Date Box -->
+<p id="demo"</p>
+<script>
+n =  new Date();
+y = n.getFullYear();
+monthNumber = n.getMonth();
+d = n.getDate();
+weekdayNumber = n.getDay();
+var weekdayString = "unset";
+if(weekdayNumber ==6)
+{
+        weekdayString = "Saturday, ";
+}
+if(weekdayNumber ==5)
+{
+        weekdayString = "Friday, ";
+}
+if(weekdayNumber ==4)
+{
+        weekdayString = "Thursday, ";
+}
+if(weekdayNumber ==3)
+{
+        weekdayString = "Wednesday, ";
+}
+if(weekdayNumber ==2)
+{
+        weekdayString = "Tuesday, ";
+}
+if(weekdayNumber ==1)
+{
+        weekdayString = "Monday, ";
+}
+if(weekdayNumber ==0)
+{
+        weekdayString = "Sunday, ";
+}
+var monthString = "unset";
+if(monthNumber ==11)
+{
+        monthString = "December ";
+}
 
-Thursday, December 10th 2020
+if(monthNumber ==10)
+{
+        monthString = "November ";
+}
+if(monthNumber ==9)
+{
+        monthString = "October ";
+}
+if(monthNumber ==8)
+{
+        monthString = "September ";
+}
+if(monthNumber ==7)
+{
+        monthString = "August ";
+}
+if(monthNumber ==6)
+{
+        monthString = "July ";
+}
+if(monthNumber ==5)
+{
+        monthString = "June ";
+}
+if(monthNumber ==4)
+{
+        monthString = "May ";
+}
+if(monthNumber ==3)
+{
+        monthString = "April ";
+}
+if(monthNumber ==2)
+{
+        monthString = "March ";
+}
+if(monthNumber ==1)
+{
+        monthString = "February ";
+}
+if(monthNumber ==0)
+{
+        monthString = "January ";
+}
+
+document.getElementById("demo").innerHTML = weekdayString + monthString + d;
+</script>
+
+
+
+
+
     </div>
 <div class="dashboard_box" style=" color:#882FF6; font-size: 20pt">
     <!-- Here is the weather Box -->
@@ -213,6 +305,7 @@ Thursday, December 10th 2020
                 <div class="dashboard_box_right_inner" style="color:#ff5994 ;">
                     <!-- Title  -->
                     <h2 style=" color:#FF9933;">Your Loot</h2>
+			<img class="border rounded-circle img-profile" src="{% static view.weather_help.treasure_image %}" alt="Image" height=50px width=50px>
                 </div>
 
             <div class="dashboard_box_right_inner">

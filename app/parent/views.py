@@ -2099,7 +2099,7 @@ class ChildDashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.Templa
         max_temp = current_weather['main']['temp_max']
         description = current_weather['weather'][0]['description']
         icon = current_weather['weather'][0]['icon']
-
+        treasure_image = "weather/greenumbrella.png"
         notRain = True
         rainBoolean = "rain" in description
         if rainBoolean == True:
@@ -2120,7 +2120,8 @@ class ChildDashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.Templa
         weather_help = {
             'icon': icon,
             'max_temp': max_temp,
-            'help_image': help_image
+            'help_image': help_image,
+            'treasure_image': treasure_image
         }
 
         return weather_help
