@@ -2112,7 +2112,7 @@ class ChildDashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.Templa
         max_temp = current_weather['main']['temp_max']
         description = current_weather['weather'][0]['description']
         icon = current_weather['weather'][0]['icon']
-        treasure_image = "weather/greenumbrella.png"
+        treasure_image = "weather/treasureChest.jpg"
         notRain = True
         rainBoolean = "rain" in description
         if rainBoolean == True:
