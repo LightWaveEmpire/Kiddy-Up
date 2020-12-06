@@ -13,6 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from parent.forms import ParentSignUpForm, ChildSignUpForm, ChildUpdateForm, TaskUpdateForm, ChildUpdateProfileForm, ChildLoginForm, UpdateProfileForm
 from parent.models import Child, Task, Reward, Parent, Original_Task, Earned_Reward, Location
 from parent.utils import calendar_pull, task_factory, reward_system
+from django.core.paginator import Paginator
 
 import google_apis_oauth
 import os
@@ -30,8 +31,6 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
-
-
 
 
 def is_member(user):
@@ -183,7 +182,7 @@ class DashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateVie
 
     def children(self):
         parent = Parent.objects.get(user = self.request.user)
-        children = Child.objects.filter(parent = parent)
+        children = Child.objects.filter(parent = parent).order_by('name')
         return children
 
     def rewards(self):
@@ -194,11 +193,11 @@ class DashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateVie
         return Earned_Reward.objects.filter(child__parent = parent)
 
     def tasks(self):
-        return Task.objects.filter(parent__user = self.request.user, status='OPEN')
+        return Task.objects.filter(parent__user = self.request.user, status='OPEN').order_by('date')
 
     def pending_tasks(self):
         parent = Parent.objects.get(user = self.request.user)
-        return Task.objects.filter(parent = parent, status='PEND')
+        return Task.objects.filter(parent = parent, status='PEND').order_by('date')
 
     def completed_tasks(self):
         parent = Parent.objects.get(user = self.request.user)
@@ -234,6 +233,7 @@ def redirect_on_login(request):
 class RewardListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
     model=Reward
     paginate_by = 10
+    ordering = ['cost']
 
     def get_queryset(self):
         return Reward.objects.filter(parent__user=self.request.user)
@@ -1048,6 +1048,7 @@ class CompletedTaskListView(LoginRequiredMixin, UserPassesTestMixin, generic.Lis
     model=Task
     paginate_by = 10
     template_name = "parent/completed_task_list.html"
+    ordering = ['date']
 
     def get_queryset(self):
         return Task.objects.filter(parent__user=self.request.user, status='COMP')
@@ -1095,7 +1096,7 @@ class TaskListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return Task.objects.filter(parent__user=self.request.user)
+        return Task.objects.filter(parent__user=self.request.user).order_by('date')
 
 
 
@@ -1310,11 +1311,8 @@ class TaskDelete(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
         return weather
 
 
-
-
-
-
 # Child Views
+
 
 class ChildListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
     model=Child
@@ -2039,7 +2037,9 @@ class ChildDashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.Templa
     def tasks(self):
         parent = Parent.objects.get(user = self.request.user)
         active_child = parent.active_child
-        return Task.objects.filter(child = active_child, status='OPEN')
+        tasks = Task.objects.filter(child = active_child, status='OPEN').order_by('date')[0:5]
+        # paginator = Paginator(tasks, 5)
+        return tasks
 
     def completed_tasks(self):
         parent = Parent.objects.get(user = self.request.user)
@@ -2161,10 +2161,11 @@ class ChildUpdateProfileView(LoginRequiredMixin, UserPassesTestMixin, generic.Up
         return self.request.user.is_active == True
 
 
-class ChildTaskListView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateView):
+class ChildTaskListView(LoginRequiredMixin,
+        UserPassesTestMixin, generic.ListView):
     model=Task
     template_name = 'parent/child_task_list.html'
-    paginate_by = 10
+    # paginate_by = 10
 
     def child(self):
         parent = Parent.objects.get(user = self.request.user)
@@ -2173,12 +2174,12 @@ class ChildTaskListView(LoginRequiredMixin, UserPassesTestMixin, generic.Templat
     def tasks(self):
         parent = Parent.objects.get(user = self.request.user)
         active_child = parent.active_child
-        return Task.objects.filter(child = active_child, status='OPEN')
+        return Task.objects.filter(child = active_child, status='OPEN').order_by('date')
 
-    def completed_tasks(self):
-        parent = Parent.objects.get(user = self.request.user)
-        active_child = parent.active_child
-        return Task.objects.filter(child = active_child, status='COMP')
+    # def completed_tasks(self):
+    #     parent = Parent.objects.get(user = self.request.user)
+    #     active_child = parent.active_child
+    #     return Task.objects.filter(child = active_child, status='COMP')
 
     def test_func(self):
         return self.request.user.is_active == True
@@ -2194,7 +2195,7 @@ class ChildRewardListView(LoginRequiredMixin, UserPassesTestMixin, generic.Templ
 
     def rewards(self):
         parent = Parent.objects.get(user = self.request.user)
-        return Reward.objects.filter(parent=parent)
+        return Reward.objects.filter(parent=parent).order_by('cost')
 
     def test_func(self):
         return self.request.user.is_active == True

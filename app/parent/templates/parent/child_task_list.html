@@ -37,7 +37,7 @@
             </div>
         </div>
     </div>
-
+<!--
     <div class="dashboard_box">
         <h2 style="width: 343px;">Done</h2>
         <div class="row">
@@ -72,7 +72,7 @@
         </div>
     </div>
 </div>
-
+-->
 {% block pagination %} {% if is_paginated %}
 <div class="pagination">
     <span class="page-links">
@@ -85,6 +85,10 @@
     <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a> {% endif %}
     </span>
 </div>
-{% endif %} {% endblock %} {% endblock %} {% block sidebar_content %}
+{% endif %} {% endblock %}
+
+{% endblock %}
+
+{% block sidebar_content %}
 <!-- no sidebar for registration page -->
 {% endblock %}

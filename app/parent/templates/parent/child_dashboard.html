@@ -178,13 +178,21 @@ Thursday, December 10th 2020
                                 </tr>
                                 {% endfor %}
                             </tbody>
+                                <tfoot>
+                                    <tr><td>
+                                    <a style="color:#059937; text-decoration: underline; font-size: 20pt; " href="{% url 'child-tasks' %}"><i>See all Tasks</i></a>
+                                    </td></tr>
+                                </tfoot>
                         </table>
+
                         {% else %} <p style=" color:#17202A"> You completed all your tasks! </p>{% endif %}
 
             </div>
 
         </div>
     </div>
+
+
     <div class="dashboard_boxes_right" >
         <!-- Here is the Right Side Boxes -->
         <div class="dashboard_container_right">
@@ -218,17 +226,17 @@ Thursday, December 10th 2020
             <div class="dashboard_box_right_inner">
                 <div class="col-md-18">
                     {% if view.earned_rewards %}
-                    <table>
+                    <table style="font-size: 20pt;">
                         {% for reward in view.earned_rewards %}
                         <tr>
-                            <td style=" color:#FF9933; font-size: 15pt">{{reward.reward}} - EARNED!</td>
+                            <td style=" color:#FF9933; ">{{reward.reward}} - EARNED!</td>
                         </tr>
                         {% endfor %}
                     </table>
                     {% else %}
-                    <p style="color:#FF9933;">You have no earned rewards.
+                    <p style="color:#FF9933 ; font-size: 15pt">You have no earned rewards.
                         {% endif %}<br>
-                        <p><a style="color:#FF9933;" href="{% url 'child-rewards' %}"><i>Buy a Reward</i></a></p>
+                        <p><a style="color:#059937; ; font-size: 20pt; text-decoration: underline;" href="{% url 'child-rewards' %}"><i>Buy a Reward!</i></a></p>
                     </p>
                 </div>
 
@@ -305,6 +313,8 @@ Thursday, December 10th 2020
                 </div>
             </div>
         </div>
-        {% endblock %} {% block sidebar_content %}
+        {% endblock %}
+
+        {% block sidebar_content %}
         <!-- no sidebar for registration page -->
         {% endblock %}

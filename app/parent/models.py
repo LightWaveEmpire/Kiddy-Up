@@ -299,14 +299,14 @@ class Original_Task(models.Model):
     def turn_into_child_task(self):
         # May need to call with self.raw_otask
         task_details = entity_extraction.extract_entities(self.otask, self.parent.entities)
-        print(f'\n\nDEBUG Task Creation: {task_details}\n\n', file=sys.stderr)
+        # print(f'\n\nDEBUG Task Creation: {task_details}\n\n', file=sys.stderr)
         for kid_name in task_details['people']:
             parent = self.parent
             try:
                 k = Child.objects.get(parent=parent, name=kid_name)
                 if k is not None:   #if the parent's kid exists
                     #task_image, status is assigned to default
-                    print(f'\n\nDEBUG: {k} - If Block', file=sys.stderr)
+                    # print(f'\n\nDEBUG: {k} - If Block', file=sys.stderr)
                     t = Task(
                         original_task=self,
                         parent=self.parent,
