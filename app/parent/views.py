@@ -2034,6 +2034,19 @@ class ChildDashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.Templa
         parent = Parent.objects.get(user = self.request.user)
         return Reward.objects.filter(parent = parent)
 
+    def reward_count(self):
+        parent = Parent.objects.get(user = self.request.user)
+        active_child = parent.active_child
+        earned_rewards = Earned_Reward.objects.filter(child=active_child)
+        reward_count = {}
+        for reward in earned_rewards:
+            if reward.reward in reward_count:
+                reward_count[reward.reward] += 1
+            else:
+                reward_count[reward.reward] = 0
+        return reward_count
+
+
     def tasks(self):
         parent = Parent.objects.get(user = self.request.user)
         active_child = parent.active_child

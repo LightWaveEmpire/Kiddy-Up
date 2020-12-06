@@ -225,11 +225,11 @@ Thursday, December 10th 2020
 
             <div class="dashboard_box_right_inner">
                 <div class="col-md-18">
-                    {% if view.earned_rewards %}
+                    {% if view.reward_count %}
                     <table style="font-size: 20pt;">
-                        {% for reward in view.earned_rewards %}
+                        {% for reward, reward_num in view.reward_count.items %}
                         <tr>
-                            <td style=" color:#FF9933; ">{{reward.reward}} - EARNED!</td>
+                            <td style=" color:#FF9933; ">{{reward}} (x{{reward_num}})</td>
                         </tr>
                         {% endfor %}
                     </table>
@@ -238,6 +238,7 @@ Thursday, December 10th 2020
                         {% endif %}<br>
                         <p><a style="color:#059937; ; font-size: 20pt; text-decoration: underline;" href="{% url 'child-rewards' %}"><i>Buy a Reward!</i></a></p>
                     </p>
+
                 </div>
 
             </div>
