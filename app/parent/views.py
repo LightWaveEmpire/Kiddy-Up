@@ -2046,10 +2046,22 @@ class ChildDashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.Templa
         active_child = parent.active_child
         return Task.objects.filter(child = active_child, status='COMP')
 
+
+
     def pending_tasks(self):
         parent = Parent.objects.get(user = self.request.user)
         active_child = parent.active_child
         return Task.objects.filter(child = active_child, status='PEND')
+
+    def pending_tasks_metrics(self):
+        parent = Parent.objects.get(user = self.request.user)
+        active_child = parent.active_child
+        pending_tasks = Task.objects.filter(child = active_child, status='PEND')
+        metrics = {
+            'count' : len(pending_tasks),
+            'sum' : sum(task.point_value for task in pending_tasks)
+        }
+        return metrics
 
     def earned_rewards(self):
         parent = Parent.objects.get(user = self.request.user)
