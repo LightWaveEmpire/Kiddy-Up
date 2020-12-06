@@ -13,7 +13,7 @@ def get_task_image(task_description : str) -> str:
     """
 
     # step 0: if condition for child level.
-    	# if file.startswith(condition): 
+    	# if file.startswith(condition):
     # step 1: read in task_description
     # step 2: split task_description into individual words
     # step 3: search filename for each word
@@ -34,4 +34,4 @@ def get_task_image(task_description : str) -> str:
     #             else:
     #                 return "static/task_images/default_task_image.jpg"
 
-    return "static/task_images/default_task_image.jpg"
+    return "task_images/default_task_image.jpg"
