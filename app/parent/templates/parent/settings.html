@@ -15,9 +15,10 @@
   <br />
 
 
-  <h2> <p style="margin-left: 25px"> Profile </h2>
+  <h2> <p style="margin-left: 25px">Zip Code</h2>
 
     <table class="table table-bordered">
+<!--
       <thead>
         <tr>
           <th>Username</th>
@@ -26,15 +27,19 @@
           <th>Action</th>
         </tr>
       </thead>
-
+-->
 
 	    {% if view.parent.user ==  user %}
 	    <tbody>
 	      <tr>
+<!--
 	        <td>{{view.parent.user.username}}</td>
+-->
 	        <td>{{view.parent.zip_code}}</td>
-	        <td>{{view.parent.user.email}}</td>
-	        <td><a href="{% url 'profile-update' %}">Edit</a></td>
+<!--
+          <td>{{view.parent.user.email}}</td>
+-->
+	        <td><a href="{% url 'profile-update' %}">Edit Zip Code</a></td>
 
 	      </tr>
 	    {% endif %}
