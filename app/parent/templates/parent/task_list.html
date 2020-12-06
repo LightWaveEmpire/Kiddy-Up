@@ -3,11 +3,9 @@
 <h1><p style="margin-left: 15px"> Tasks</h1>
 
 
-<p><a style="margin-left: 20px" href="{% url 'pending_tasks' %}">Completed Tasks to Validate</a></p>
-<p><a style="margin-left: 20px" href="{% url 'completed_tasks' %}">Past Completed Tasks</a></p>
-<p><a style="margin-left: 20px" href="{% url 'manual_add' %}">Add a Task</a></p>
 
 
+<h5><p style="margin-left: 15px"> Open Tasks</h5>
 <table class="table table-bordered">
     <thead>
         <tr>
@@ -30,8 +28,15 @@
             <td><a href="{% url 'task-update' task.id%}">Edit</a></td>
         </tr>
         {% endfor %}
+        <tr>
+
+            <td colspan="6" style="text-align:center"><a style="margin-left: 20px" href="{% url 'manual_add' %}">Add a Task</a></td>
+        </tr>
     </tbody>
 </table>
+
+<h5><a style="margin-left: 20px" href="{% url 'pending_tasks' %}">Validate Completed Tasks</a></h5>
+<h5><a style="margin-left: 20px" href="{% url 'completed_tasks' %}">Past Completed Tasks</a></h5>
 
 {% block pagination %} {% if is_paginated %}
 <div class="pagination">
