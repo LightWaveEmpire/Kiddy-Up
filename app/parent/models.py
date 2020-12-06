@@ -96,9 +96,9 @@ class Parent(models.Model):
         # and other locations
 
         for location in locations:
-            if location.location_type is "SCHOOL":
+            if location.location_type is "School":
                 temp_entities['SCHOOL'].append(location.name)
-            if location.location_type is "WORK":
+            if location.location_type is "Work":
                 temp_entities['WORK'].append(location.name)
         temp_entities['SCHOOL'] = list(set(temp_entities['SCHOOL']))
 
