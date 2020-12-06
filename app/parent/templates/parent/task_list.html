@@ -11,6 +11,7 @@
         <tr>
             <th>Task</th>
             <th>Child</th>
+            <th>Due</th>
             <th>Status</th>
             <th>Point Value</th>
             <th>Action</th>
@@ -21,6 +22,7 @@
         <tr>
             <td><a href="{% url 'task' task.id %}">{{task.name}}</a></td>
             <td>{{ task.child }}</td>
+            <td>{{ task.date }}</td>
             <td>{{ task.status }}</td>
             <td>{{ task.point_value }}</td>
             <td><a href="{% url 'task-update' task.id%}">Edit</a></td>
