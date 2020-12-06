@@ -148,7 +148,8 @@
     <br />
     <br />
     <br />
-    <h2> <p style="margin-left: 15px"> Link Calendar and Task List</h2>
+     <h2> <p style="margin-left: 15px"> Tasks</h2>
+    <h5> <p style="margin-left: 15px"> Link Calendar and Task List</h5>
 	<ul>
     <li>
     {% if view.parent.account_creds %}
@@ -158,19 +159,20 @@
       <a href="{% url 'google_oauth' %}" >Link Google Account</a>
     {%endif %}
     </li>
-
-    <li>
         {% if view.parent.account_creds %}
+    <li>
+
           <a href="{% url 'pull_tasks' %}" >Get Calendar Events and Tasks</a>
+              </li>
         {% else %}
 
         {% endif %}
 
-    </li>
+
 
   </ul>
-
-
+  <h5><a style="margin-left: 20px" href="{% url 'task-add' %}">Add Task</a></h5>
+  <h5> <a style="margin-left: 20px" href="{% url 'original_task-add' %}">Add Task by Form</a></h5>
 
 
 
