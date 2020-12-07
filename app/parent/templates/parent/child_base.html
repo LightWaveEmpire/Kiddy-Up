@@ -30,7 +30,7 @@
         <!--
 {% url 'child-profile-update' view.child.id %}
         -->
-<span>
+<span style="margin-top: 24px;">
         {% if view.child.target_reward %}
             <label for="reward"><a style=" color:#35D461" href="{% url 'child-profile-update' view.child.id %}">{{view.child.target_reward}}</a></label>
             <progress id="reward" value="{{view.child.current_points}}" max='{{view.child.target_reward.cost}}'>{{view.child.current_points}}
