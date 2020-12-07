@@ -1,7 +1,7 @@
 #import spacy
 from spacy.pipeline import EntityRuler
 import json
-import constants
+from parent.utils import constants
 # from django.conf import settings
 
 
