@@ -13,16 +13,7 @@ from array import *
 import json
 
 
-
 # This list will be read into the parent.entities json structure for RACT on first call
-LIST_OF_DEFAULT_TASKS = [
-     "Sweep the floor",
-     "Mop the kitchen",
-     "Do Homework"
- ]
-
-
-
 
 # User = settings.AUTH_USER_MODEL
 
@@ -52,7 +43,7 @@ class Parent(models.Model):
                 "CHILD": [],
                 "SCHOOL": [],
                 "WORK": [],
-                "RACT": [LIST_OF_DEFAULT_TASKS]
+                "RACT": []
             }
         super(Parent, self).save(*args, **kwargs)
 
@@ -68,7 +59,7 @@ class Parent(models.Model):
             "CHILD": [],
             "SCHOOL": [],
             "WORK": [],
-            "RACT": LIST_OF_DEFAULT_TASKS
+            "RACT": []
         }
         temp_entities = {
             "CHILD": [],
@@ -96,16 +87,16 @@ class Parent(models.Model):
         # and other locations
 
         for location in locations:
-            if location.location_type is "School":
+            if location.location_type == "School":
                 temp_entities['SCHOOL'].append(location.name)
-            if location.location_type is "Work":
+            if location.location_type == "Work":
                 temp_entities['WORK'].append(location.name)
         temp_entities['SCHOOL'] = list(set(temp_entities['SCHOOL']))
 
-
         # build list of task names
-        for task in tasks:
-            temp_entities['RACT'].append(task.name)
+#
+#        for task in tasks:
+#            temp_entities['RACT'].append(task.name)
 
         temp_entities['RACT'] = list(set(temp_entities['RACT']))
 
@@ -142,7 +133,7 @@ class Location(models.Model):
     WORK = "Work"
     CHURCH = "Church"
     SPORT = "Sport"
-    OTHER="Other"
+    OTHER = "Other"
 
     LOCATION_CHOICES = [
         (SCHOOL, "School"),
@@ -174,14 +165,14 @@ class Location(models.Model):
 
 class Child(models.Model):
     # user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='child')
-    parent = models.ForeignKey(Parent, on_delete=models.CASCADE, related_name ='parent')
+    parent = models.ForeignKey(Parent, on_delete=models.CASCADE, related_name='parent')
     name = models.CharField("Child Name", max_length=20)
     is_authenticated = models.BooleanField(default=False)
     target_reward = models.ForeignKey('Reward', on_delete=models.SET_NULL, blank=True, null=True)
     age = models.IntegerField("Age")
     comp_level = models.IntegerField("Comprehension Level", blank=True, null=True)
     owned_rewards = models.JSONField(blank=True, null=True)
-    avatar = models.ImageField("Avatar", upload_to = 'avatars', default='default.jpg')
+    avatar = models.ImageField("Avatar", upload_to='avatars', default='default.jpg')
     current_points = models.IntegerField("Point Balance", default=0)
     pin = models.CharField(max_length=6, default='123')
 
@@ -203,8 +194,6 @@ class Child(models.Model):
             self.is_authenticated = True
         return self.is_authenticated
 
-
-
     def __str__(self):
         """String for representing the Model object."""
         return self.name
@@ -213,15 +202,12 @@ class Child(models.Model):
         return reverse('child', kwargs={'pk': self.pk})
 
 
-
-
-
 # We will still need location added to Task model
 
 class Task(models.Model):
     OPEN = "OPEN"
-    PENDING = "PEND"
-    COMPLETE = "COMP"
+    PENDING = "PENDING"
+    COMPLETE = "COMPLETE"
     STATUS_CHOICES = [
         (None, "NA"),
         (OPEN, "Open"),
@@ -277,7 +263,6 @@ class Task(models.Model):
                         return "static/task_images/default_task_image.jpg"
 
 
-
 class Original_Task(models.Model):
     parent = models.ForeignKey(Parent, on_delete=models.CASCADE)
     otask = models.TextField("Event / Task", blank=True, null=True)
@@ -322,9 +307,7 @@ class Original_Task(models.Model):
                     t.save()
 
             except Exception as e:
-                print(f'\n\nDEBUG: Except block {kid_name} \n\nError: {e}', file=sys.stderr)
-
-
+                print(f'\n\nDEBUG: Task not created. \n\nError: {e}', file=sys.stderr)
 
 
 class Earned_Reward(models.Model):
@@ -340,4 +323,3 @@ class Earned_Reward(models.Model):
 
     def get_absolute_url(self):
         return reverse('earned_reward', kwargs={'pk': self.pk})
-
