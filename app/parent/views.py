@@ -2090,7 +2090,7 @@ class ChildDashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.Templa
             if reward.reward in reward_count:
                 reward_count[reward.reward] += 1
             else:
-                reward_count[reward.reward] = 0
+                reward_count[reward.reward] = 1
         return reward_count
 
 
