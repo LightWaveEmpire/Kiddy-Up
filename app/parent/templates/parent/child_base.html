@@ -35,12 +35,13 @@
                     {% if view.child.is_authenticated %}
 <li class="nav-item" >
                     {% if view.child.target_reward %}
-<a style=" color:#35D461" href="{% url 'child-profile-update' view.child.id%}">
-                        <label for="reward">{{view.child.target_reward}}&nbsp;&nbsp;&nbsp; </label></a>
+
+                        <label for="reward">{{view.child.target_reward}}&nbsp;&nbsp;&nbsp; </label>
                         <a style=" color:#35D461" href="{% url 'child-rewards'%}">
                         <progress id="reward" value="{{view.child.current_points}}" max='{{view.child.target_reward.cost}}'>{{view.child.current_points}} </progress>
                     {% else %}
-                        <label for="reward">No Goal Set</label>
+                        <a style=" color:#35D461" href="{% url 'child-profile-update' view.child.id%}">
+                            <label for="reward">No Goal Set</label></a>
                         <progress id="reward" value="0" max='0'> 0% </progress>
                     {% endif%}
                     &nbsp;&nbsp;&nbsp;<i class="fas fa-certificate">{{view.child.current_points}}</i>
