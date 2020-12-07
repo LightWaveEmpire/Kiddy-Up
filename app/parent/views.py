@@ -2160,8 +2160,7 @@ class ChildDashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.Templa
         tasks = Task.objects.filter(child = active_child, status='OPEN').order_by('date')[0:5]
         for task in tasks:
             task.image = Task.get_task_image(task)
-        # task_names = Task.objects.filter(child = active_child, status='OPEN').values('name', flat=true).order_by('date')[0:5]
-        # tasks.image = Task.get_task_image(active_child, task_names)
+            task.save(update_fields=["image"])
         # paginator = Paginator(tasks, 5)
         return tasks
 

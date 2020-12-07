@@ -263,10 +263,7 @@ class Task(models.Model):
                     file_name = (file.split('_'))
                     res = len(set(newlist) & set(file_name))
                     file_list[f"{file}"] = res
-                    # return "task_images/" + file_name[2]
 
-        keys = list(file_list)
-        # return "task_images/" + str(file_list[keys[2]])
         res_file = max(file_list, key=file_list.get)
 
         return "task_images/" + str(res_file)
