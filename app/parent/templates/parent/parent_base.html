@@ -12,13 +12,13 @@
 <ul class="nav navbar-nav flex-nowrap ml-auto">
     {% if user.is_authenticated %}
     <li class="nav-item">
-        <a class="nav-link" href="{% url 'dashboard'%}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+        <a class="nav-link" href="{% url 'dashboard'%}"><i class="fas fa-tachometer-alt"></i>&nbsp;<span>Dashboard</span></a></li>
     {# <li class="nav-item"><a class="nav-link" href="{% url 'profile'%}?next={{request.path}}"><i class="fas fa-user"></i><span>Profile</span></a></li> #}
-    <li class="nav-item"><a class="nav-link" href="{% url 'tasks'%}"><i class="fas fa-table"></i><span>Tasks</span></a></li>
-    <li class="nav-item"><a class="nav-link" href="{% url 'rewards'%}"><i class="far fa-user-circle"></i><span>Rewards</span></a></li>
-    <li class="nav-item"><a class="nav-link" href="{% url 'children'%}"><i class="far fa-user-circle"></i><span>Children</span></a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'tasks'%}"><i class="fas fa-table"></i>&nbsp;<span>Tasks</span></a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'rewards'%}"><i class="fas fa-coins"></i>&nbsp;<span>Rewards</span></a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'children'%}"><i class="fas fa-users"></i>&nbsp;<span>Children</span></a></li>
     {# <li class="nav-item"><a class="nav-link" href="{% url 'settings'%}"><i class="fas fa-user-circle"></i><span>Setting</span></a></li> #}
-    <li class="nav-item"><a class="nav-link" href="{% url 'child_login'%}"><i class="far fa-user-circle"></i><span>Child Dashboard</span></a></li>
+    <li class="nav-item"><a class="nav-link" href="{% url 'child_login'%}"><i class="far fa-user-circle"></i>&nbsp;<span>Child Dashboard</span></a></li>
     {% else %}
 
     {% endif %}

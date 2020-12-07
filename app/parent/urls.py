@@ -8,7 +8,7 @@ from django.conf.urls import include, url
 
 urlpatterns = [
 
-    path('', views.DashboardView.as_view(), name="home"),
+
     path('parent/redirect/', views.redirect_on_login, name='login-redirect'),
     path('parent/pull_tasks', views.pull_tasks, name="pull_tasks"),
     path('google_oauth/redirect/', RedirectOauthView, name='google_oauth'),
