@@ -35,8 +35,10 @@
         </div>
     </li>
     {% else %}
+    <span style="margin-top: 12px;">
     <li class="nav-item dropdown no-arrow"><span class="title">{{ view.weather.city }}</span><img src="http://openweathermap.org/img/w/{{ view.weather.icon }}.png" alt="Image"> {{ view.weather.now_temp }}° F
     </li>
+</span>
     <div class="d-none d-sm-block topbar-divider"></div>
     <li class="nav-item dropdown no-arrow">
         <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-1 text-gray-600 small">{{user.username}}</span><img class="border rounded-circle img-profile" src="/media/default.jpg"></a>
