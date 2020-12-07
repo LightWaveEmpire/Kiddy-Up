@@ -134,7 +134,7 @@ def pull_tasks(request):
 
     task_factory.create_child_tasks_from_otask(parent)
 
-    return redirect('dashboard')
+    return reverse_lazy('tasks')
 
 # Require Login
 
@@ -903,7 +903,7 @@ class Original_TaskCreate(LoginRequiredMixin, UserPassesTestMixin, generic.Creat
         tasks = Task.objects.filter(parent=parent)
 
         parent.update_entities(children, locations, tasks)
-        print(f'\n\nDEBUG: Parent = {parent.entities}\n\n', file=sys.stderr)
+
         task_factory.create_otask_manually(parent, task_string)
         return reverse_lazy('tasks')
 
