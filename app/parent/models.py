@@ -9,6 +9,7 @@ from collections import defaultdict
 import os
 import sys
 from array import *
+import fnmatch
 
 import json
 
@@ -229,7 +230,7 @@ class Task(models.Model):
     )
 
     # get details on image storage from Samuel
-    image = models.TextField("Task Image", default='default_img')
+    image = models.TextField("Task Image", default='task_images/default_task_image.jpg')
 
     # Will need to change to DateTimeField
     date = models.DateTimeField("Task Date", )
@@ -247,20 +248,28 @@ class Task(models.Model):
         return reverse('task', kwargs={'pk': self.pk})
 
     def get_task_image(self):
-        task_description = self.description
+        task_name = self.name
         curr_user = self.child
-        comp_level = curr_user.comp_level
+        comp_level = str(curr_user.comp_level)
         newlist = []
+        file_name = []
+        file_list = {}
 
-        newlist.append(task_description.split())
+        newlist = (task_name.lower().split())
 
         for root, dirs, files in os.walk(r'static/task_images/'):
             for file in files:
-                if file.startswith(str(comp_level)):
-                    if all(x in newlist for x in file):
-                        return file
-                    else:
-                        return "static/task_images/default_task_image.jpg"
+                if file.startswith(comp_level):
+                    file_name = (file.split('_'))
+                    res = len(set(newlist) & set(file_name))
+                    file_list[f"{file}"] = res
+                    # return "task_images/" + file_name[2]
+
+        keys = list(file_list)
+        # return "task_images/" + str(file_list[keys[2]])
+        res_file = max(file_list, key=file_list.get)
+
+        return "task_images/" + str(res_file)
 
 
 class Original_Task(models.Model):

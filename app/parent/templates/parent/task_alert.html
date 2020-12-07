@@ -1,0 +1,17 @@
+
+
+{% autoescape off %}
+
+{{ logo }}
+
+
+{{ parent.active_child.name }} has completed {{ task.name }}. 
+
+If you wish to see the completed task, click the link below. 
+
+http://localhost:8080/parent/dashboard/
+
+Sincerely,
+The TestSite Team
+{% endautoescape %}
+

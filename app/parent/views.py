@@ -31,6 +31,12 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.utils.encoding import force_text
 from django.utils.http import urlsafe_base64_decode
+from django.conf import settings
+from django.core.mail import send_mail, EmailMessage, EmailMultiAlternatives
+from email.mime.image import MIMEImage
+from django.template import RequestContext
+from django.template.loader import get_template
+from pathlib import Path
 
 
 def is_member(user):
@@ -1236,6 +1242,10 @@ class TaskCreate(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
 
     def form_valid(self, form):
         form.instance.parent = Parent.objects.get(user=self.request.user)
+        # new_task = form.save(commit=False)
+        # child_comp = form.cleaned_data.get( )
+        # new_task.image = Task.get_task_image()
+        # new_task.save()
         return super().form_valid(form)
 
     def test_func(self):
@@ -1833,6 +1843,14 @@ def home(request):
     return render(request, "parent/index.html")
 
 
+from functools import lru_cache
+@lru_cache()
+def logo_data():
+    with open(('static/images/kiddy-up.png'), 'rb') as f:
+        logo_data = f.read()
+    logo = MIMEImage(logo_data)
+    logo.add_header('Content-ID', '<logo>')
+    return logo
 
 class ParentSignUpView(View):
     form_class = ParentSignUpForm
@@ -1851,14 +1869,53 @@ class ParentSignUpView(View):
             user.save()
 
             current_site = get_current_site(request)
+            # image_path = 'static/images/kiddy-up.png'
+            # image_name = Path(image_path).name
             subject = 'Activate Your Kiddy-Up Account'
-            message = render_to_string('parent/auth_user_email.html', {
+
+            body_text = render_to_string('parent/auth_user_email.html', {
                 'user': user,
                 'domain': current_site.domain,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                 'token': account_activation_token.make_token(user),
             })
-            user.email_user(subject, message)
+            # html_text = f"""
+            #     <!doctype html>
+            #         <html lang=en>
+            #             <head>
+            #                 <meta charset=utf-8>
+            #             </head>
+            #             <body>
+            #                 <h2>{subject}</h2>
+            #                 <p>
+            #                 <img src='cid:{image_name}'/>
+            #                 </p>
+            #             </body>
+            #         </html>
+            # """
+            message = EmailMultiAlternatives(
+                subject=subject,
+                body=body_text,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[user.email],
+                **kwargs
+            )
+            # message.mixed_subtype = 'related'
+            # message.attach_alternative(html_text, "text/html")
+            # message.content_subtype = 'html'
+            # message.attach('static/images/kiddy-up.png', img_data, 'image/png')
+
+            message.send(fail_silently=False)
+
+
+
+            # message = render_to_string('parent/auth_user_email.html', {
+            #     'user': user,
+            #     'domain': current_site.domain,
+            #     'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+            #     'token': account_activation_token.make_token(user),
+            # })
+            # user.email_user(subject, message)
 
             messages.success(request, ('Please confirm your email to complete registration.'))
 
@@ -2101,6 +2158,10 @@ class ChildDashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.Templa
         parent = Parent.objects.get(user = self.request.user)
         active_child = parent.active_child
         tasks = Task.objects.filter(child = active_child, status='OPEN').order_by('date')[0:5]
+        for task in tasks:
+            task.image = Task.get_task_image(task)
+        # task_names = Task.objects.filter(child = active_child, status='OPEN').values('name', flat=true).order_by('date')[0:5]
+        # tasks.image = Task.get_task_image(active_child, task_names)
         # paginator = Paginator(tasks, 5)
         return tasks
 
@@ -2297,12 +2358,24 @@ def ChildRewardBuyView(request, pk):
 
 
 
-def TaskCompleteView(request, pk):
+def TaskCompleteView(request, pk,):
     parent = Parent.objects.get(user = request.user)
     active_child = parent.active_child
     task = Task.objects.get(id=pk)
     reward_system.complete_task(active_child, task)
-    # return redirect('child-tasks')
+    
+    send_mail(
+    'Task Completion Notification',
+    render_to_string('parent/task_alert.html', {
+                'parent': parent,
+                'task': task,
+            }),
+    [],
+    [parent.user.email],
+    fail_silently=False,
+    ) 
+   
+
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 def TaskValidate(request, pk):
