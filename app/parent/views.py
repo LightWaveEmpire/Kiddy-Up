@@ -134,7 +134,10 @@ def pull_tasks(request):
 
     task_factory.create_child_tasks_from_otask(parent)
 
-    return reverse_lazy('tasks')
+    response = HttpResponseRedirect(reverse_lazy('tasks'))
+    return response
+    # return reverse_lazy('tasks')
+
 
 # Require Login
 
