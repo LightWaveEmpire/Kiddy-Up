@@ -3,8 +3,7 @@ from spacy.pipeline import EntityRuler
 import json
 from parent.utils import constants
 import sys
-# import constants
-# from django.conf import settings
+from dateutil import parser as dupr
 
 
 def extract_entities(otask, entities=None) -> dict:
@@ -48,6 +47,7 @@ def extract_entities(otask, entities=None) -> dict:
     task['description'] = task['name'] = str(otask)
 
     for ent in doc.ents:
+        # print(ent, ent.label_, file=sys.stderr)
 
         if ent.label_ == "CHILD":
             task['people'].append(ent.text)
@@ -157,9 +157,9 @@ def extract_location(entity, task):
 
 
 def extract_date(entity, task):
-    task['date'] = entity.text
+    task['date'] = dupr.parse(entity.text).isoformat()
     # DEBUG: use to dummy out issues reading date.
-    task['date'] = constants.TASK_STRUCTURE['date']
+    # task['date'] = constants.TASK_STRUCTURE['date']
     task['name'] = task['name'].replace(entity.text, "").strip()
     task['name'] = task['name'].replace(entity.root.head.text, "", 1).strip()
 
