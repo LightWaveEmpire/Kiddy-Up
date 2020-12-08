@@ -21,21 +21,14 @@ def extract_entities(otask, entities=None) -> dict:
     if user_ents_raw is None:
         user_ents_raw = json.dumps(constants.ENT_STRUCTURE)
 
-    # move to constants?
     task = json.loads(json.dumps(constants.TASK_STRUCTURE))
-#    task = {}
-#    task['name'] = "Untitled Task"
-#    task['description'] = ""
-#    task['people'] = []
-#    task['date'] = "12/02/2021"
-#    task['location'] = "no location given"
 
     # nlp = spacy.load('en_core_web_lg')
     nlp = constants.NLP
 
     ents_ruler = EntityRuler(nlp, phrase_matcher_attr="LOWER", overwrite_ents=True)
     user_ents = json.loads(user_ents_raw)
-    remainder = otask
+    #remainder = otask
 
     for category in user_ents:
         MATCH_ID = category.upper()
@@ -85,8 +78,8 @@ def extract_entities(otask, entities=None) -> dict:
 #    print(task['name'], "86", file=sys.stderr)
 
     task['name'] = reportClosest(
-        findClosest(constants.DEFAULT_TASKS, remainder,
-                    findClosest(user_ents['RACT'], remainder))
+        findClosest(constants.DEFAULT_TASKS, title,
+                    findClosest(user_ents['RACT'], title))
     )
 
     if task['name'] == "Untitled Task":
@@ -97,7 +90,8 @@ def extract_entities(otask, entities=None) -> dict:
         if len(title) > 17:
             task['name'] += "..."
 
-#    print(task['name'], "101", file=sys.stderr)
+    print(task, file=sys.stderr)
+    #ABRACADABRA! When I put this here it works.
     return task
 
 
@@ -178,7 +172,13 @@ def clean_description(task, children):
 
     for person in task['people']:
         if person in children:
-            desc = desc.replace(person, "").strip()
+            task['description'] = desc.replace(person, "").strip()
+            desc = task['description']
+            #print("desc - ", person, desc)
+
+        #quick-and-dirty patch
+        if desc.startswith("\'s"):
+            desc = desc.replace("\'s", "", 1).strip()
 
     return desc
 
@@ -189,6 +189,12 @@ def clean_title(task, children):
 
     for person in task['people']:
         if person in children:
-            title = task['name'].replace(person, "").strip()
+            task['name'] = title.replace(person, "").strip()
+            title = task['name']
+            #print("title - ", person, " -- ", title)
+
+    #quick-and-dirty patch
+    if title.startswith("\'s"):
+        title = title.replace("\'s", "", 1).strip()
 
     return title
