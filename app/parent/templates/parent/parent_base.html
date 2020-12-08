@@ -12,13 +12,13 @@
 <ul class="nav navbar-nav flex-nowrap ml-auto">
     {% if user.is_authenticated %}
     <li class="nav-item">
-        <a class="nav-link" href="{% url 'dashboard'%}"><i class="fas fa-tachometer-alt"></i>&nbsp;<span>Dashboard</span></a></li>
-    {# <li class="nav-item"><a class="nav-link" href="{% url 'profile'%}?next={{request.path}}"><i class="fas fa-user"></i><span>Profile</span></a></li> #}
-    <li class="nav-item"><a class="nav-link" href="{% url 'tasks'%}"><i class="fas fa-table"></i>&nbsp;<span>Tasks</span></a></li>
-    <li class="nav-item"><a class="nav-link" href="{% url 'rewards'%}"><i class="fas fa-coins"></i>&nbsp;<span>Rewards</span></a></li>
-    <li class="nav-item"><a class="nav-link" href="{% url 'children'%}"><i class="fas fa-users"></i>&nbsp;<span>Children</span></a></li>
-    {# <li class="nav-item"><a class="nav-link" href="{% url 'settings'%}"><i class="fas fa-user-circle"></i><span>Setting</span></a></li> #}
-    <li class="nav-item"><a class="nav-link" href="{% url 'child_login'%}"><i class="far fa-user-circle"></i>&nbsp;<span>Child Dashboard</span></a></li>
+        <a class="nav-link" style="color: #2F9599 ;" href="{% url 'dashboard'%}"><i class="fas fa-tachometer-alt"></i>&nbsp;<span>  Dashboard</span></a></li>
+    {# <li class="nav-item"><a class="nav-link" style="color: #2F9599;" href="{% url 'profile'%}?next={{request.path}}"><i class="fas fa-user"></i><span>Profile</span></a></li> #}
+    <li class="nav-item"><a class="nav-link" style="color: #F26B38;" href="{% url 'tasks'%}"><i class="fas fa-table"></i>&nbsp;<span>Tasks</span></a></li>
+    <li class="nav-item"><a class="nav-link" style="color: #D4AC0D;"  href="{% url 'rewards'%}"><i class="fas fa-coins"></i>&nbsp;<span>Rewards</span></a></li>
+    <li class="nav-item"><a class="nav-link" style="color: #27AE60;" href="{% url 'children'%}"><i class="fas fa-users"></i>&nbsp;<span>Children</span></a></li>
+    {# <li class="nav-item"><a class="nav-link" style="color: #2F9599;" href="{% url 'settings'%}"><i class="fas fa-user-circle"></i><span>Setting</span></a></li> #}
+    <li class="nav-item"><a class="nav-link" style="color: #c5a2d1;" href="{% url 'child_login'%}"><i class="far fa-user-circle"></i>&nbsp;<span>Child Dashboard</span></a></li>
     {% else %}
 
     {% endif %}

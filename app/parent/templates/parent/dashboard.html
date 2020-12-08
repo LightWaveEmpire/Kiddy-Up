@@ -52,8 +52,8 @@
 
 
     <div class="dashboard_box">
-        <h2 style="width: 343px;">Tasks</h2>
-        <h5 style="width: 343px;">Pending Completion</h5>
+        <h2 style="color:#F26B38; width: 343px;"><u>Tasks</u></h2>
+        <h5 style="color:#A7226E; margin-left: 25px; width: 343px;">Pending Completion</h5>
         <div class="row">
             <div class="col-md-12">
                 {% if view.tasks %}
@@ -77,12 +77,12 @@
                     </tbody>
                 </table>
                 {% else %}
-                Your kids have completed all their tasks!
+               <p style="margin-left: 40px;"> Your kids have completed all their tasks! </p>
                 {% endif %}
             </div>
         </div>
         <br>
-        <h5 style="width: 343px;">Waiting For Approval</h5>
+        <h5 style="color:#A7226E;margin-left: 25px; width: 343px;">Waiting For Approval</h5>
         <div class="row">
             <div class="col-md-12">
                 {% if view.pending_tasks %}
@@ -111,7 +111,7 @@
                     </tbody>
                 </table>
                                 {% else %}
-                No current completed tasks to be validated
+               <p style="margin-left: 40px;"> No current completed tasks to be validated </p>
                 {% endif %}
             </div>
         </div>
@@ -136,8 +136,8 @@
 
 
     <div class="dashboard_box">
-        <h2 style="width: 343px;">Rewards</h2>
-        <h5 style="width: 343px;">Earned Rewards</h5>
+        <h2 style="color:#D4AC0D; width: 343px;"><u>Rewards</u></h2>
+        <h5 style="color:#A7226E; margin-left: 25px; width: 343px;">Earned Rewards</h5>
         <div>
             <div class="col-md-12">
                 {% if view.earned_rewards %}
@@ -160,7 +160,7 @@
                 {% endfor %}
 </table>
 {% else %}
-                You children have no earned rewards.
+               <p style="margin-left: 40px;"> Your children have no earned rewards. </p>
 
                 {% endif %}<br>
             </div>

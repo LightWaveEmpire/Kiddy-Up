@@ -10,19 +10,19 @@
 {% block content %}
 {{ block.super }}
 
-  <h1><p style="margin-left: 15px"> Children </h1>
-
-<p><a style="margin-left: 15px" href="{% url 'child-add' %}">Add a Child</a></p>
-
+  <h1><p style=" color:#27AE60; margin-left: 15px"> Children </h1>
+<ul style="margin-left: 15px">
+<li><a  href="{% url 'child-add' %}">Add a Child</a></li>
+</ul>
 <table  class="table table-bordered">
   <thead>
     <tr>
-      <th>Child Name</th>
-      <th>Age</th>
-      <th>Comprehension Level</th>
-      <th>Current Points</th>
-      <th>Target Reward</th>
-      <th>Action</th>
+      <th style=" color:#27AE60;" >Child Name</th>
+      <th style=" color:#27AE60;" >Age</th>
+      <th style=" color:#27AE60;" >Comprehension Level</th>
+      <th style=" color:#27AE60;">Current Points</th>
+      <th style=" color:#27AE60;">Target Reward</th>
+      <th style=" color:#27AE60;">Action</th>
     </tr>
   </thead>
   <tbody>

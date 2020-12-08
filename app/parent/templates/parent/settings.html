@@ -7,10 +7,10 @@
 
 {% block content %}
 
-  <h1><p style="margin-left: 15px"> Settings</h1>
+  <h1><p style="color:#A93226; margin-left: 15px"> Settings</h1>
 
 
-  <h2> <p style="margin-left: 25px">Zip Code</h2>
+  <h2> <p style="color:#884EA0; margin-left: 25px">Zip Code</h2>
 
     <table class="table table-bordered">
 <!--
@@ -43,10 +43,10 @@
     </table>
 
 
-          <h2> <p style="margin-left: 15px"> Children</h2>
-
-          <p><a style="margin-left: 25px" href="{% url 'child-add' %}">Add a Child</a></p>
-
+          <h2> <p style="color:#17A589; margin-left: 25px"> Children:</h2>
+            <ul     style="margin-left: 25px">
+          <li><a  href="{% url 'child-add' %}">Add a Child</a></li>
+            </ul>
         {% if view.children %}
 
           <table class="table table-bordered">
@@ -76,10 +76,10 @@
         {% endif %}
 
 
-          <h2> <p style="margin-left: 15px"> Locations</h2>
-
-          <p><a style="margin-left: 25px" href="{% url 'location-add' %}">Add a Location</a></p>
-
+          <h2> <p style="color:#F39C12; margin-left: 25px"> Locations</h2>
+            <ul style="margin-left: 40px">
+          <li><a href="{% url 'location-add' %}">Add a Location</a></li>
+            </ul>
         {% if view.locations %}
 
           <table class="table table-bordered">
@@ -105,8 +105,10 @@
         {% endif %}
 
 
-    <h2> <p style="margin-left: 15px"> Rewards</h2>
-    <p><a style="margin-left: 25px" href="{% url 'reward-add' %}">Add a Reward</a></p>
+    <h2> <p style="color:#D4AC0D; margin-left: 25px"> Rewards</h2>
+    <ul style="margin-left: 40px">
+      <li><a href="{% url 'reward-add' %}">Add a Reward</a></li>
+    </ul>
 
 
 
@@ -132,9 +134,9 @@
     {% endif %}
 
 
-     <h2> <p style="margin-left: 15px"> Tasks</h2>
-    <h5> <p style="margin-left: 15px"> Link Calendar and Task List</h5>
-	<ul>
+     <h2> <p style="color:#F26B38; margin-left: 25px"> Tasks:</h2>
+    <h5> <p style=" color:#F26B38; margin-left: 40px"> Link Calendar and Task List</h5>
+	<ul style="margin-left: 40px">
     <li>
     {% if view.parent.account_creds %}
       Account Linked Successfully! ->
@@ -155,8 +157,12 @@
 
 
   </ul>
-  <h5><a style="margin-left: 20px" href="{% url 'original_task-add' %}">Add Task</a></h5>
-  <h5> <a style="margin-left: 20px" href="{% url 'task-add' %}">Add Task by Form</a></h5>
+  <h5> <p style="color:#F26B38; margin-left: 40px"> Manual Entry: </h5> 
+    <ul style="margin-left: 40px">
+  <li><a  href="{% url 'original_task-add' %}">Add Task</a></li>
+  <li> <a href="{% url 'task-add' %}">Add Task by Form</a></li> 
+    </ul>
+
 
 
 

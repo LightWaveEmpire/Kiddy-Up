@@ -12,24 +12,24 @@
 
 
 
-  <h1><p style="margin-left: 15px"> Rewards</h1>
-
-<p><a style="margin-left: 15px" href="{% url 'earned_rewards' %}">Manage Earned Rewards</a></p>
-<p><a style="margin-left: 15px" href="{% url 'reward-add' %}">Add a Reward</a></p>
-
+  <h1><p style="color: #D4AC0D; margin-left: 15px"> <u>Rewards</u></h1> </p>
+<ul style="margin-left: 10px">
+<li><a  href="{% url 'earned_rewards' %}">Manage Earned Rewards</a></li>
+<li><a  href="{% url 'reward-add' %}">Add a Reward</a></li>
+</ul>
 
 <table class="table table-bordered">
   <thead>
     <tr>
-      <th>Reward Name</th>
-      <th>Reward Value</th>
-      <th>Action</th>
+      <th style="color: #D4AC0D;">Reward Name</th>  
+      <th style="color: #D4AC0D;">Reward Value</th>
+      <th style="color: #D4AC0D;">Action</th> 
     </tr>
   </thead>
   <tbody>
     {% for reward in object_list %}
       <tr>
-        <td><a href="{% url 'reward' reward.id %}">{{reward.name}}</a></td>
+        <td><a  href="{% url 'reward' reward.id %}">{{reward.name}}</a></td>
         <td>{{ reward.cost }}</td>
         <td><a href="{% url 'reward-update' reward.id%}">Edit</a></td>
       </tr>
