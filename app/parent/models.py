@@ -255,6 +255,9 @@ class Task(models.Model):
         file_name = []
         file_list = {}
 
+        # on my machine this line made the child task images work right
+        print("loading child-friendly images...", file=sys.stderr)
+
         newlist = (task_name.lower().split())
 
         for root, dirs, files in os.walk(r'static/task_images/'):
@@ -289,31 +292,34 @@ class Original_Task(models.Model):
 
     def turn_into_child_task(self):
         # May need to call with self.raw_otask
-        task_details = entity_extraction.extract_entities(self.otask, self.parent.entities)
-        # print(f'\n\nDEBUG Task Creation: {task_details}\n\n', file=sys.stderr)
-        for kid_name in task_details['people']:
-            parent = self.parent
-            try:
-                k = Child.objects.get(parent=parent, name=kid_name)
-                if k is not None:   #if the parent's kid exists
-                    #task_image, status is assigned to default
-                    # print(f'\n\nDEBUG: {k} - If Block', file=sys.stderr)
-                    t = Task(
-                        original_task=self,
-                        parent=self.parent,
-                        child=k,
-                        name=task_details['name'],
-                        description=task_details['description'],
-                        #date=task_details['date'],
-                        date="2020-12-15",
-                        location=task_details['location'],
-                        image=''
-                    )
-                    t.image = image_mapping.get_task_image(t)
-                    t.save()
 
-            except Exception as e:
-                print(f'\n\nDEBUG: Task not created. \n\nError: {e}', file=sys.stderr)
+        # prevents duplicate imports
+        if not self.has_created_task():
+        # if True:
+            task_details = entity_extraction.extract_entities(self.otask, self.parent.entities)
+            # print(f'\n\nDEBUG Task Creation: {task_details}\n\n', file=sys.stderr)
+            for kid_name in task_details['people']:
+                parent = self.parent
+                try:
+                    k = Child.objects.get(parent=parent, name=kid_name)
+                    if k is not None:   #if the parent's kid exists
+                        #task_image, status is assigned to default
+                        # print(f'\n\nDEBUG: {k} - If Block', file=sys.stderr)
+                        t = Task(
+                            original_task=self,
+                            parent=self.parent,
+                            child=k,
+                            name=task_details['name'],
+                            description=task_details['description'],
+                            date=task_details['date'],
+                            location=task_details['location'],
+                            image=''
+                        )
+                        t.image = image_mapping.get_task_image(t)
+                        t.save()
+
+                except Exception as e:
+                    print(f'\n\nDEBUG: Task not created. \n\nError: {e}', file=sys.stderr)
 
 
 class Earned_Reward(models.Model):
