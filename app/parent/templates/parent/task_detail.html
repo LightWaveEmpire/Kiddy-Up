@@ -2,23 +2,39 @@
 {% extends "parent/parent_base.html" %}
 
 {% load has_perms %}
+{% load static %}
 
 {% block title %}Task{% endblock %}
 
 {% block content %}
 
-  <h1>Task</h1>
+<style>
+	p {
+		margin-left: 40%;
+	}
+</style>
 
-<ul>
-<li>Task: {{ task.name }}</li>
-<li>Description: {{ task.description }}
-<li>Points: {{ task.point_value }}</li>
-<li>Image: {{ task.image }}</li>
-<li>Child: {{ task.child }}</li>
-<li><a href="{% url 'task-update' task.id%}">Edit</a></li>
-<li><a href="{% url 'task-delete' task.id%}">Delete</a></li>
-</ul>
+<center>
+	<h1>{{ task.name }}</h1>
+</center>
 
+	<br><br>
+
+	<p><u>Description:</u>	
+		 {{ task.description }}</p>
+
+		<!-- <h4><u>Points</u></h4> --> 
+	<p><u>Points:</u> <i class="fas fa-coins" style="color: #D4AF37"></i> {{ task.point_value }}</p>
+
+	<p><u>Image:</u> {{ task.image }}</p>
+
+	<p><u>Child:</u> {{ task.child }}</p>
+	<br>
+		
+<center>
+	<a href="{% url 'task-update' task.id%}">Edit</a> <br>
+	<a href="{% url 'task-delete' task.id%}">Delete</a>
+</center>
 
 {% endblock %}
 
