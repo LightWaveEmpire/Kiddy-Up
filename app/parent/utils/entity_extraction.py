@@ -185,6 +185,8 @@ def clean_description(task, children):
 
 def clean_title(task, children):
 
+    title = task['name']
+
     for person in task['people']:
         if person in children:
             title = task['name'].replace(person, "").strip()
