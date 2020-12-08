@@ -1,11 +1,11 @@
  {% extends "parent/child_base.html" %} {% load has_perms %} {% block title %} Child Tasks - {{ block.super }} {% endblock %} {% block content %}
 
-<h1>My Tasks</h1>
+<h1 style ="color:purple">My Tasks</h1>
 
 
 <div class="dashboard_container">
     <div class="dashboard_box">
-        <h2 style="width: 343px;">ToDo</h2>
+        <h2 style="width: 343px; color:red">ToDo</h2>
         <div class="row">
             <div class="col-md-12">
                 {% if view.tasks %}

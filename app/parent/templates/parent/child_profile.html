@@ -11,13 +11,13 @@
 
   <h1>{{ view.child.name }}</h1>
 
+
 <ul>
-<li>Age: {{ view.child.age }}</li>
-<li>Avatar: {{ view.child.avatar }}</li>
-<li>Target Reward: {{ view.child.target_reward }}</li>
+<li><p style ="color:orange">Age: {{ view.child.age }}</p></li>
+<li><p style ="color:green">Avatar: {{ view.child.avatar }}</p></li>
+<li><p style ="color:blue">Target Reward: {{ view.child.target_reward }}</p></li>
 <li><a href="{% url 'child-profile-update' view.child.id%}">Edit</a></li>
 {# <li><a href="{% url 'child-delete' child.id %}">Delete</a></li> #}
-
 </ul>
 
 {# {% endfor %} #}
