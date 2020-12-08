@@ -12,33 +12,41 @@ ENT_STRUCTURE = {
     "RACT": []
 }
 
+TASK_STRUCTURE = {
+    'name': "Untitled Task",
+    'description': "",
+    'people': [],
+    'date': "12/02/2021",
+    'location': "no location given"
+}
+
 #NLP = spacy.load('en_core_web_lg')
 NLP = model.load()
 
 DEFAULT_TASKS = [
-    NLP("put away toys"),
-    NLP("feed cat"),
-    NLP("feed dog"),
-    NLP("put laundry in hamper"),
-    NLP("make bed"),
-    NLP("clear table"),
+    NLP("put away 1oys"),
+    NLP("feed the cat"),
+    NLP("feed the dog"),
+    NLP("put laundry in the hamper"),
+    NLP("make the bed"),
+    NLP("clearthe table"),
     NLP("pull weeds"),
-    NLP("water plants"),
+    NLP("water the plants"),
     NLP("put away dishes"),
-    NLP("wash dishes"),
-    NLP("load dishwasher"),
-    NLP("empty dishwasher"),
-    NLP("help set table"),
-    NLP("bring in groceries"),
-    NLP("sort laundry"),
-    NLP("match socks"),
-    NLP("wash cat dishes"),
-    NLP("wash dog dishes"),
-    NLP("sweep floor"),
-    NLP("rake leaves"),
+    NLP("wash the dishes"),
+    NLP("load the dishwasher"),
+    NLP("empty the dishwasher"),
+    NLP("set the table"),
+    NLP("bring in the groceries"),
+    NLP("sort the laundry"),
+    NLP("match the socks"),
+    NLP("wash the cat dishes"),
+    NLP("wash the dog dishes"),
+    NLP("sweep the floor"),
+    NLP("rake the leaves"),
     NLP("clean room"),
-    NLP("put away groceries"),
-    NLP("put away dishes"),
+    NLP("put away the groceries"),
+    NLP("put away the dishes"),
     NLP("vacuum"),
     NLP("wipe table"),
     NLP("put away clothes"),
