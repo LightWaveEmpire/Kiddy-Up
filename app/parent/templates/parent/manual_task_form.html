@@ -1,6 +1,6 @@
  {% extends "parent/parent_base.html" %} {% load has_perms %} {% block title %}Add Tasks - {{ block.super }}{% endblock %} {% block content %}
 
-<h1>Add Task Manually</h1>
+<h1 style=" margin-left: 20px; color:#F26B38;" >Add Task Manually</h1>
 <a href="{% url 'task-add' %}">Add task using a form</a>
 <form method="post">
     {% csrf_token %} {{ form.as_p }}

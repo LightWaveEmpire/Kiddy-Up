@@ -7,11 +7,11 @@
 
 {% block content %}
 
-  <h1>Delete Location</h1>
+  <h1 style="color:#F39C12; margin-left: 10px">Delete Location</h1>
 
 
 <form method="post">{% csrf_token %}
-    <p>Are you sure you want to delete? "{{ object }}"?</p>
+    <p style="color:#F39C12; margin-left: 25px">Are you sure you want to delete the <u style="color:blue;">"{{ object }}"</u> location?</p>
     <input type="submit" value="Confirm">
 </form>
 

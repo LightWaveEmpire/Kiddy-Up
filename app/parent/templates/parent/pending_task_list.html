@@ -1,12 +1,12 @@
  {% extends "parent/parent_base.html" %} {% load has_perms %} {% block title %} Completed Tasks  - {{ block.super }} {% endblock %} {% block content %}
 
 
-<h5><p style="margin-left: 15px">Completed Tasks - Requires Validation</h5>
+<h5><p style="color:#F26B38; margin-left: 15px">Completed Tasks - Requires Validation</h5>
             <div >
                 {% if object_list %}
                 <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
-                        <tr>
+                        <tr style="color:#F26B38;">
                             <th>Event</th>
                             <th>Child</th>
                             <th>Action</th>
@@ -29,7 +29,7 @@
                     </tbody>
                 </table>
                                 {% else %}
-                No current completed tasks to be validated
+               <p style="margin-left: 30px; color:#F26B38;"> No current completed tasks to be validated </p>
                 {% endif %}
             </div>
 
