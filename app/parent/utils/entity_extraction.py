@@ -2,10 +2,12 @@
 from spacy.pipeline import EntityRuler
 import json
 from parent.utils import constants
+import sys
+# import constants
 # from django.conf import settings
 
 
-def extract_entities(otask, entities=None, nlp=None) -> dict:
+def extract_entities(otask, entities=None) -> dict:
     """
     Returns some reference for an image based on the task description
 
@@ -14,25 +16,23 @@ def extract_entities(otask, entities=None, nlp=None) -> dict:
     :return: a reference to an image to use for the child view
 
     """
-    if entities is None:
+    user_ents_raw = entities
+
+    if user_ents_raw is None:
         user_ents_raw = json.dumps(constants.ENT_STRUCTURE)
-    else:
-        user_ents_raw = entities
 
-    task = {}
-    task['name'] = "Untitled Task"
-    task['description'] = ""
-    task['people'] = []
-    task['date'] = "12/02/2021"
-    task['location'] = "no location given"
+    # move to constants?
+    task = json.loads(json.dumps(constants.TASK_STRUCTURE))
+#    task = {}
+#    task['name'] = "Untitled Task"
+#    task['description'] = ""
+#    task['people'] = []
+#    task['date'] = "12/02/2021"
+#    task['location'] = "no location given"
 
-    # Question - Does this need to run each time or can we run it once somehow? Not sure what the delay is on running this line
-    # nlp = settings.NLP
-    if nlp is None:
-        # nlp = spacy.load('en_core_web_lg')
-        nlp = constants.NLP
+    # nlp = spacy.load('en_core_web_lg')
+    nlp = constants.NLP
 
-    #this is not how constants are supposed to work
     ents_ruler = EntityRuler(nlp, phrase_matcher_attr="LOWER", overwrite_ents=True)
     user_ents = json.loads(user_ents_raw)
     remainder = otask
@@ -48,11 +48,11 @@ def extract_entities(otask, entities=None, nlp=None) -> dict:
     try:
         nlp.add_pipe(ents_ruler)
     except ValueError:
-        pass
+        print("Entity Ruler not added: already exists", file=sys.stderr)
 
     doc = nlp(otask)
 
-    task['description'] = str(otask)
+    task['description'] = task['name'] = str(otask)
 
     for ent in doc.ents:
 
@@ -68,91 +68,125 @@ def extract_entities(otask, entities=None, nlp=None) -> dict:
         if ent.label_ == "SCHOOL":
             task['location'] = ent.text
 
-        # this is shoddy and needs tweaking
-        if ent.label_ == "GPE":
-            task['location'] = ent.text
-
-        if ent.label_ == "RACT":
-            task['name'] = ent.text
+        if ent.label_ in ["GPE", "LOC", "ORG, FAC"]:
+            task = extract_location(ent, task)
 
         if ent.label_ == "DATE":
-            task['date'] = ent.text
+            task = extract_date(ent, task)
 
-    for person in task['people']:
-        if person in user_ents['CHILD']:
-            remainder = remainder.replace(person, "").strip()
+#    for person in task['people']:
+#        if person in user_ents['CHILD']:
+#            desc = desc.replace(person, "").strip()
+#            remainder = remainder.replace(person, "").strip()
 
-    task['description'] = remainder
+    task['description'] = clean_description(task, user_ents["CHILD"])
+#    print(task['name'], "84", file=sys.stderr)
+    title = clean_title(task, user_ents["CHILD"])
+#    print(task['name'], "86", file=sys.stderr)
 
     task['name'] = reportClosest(
         findClosest(constants.DEFAULT_TASKS, remainder,
                     findClosest(user_ents['RACT'], remainder))
     )
 
-    if task['name'] is None:
-        try:
-            task['name'] = remainder.title()[0:17]
-            if len(remainder) > 18:
-                task['name'] += "..."
-        except IndexError:
-            task['name'] = remainder.title()
-#    if task['name'] == "Untitled Task":
-#        for ent in doc.ents:
-#
-#            headOfPrep = ent.root.head.head
-#            referencePoint = headOfPrep
-#
-#            if headOfPrep.pos_ == "VERB":
-#                for child in headOfPrep.children:
-#                    if child.dep_ == "dobj":
-#                        referencePoint = child
-#
-#            if referencePoint is headOfPrep:
-#                for token in headOfPrep.sent:
-#                    if token.dep_ == "nsubj":
-#                        referencePoint = token
-#
-#            for chunk in referencePoint.sent.as_doc().noun_chunks:
-#                if chunk.root.text == referencePoint.text:
-#                    # print(chunk.text, ent.text)
-#                    task['name'] = (chunk.text)
+    if task['name'] == "Untitled Task":
+        task['name'] = title[0:17]
 
-    print("/n", task, "\n", flush=True)
+        if task['name'].islower():
+            task['name'] = title.title()[0:17]
+        if len(title) > 17:
+            task['name'] += "..."
+
+#    print(task['name'], "101", file=sys.stderr)
     return task
 
 
 def reportClosest(current_top):
+    #    print("\n", current_top, "\n", flush=True)
     try:
         return current_top[0]
     except TypeError:
         return None
 
 
-def findClosest(list_of_golds, new_task, current_top=("", 0), nlp=None):
+def findClosest(list_of_golds, new_task, current_top=("Untitled Task", 0), strict=False):
 
-    if nlp is None:
-        # nlp = spacy.load('en_core_web_lg')
-        nlp = constants.NLP
+    nlp = constants.NLP
+    threshold = .86 if strict else .8
 
+    # parses new_task if necessary
     try:
         new_task.is_parsed
     except AttributeError:
         temp = nlp(new_task)
         new_task = temp
 
-    task = " "
-    score = 0
+    task, score = ("", 0)
     if current_top is not None:
-        if current_top[1] >= 0 and current_top[1] < 1:
+        if current_top[1] >= 0 and current_top[1] <= 1:
             task = current_top[0]
             score = current_top[1]
 
     for gold_task in list_of_golds:
+        try:
+            gold_task.is_parsed
+        except AttributeError:
+            temp = nlp(gold_task)
+            gold_task = temp
         sim = new_task.similarity(gold_task)
-        # print(gold_task, ": ", sim, file=sys.stderr)
-        if sim > score:
+#        print(gold_task, ": ", sim, file=sys.stderr)
+        if strict and sim < threshold:
+            pass
+        elif sim > score:
             score = sim
             task = gold_task
-    if score > .8:
-        return task, sim
-    return None
+    if score > threshold:
+        current_top = (task, score)
+    return current_top
+
+
+def extract_location(entity, task):
+    if entity.label_ == "GPE" or entity.label_ == "LOC":
+        task['location'] = entity.text
+        #print(ent.root.text, ent.root.dep_)
+        task['name'] = task['name'].replace(entity.text, "").strip()
+        task['name'] = task['name'].replace(entity.root.head.text, "", 1).strip()
+
+    if entity.label_ == "ORG" or entity.label_ == "FAC":
+        if entity.root.head.text in ["at", "in", "on"]:
+            if task['location'] == "no location given":
+                task['location'] = entity.text
+                task['name'] = task['name'].replace(entity.text, "").strip()
+                task['name'] = task['name'].replace(entity.root.head.text, "", 1).strip()
+
+    return (task)
+
+
+def extract_date(entity, task):
+    task['date'] = entity.text
+    # DEBUG: use to dummy out issues reading date.
+    task['date'] = constants.TASK_STRUCTURE['date']
+    task['name'] = task['name'].replace(entity.text, "").strip()
+    task['name'] = task['name'].replace(entity.root.head.text, "", 1).strip()
+
+    return (task)
+
+
+def clean_description(task, children):
+
+    desc = task['description']
+
+    for person in task['people']:
+        if person in children:
+            desc = desc.replace(person, "").strip()
+
+    return desc
+
+
+def clean_title(task, children):
+
+    for person in task['people']:
+        if person in children:
+            title = task['name'].replace(person, "").strip()
+
+    return title
