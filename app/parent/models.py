@@ -250,6 +250,15 @@ class Task(models.Model):
     point_value = models.IntegerField("Point Value", default=1)
     location = models.CharField("Location", max_length=40)
 
+    def as_p(self):
+        "Returns this form rendered as HTML <p>s."
+        return self._html_output(
+            normal_row = u'<p style=" margin-left: 15px" %(html_class_attr)s>  %(label)s%(field)s</p> <p style=" margin-left: 37px;"%(help_text)s</p> <br/>',
+            error_row = u'%s',
+            row_ender = '</p>',
+            help_text_html = u' <span style=" opacity: 0.5;" class="helptext">%s</span>',
+            errors_on_separate_row = True)
+        
     class Meta:
         db_table = 'task'
 
