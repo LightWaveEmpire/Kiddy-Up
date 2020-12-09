@@ -180,7 +180,7 @@ class Child(models.Model):
     is_authenticated = models.BooleanField(default=False)
     target_reward = models.ForeignKey('Reward', on_delete=models.SET_NULL, blank=True, null=True)
     age = models.IntegerField("Age")
-        comp_level = models.IntegerField(
+    comp_level = models.IntegerField(
         "Comprehension Level",
         choices=COMP_CHOICES,
         default=ONE
