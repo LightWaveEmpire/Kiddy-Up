@@ -96,11 +96,14 @@ class TaskCreateForm(forms.ModelForm):
         fields = ['name', 'description', 'status', 'point_value', 'child', 'date', 'time']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
+            'time': forms.TimeInput(attrs={'type': 'time', 'step': "60"}),
         }
 
     def __init__(self, user, *args, **kwargs):
 
         super(TaskCreateForm, self).__init__(*args, **kwargs)
+        self.fields['time'].format = '%H:%M'
+        print(self.fields['time'].format)
         if user:
             self.fields['child'].queryset = Child.objects.filter(parent__user=user)
         else:
@@ -114,6 +117,7 @@ class TaskUpdateForm(forms.ModelForm):
         fields = ['name', 'description', 'status', 'point_value', 'child', 'date', 'time']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
+            'time': forms.TimeInput(attrs={'type': 'time', 'step': "60"})
         }
 
     def __init__(self, user, *args, **kwargs):
@@ -133,3 +137,4 @@ class ChildLoginForm(forms.ModelForm):
 
     def __init__(self, user=None, *args, **kwargs):
         super(ChildLoginForm, self).__init__(*args, **kwargs)
+        self.fields['pin'].attrs.update({'autocomplete': 'false'})
