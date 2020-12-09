@@ -2061,12 +2061,12 @@ class ChildLoginView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateVi
         data['parent'] = parent = Parent.objects.get(user = self.request.user)
         data['children'] = Child.objects.filter(parent=parent)
         data['active_child'] = parent.active_child
-        print(f'\n\nDEBUG: Parent = {parent}\n\n', file=sys.stderr)
-        print(f'\n\nDEBUG: Active Child = {parent.active_child}\n\n', file=sys.stderr)
+        # print(f'\n\nDEBUG: Parent = {parent}\n\n', file=sys.stderr)
+        # print(f'\n\nDEBUG: Active Child = {parent.active_child}\n\n', file=sys.stderr)
         if parent.active_child:
             child = parent.active_child
             data['pin'] = pin = child.pin
-            print(f'\n\nDEBUG: PIN = {pin}\n\n', file=sys.stderr)
+            # print(f'\n\nDEBUG: PIN = {pin}\n\n', file=sys.stderr)
         return data
 
 
@@ -2133,22 +2133,22 @@ class ChildLoginView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateVi
 
 def SetActiveChildView(request, pk):
     parent = Parent.objects.get(user = request.user)
-    print(f'\n\nDEBUG: Parent = {parent}\n\n', file=sys.stderr)
+    # print(f'\n\nDEBUG: Parent = {parent}\n\n', file=sys.stderr)
     child = Child.objects.get(id = pk)
-    print(f'\n\nDEBUG: Child = {child}\n\n', file=sys.stderr)
+    # print(f'\n\nDEBUG: Child = {child}\n\n', file=sys.stderr)
     parent.active_child = child
-    print(f'\n\nDEBUG: Active Child = {parent.active_child}\n\n', file=sys.stderr)
+    # print(f'\n\nDEBUG: Active Child = {parent.active_child}\n\n', file=sys.stderr)
     parent.save()
     return redirect('child_login')
 
 
 def CheckPinView(request, pk):
     parent = Parent.objects.get(user = request.user)
-    print(f'\n\nDEBUG: Parent = {parent}\n\n', file=sys.stderr)
+    # print(f'\n\nDEBUG: Parent = {parent}\n\n', file=sys.stderr)
     child = Child.objects.get(id = pk)
-    print(f'\n\nDEBUG: Child = {child}\n\n', file=sys.stderr)
+    # print(f'\n\nDEBUG: Child = {child}\n\n', file=sys.stderr)
     parent.active_child = child
-    print(f'\n\nDEBUG: Active Child = {parent.active_child}\n\n', file=sys.stderr)
+    # print(f'\n\nDEBUG: Active Child = {parent.active_child}\n\n', file=sys.stderr)
     parent.save()
     return redirect('child_login')
 
