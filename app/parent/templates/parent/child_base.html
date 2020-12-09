@@ -10,10 +10,10 @@
 <ul class="nav navbar-nav flex-nowrap ml-auto">
     {% if user.is_authenticated %}
     {% if view.child.is_authenticated %}
-    <li class="nav-item"><a class="nav-link" style=" color:#F9E104" href="{% url 'child-dashboard'%}"><i class="fas fa-tachometer-alt"></i>&nbsp;<span>Dashboard</span></a></li>
-    <li class="nav-item"><a class="nav-link" style=" color:#35D461" href="{% url 'child-profile' %}"><i class="fas fa-user"></i>&nbsp;<span>Profile</span></a></li>
-    <li class="nav-item"><a class="nav-link" style=" color:#F99D07" href="{%  url 'child-tasks'%}"><i class="fas fa-table"></i>&nbsp;<span>My Tasks</span></a></li>
-    <li class="nav-item"><a class="nav-link" style=" color:#882FF6" href="{% url 'child_earned_rewards'%}"><i class="fas fa-coins"></i>&nbsp;<span>My Rewards</span></a></li>
+    <li class="nav-item"><a class="nav-link" style=" color:#2F9599" href="{% url 'child-dashboard'%}"><i class="fas fa-tachometer-alt"></i>&nbsp;<span>Dashboard</span></a></li>
+    <li class="nav-item"><a class="nav-link" style=" color:#27AE60" href="{% url 'child-profile' %}"><i class="fas fa-user"></i>&nbsp;<span>Profile</span></a></li>
+    <li class="nav-item"><a class="nav-link" style=" color:#F26B38" href="{%  url 'child-tasks'%}"><i class="fas fa-table"></i>&nbsp;<span>My Tasks</span></a></li>
+    <li class="nav-item"><a class="nav-link" style=" color:#D4AC0D" href="{% url 'child_earned_rewards'%}"><i class="fas fa-coins"></i>&nbsp;<span>My Rewards</span></a></li>
     {% else %}
     <li class="nav-item"><a class="nav-link" href="{% url 'logout'%}"><i class="far fa-user-circle"></i><span>Back to Parent Dashboard</span></a></li>
     {% endif %}
