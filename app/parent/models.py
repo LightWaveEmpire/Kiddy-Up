@@ -328,7 +328,7 @@ class Original_Task(models.Model):
                         t.save()
 
                 except Exception as e:
-                    print(f'\n\nDEBUG: Task not created. \n\nError: {e}\n\nDate: {task_details["date"]}', file=sys.stderr)
+                    print(f'\n\nERROR: Task {task_details["name"]} not created.  \n{e}\n', file=sys.stderr)
 
 
 class Earned_Reward(models.Model):

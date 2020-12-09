@@ -99,6 +99,8 @@ def get_list_of_events(service, n):
         # Date and time are picked up better when we just pass the date time string as it is received from google
         # string = f'{summary} . {description} . {location} . from {start_date} . to {end_date}.'
         string = f'{summary} . {description} . {location} . from {start_string_date} {start_string_time}. to {end_string_date} {end_string_time}.'
+        if settings.DEBUG:
+            print(f'\n\nDEBUG: {string}\n\n', file=sys.stderr)
         listOfEvents.append((string, event))
     # return a tuple of event
     return listOfEvents
@@ -117,7 +119,8 @@ def get_list_of_tasks(service, n):
     for task_list in task_lists:
         task_list_name = task_list["title"]
         task_list_id = task_list["id"]
-        print(f'{task_list["title"]} - {task_list["id"]}')
+        if settings.DEBUG:
+            print(f'{task_list["title"]} - {task_list["id"]}')
         """
         List Method - list all tasks from tasklist
         """
@@ -126,18 +129,21 @@ def get_list_of_tasks(service, n):
         list_of_tasks = task_results.get('items')
         if list_of_tasks is not None:
             for task in list_of_tasks:
+
                 title = description = due = ''
-                print(f'\n\nDEBUG: {task}\n\n', file=sys.stderr)
+                if settings.DEBUG:
+                    print(f'\n\nDEBUG: {task}\n\n', file=sys.stderr)
                 if 'title' in task:
                     title = task['title']
                 if 'due' in task:
                     due = task['due']
                     due_date = datetime.strftime(dtparse(due), format=out_date_format)
-                    due_time = datetime.strftime(dtparse(due), format=out_time_format)
                 if 'description' in task:
                     description = task['description']
 
-                string = f'{title} . {description} . {due_date}. {due_time}'
+                string = f'{title} . {description} . {due_date}'
+                if settings.DEBUG:
+                    print(f'\n\nDEBUG: {string}\n\n', file=sys.stderr)
                 listOfTasks.append((string,task))
                 # # return a tuple of task
     return listOfTasks
