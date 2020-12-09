@@ -320,6 +320,7 @@ class Original_Task(models.Model):
                             name=task_details['name'],
                             description=task_details['description'],
                             date=task_details['date'],
+                            # time=task_details['time'],
                             location=task_details['location'],
                             image=''
                         )
