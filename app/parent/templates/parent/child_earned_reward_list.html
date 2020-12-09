@@ -9,7 +9,7 @@
 
 {{ block.super }}
 
-  <h1 style="color:#ebbc02">My Earned Rewards</h1>
+  <h1 style="color:#ebbc02; margin-left:10px">My Earned Rewards</h1>
 
 <table class="table table-bordered">
   <thead>
@@ -20,7 +20,7 @@
   <tbody>
     {% for earned_reward in object_list %}
       <tr>
-        <td>{{ earned_reward.reward }}</td>
+        <td style="color:#ebbc02;">{{ earned_reward.reward }}</td>
       </tr>
     {% endfor %}
   </tbody>
