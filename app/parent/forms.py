@@ -93,7 +93,7 @@ class TaskCreateForm(forms.ModelForm):
     class Meta:
 
         model = Task
-        fields = ['name', 'description', 'status', 'point_value', 'child', 'date']
+        fields = ['name', 'description', 'status', 'point_value', 'child', 'date', 'time']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
         }
@@ -111,7 +111,7 @@ class TaskUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Task
-        fields = ['name', 'description', 'status', 'point_value', 'child', 'date']
+        fields = ['name', 'description', 'status', 'point_value', 'child', 'date', 'time']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
         }

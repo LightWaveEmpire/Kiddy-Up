@@ -20,17 +20,19 @@
 
 	<br><br>
 
-	<p><u>Description:</u>	
+	<p><u>Description:</u>
 		 {{ task.description }}</p>
+	<p><u>Due:</u>
+		 {{ task.date }} - {{ task.time }}</p>
 
-		<!-- <h4><u>Points</u></h4> --> 
+		<!-- <h4><u>Points</u></h4> -->
 	<p><u>Points:</u> <i class="fas fa-coins" style="color: #D4AF37"></i> {{ task.point_value }}</p>
 
 	<p><u>Image:</u> {{ task.image }}</p>
 
 	<p><u>Child:</u> {{ task.child }}</p>
 	<br>
-		
+
 <center>
 	<a href="{% url 'task-update' task.id%}">Edit</a> <br>
 	<a href="{% url 'task-delete' task.id%}">Delete</a>

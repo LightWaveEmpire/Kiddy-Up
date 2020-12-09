@@ -58,7 +58,8 @@ and puts them into a list of strings to be stored into DB.
 def get_list_of_events(service, n):
     now = datetime.now(timezone(settings.TIME_ZONE)).isoformat()
     # out_time_format = "%I:%M%p on %A, %B %d"
-    out_time_format = "%Y-%m-%d %H:%M"
+    out_date_format = "%Y-%m-%d"
+    out_time_format = "%H:%M"
     events_result = service.events().list(
         calendarId='primary',
         timeMin=now,
@@ -78,14 +79,16 @@ def get_list_of_events(service, n):
             if 'dateTime' in event['start']:
                 start_date = event['start']['dateTime']
         #formatted as "05:00PM on Friday, December 15"
-        start_string = datetime.strftime(dtparse(start_date), format=out_time_format)
+        start_string_date = datetime.strftime(dtparse(start_date), format=out_date_format)
+        start_string_time = datetime.strftime(dtparse(start_date), format=out_time_format)
         if 'end' in event:
             if 'date' in event['end']:
                 end_date = event['end']['date']
             if 'dateTime' in event['end']:
                 end_date = event['end']['dateTime']
         #formatted as "05:00PM on Friday, December 15"
-        end_string = datetime.strftime(dtparse(end_date), format=out_time_format)
+        end_string_date = datetime.strftime(dtparse(end_date), format=out_date_format)
+        end_string_time = datetime.strftime(dtparse(end_date), format=out_time_format)
         if 'location' in event:
             location = event['location']
         if 'summary' in event:
@@ -95,15 +98,15 @@ def get_list_of_events(service, n):
 
         # Date and time are picked up better when we just pass the date time string as it is received from google
         # string = f'{summary} . {description} . {location} . from {start_date} . to {end_date}.'
-        string = f'{summary} . {description} . {location} . from {start_string} . to {end_string}.'
+        string = f'{summary} . {description} . {location} . from {start_string_date} {start_string_time}. to {end_string_date} {end_string_time}.'
         listOfEvents.append((string, event))
     # return a tuple of event
     return listOfEvents
 
 def get_list_of_tasks(service, n):
     now = datetime.now(timezone(settings.TIME_ZONE)).isoformat()
-
-    out_time_format = "%Y-%m-%d %H:%M"
+    out_date_format = "%Y-%m-%d"
+    out_time_format = "%H:%M"
     # out_time_format = "%I:%M%p on %A, %B %d"
 
     tasks_result = service.tasklists().list(maxResults=100).execute()
@@ -121,18 +124,20 @@ def get_list_of_tasks(service, n):
         task_results = service.tasks().list(
             tasklist=task_list_id).execute()
         list_of_tasks = task_results.get('items')
-        for task in list_of_tasks:
-            title = description = due = ''
-            print(f'\n\nDEBUG: {task}\n\n', file=sys.stderr)
-            if 'title' in task:
-                title = task['title']
-            if 'due' in task:
-                due = task['due']
-                due_formatted = datetime.strftime(dtparse(due), format=out_time_format)
-            if 'description' in task:
-                description = task['description']
+        if list_of_tasks is not None:
+            for task in list_of_tasks:
+                title = description = due = ''
+                print(f'\n\nDEBUG: {task}\n\n', file=sys.stderr)
+                if 'title' in task:
+                    title = task['title']
+                if 'due' in task:
+                    due = task['due']
+                    due_date = datetime.strftime(dtparse(due), format=out_date_format)
+                    due_time = datetime.strftime(dtparse(due), format=out_time_format)
+                if 'description' in task:
+                    description = task['description']
 
-            string = f'{title} . {description} . {due_formatted}.'
-            listOfTasks.append((string,task))
-            # # return a tuple of task
+                string = f'{title} . {description} . {due_date}. {due_time}'
+                listOfTasks.append((string,task))
+                # # return a tuple of task
     return listOfTasks

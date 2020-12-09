@@ -27,10 +27,13 @@
 	<br>
 	<p>{{ task.description }}</p>
 	<br>
-	
+	<br>
+	<p>Due by {{ task.date }} - {{ task.time }}</p>
+	<br>
+
 	<h2><i class="fas fa-coins" style="color: #D4AF37"></i> {{ task.point_value }}</h2>
 	<br><br>
-	
+
 	<img class="border rounded-circle" style="display: inline-block;" src="/static/thumbs.png" alt="Image" height="50px" width="50px">
 	<h3 style="display: inline-block;"><a href="{% url 'task-complete' task.id%}">Complete</a></h3>
 	<img class="border rounded-circle" style="display: inline-block;" src="/static/thumbs.png" alt="Image" height="50px" width="50px">
@@ -45,7 +48,7 @@
 <li>Image: {{ task.image }}</li>
 <li>Child: {{ task.child }}</li>
 <li><a href="{% url 'task-complete' task.id%}">Complete</a></li>
-</ul> 
+</ul>
 
 <i class="fal fa-coin" style="color: #D4AF37"></i>
 <i class="fas fa-coins" style="color: #D4AF37">

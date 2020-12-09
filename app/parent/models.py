@@ -241,6 +241,7 @@ class Task(models.Model):
     # Will need to change to DateTimeField
 #    date = models.DateTimeField("Task Date")
     date = models.DateField("Task Date", default=timezone.now())
+    time = models.TimeField("Task Time", null=True, default=None)
     point_value = models.IntegerField("Point Value", default=1)
     location = models.CharField("Location", max_length=40)
 
@@ -326,7 +327,7 @@ class Original_Task(models.Model):
                         t.save()
 
                 except Exception as e:
-                    print(f'\n\nDEBUG: Task not created. \n\nError: {e}', file=sys.stderr)
+                    print(f'\n\nDEBUG: Task not created. \n\nError: {e}\n\nDate: {task_details["date"]}', file=sys.stderr)
 
 
 class Earned_Reward(models.Model):
