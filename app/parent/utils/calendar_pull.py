@@ -62,7 +62,7 @@ def get_list_of_events(service, n):
 
     for event in events:
         summary = location = description = end_date = start_date = ""
-        print(f'\n\nDEBUG: {event}\n\n', file=sys.stderr)
+        # print(f'\n\nDEBUG: {event}\n\n', file=sys.stderr)
         if 'start' in event:
             if 'date' in event['start']:
                 start_date = event['start']['date']
