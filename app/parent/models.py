@@ -1,38 +1,26 @@
-from django.db import models
+from django.db import models, IntegrityError # noqa: F401
 from django.contrib.auth.models import User #, AbstractUser, UserManager
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model # noqa: F401
 from django.urls import reverse
+from django.utils import timezone
 from parent.utils import entity_extraction, image_mapping
-
-from collections import defaultdict
-
+from collections import defaultdict # noqa: F401
 import os
 import sys
-from array import *
-import fnmatch
-
+from array import * # noqa: F401, F403
+import fnmatch # noqa: F401
 import json
 
-
-# This list will be read into the parent.entities json structure for RACT on first call
-
-# User = settings.AUTH_USER_MODEL
-
-# class User(AbstractUser):
-#     is_parent = models.BooleanField(default=False)
-#     is_child = models.BooleanField(default=False)
 
 class Parent(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     active_child = models.ForeignKey('Child', on_delete=models.SET_NULL, blank=True, null=True, related_name='logged_in_child')
     zip_code = models.CharField(
         "ZIP / Postal code",
-        max_length=12,
+        max_length=5,
         default=23505
     )
-    # reevaluate field type on info re: acct storage
-    # still need to work on things, not sure how this will work out
-    # Will likely need changes when we get to it
+
     account_creds = models.JSONField(blank=True, null=True)
     entities = models.JSONField(blank=True, null=True)
 
@@ -173,7 +161,6 @@ class Child(models.Model):
         (TWO, "Older Child")
     ]
 
-
     # user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='child')
     parent = models.ForeignKey(Parent, on_delete=models.CASCADE, related_name='parent')
     name = models.CharField("Child Name", max_length=20)
@@ -188,7 +175,7 @@ class Child(models.Model):
     owned_rewards = models.JSONField(blank=True, null=True)
     avatar = models.ImageField("Avatar", upload_to='avatars', default='default.jpg')
     current_points = models.IntegerField("Point Balance", default=0)
-    pin = models.CharField(max_length=6, default='123')
+    pin = models.CharField(max_length=6)
 
     class Meta:
         db_table = 'child'
@@ -199,7 +186,7 @@ class Child(models.Model):
             models.UniqueConstraint(fields=['parent', 'name'], name='unique_sibling')#,
 
             # ensures age of child is between 5-12, inclusive
-            #models.CheckConstraint(check=models.Q(age__range=(5, 12)), name='age_5_12')
+            # models.CheckConstraint(check=models.Q(age__range=(5, 12)), name='age_5_12')
         ]
 
     def authenticate(self, pin):
@@ -214,6 +201,12 @@ class Child(models.Model):
 
     def get_absolute_url(self):
         return reverse('child', kwargs={'pk': self.pk})
+
+    def save(self, *args, **kwargs):
+        try:
+            super().save(*args, **kwargs)  # Call the "real" save() method.
+        except IntegrityError:
+            print("That doesn't work.", flush=True, file=sys.stderr)
 
 
 # We will still need location added to Task model
@@ -246,19 +239,11 @@ class Task(models.Model):
     image = models.TextField("Task Image", default='task_images/default_task_image.jpg')
 
     # Will need to change to DateTimeField
-    date = models.DateTimeField("Task Date", )
+#    date = models.DateTimeField("Task Date")
+    date = models.DateField("Task Date", default=timezone.now())
     point_value = models.IntegerField("Point Value", default=1)
     location = models.CharField("Location", max_length=40)
 
-    def as_p(self):
-        "Returns this form rendered as HTML <p>s."
-        return self._html_output(
-            normal_row = u'<p style=" margin-left: 15px" %(html_class_attr)s>  %(label)s%(field)s</p> <p style=" margin-left: 37px;"%(help_text)s</p> <br/>',
-            error_row = u'%s',
-            row_ender = '</p>',
-            help_text_html = u' <span style=" opacity: 0.5;" class="helptext">%s</span>',
-            errors_on_separate_row = True)
-        
     class Meta:
         db_table = 'task'
 
@@ -317,7 +302,7 @@ class Original_Task(models.Model):
 
         # prevents duplicate imports
         if not self.has_created_task():
-        # if True:
+        # if True: # noqa: E115
             task_details = entity_extraction.extract_entities(self.otask, self.parent.entities)
             # print(f'\n\nDEBUG Task Creation: {task_details}\n\n', file=sys.stderr)
             for kid_name in task_details['people']:
