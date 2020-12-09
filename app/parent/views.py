@@ -2300,6 +2300,11 @@ class ChildUpdateProfileView(LoginRequiredMixin, UserPassesTestMixin, generic.Up
     template_name = "parent/child_update_profile_form.html"
     success_url = reverse_lazy('child-dashboard')
 
+    def get_form_kwargs(self):
+        kwargs = super(ChildUpdateProfileView, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
+
 
     def child(self):
         parent = Parent.objects.get(user = self.request.user)
