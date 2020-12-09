@@ -138,10 +138,11 @@ def get_list_of_tasks(service, n):
                 if 'due' in task:
                     due = task['due']
                     due_date = datetime.strftime(dtparse(due), format=out_date_format)
+                    due_time = datetime.strftime(dtparse(due), format=out_time_format)
                 if 'description' in task:
                     description = task['description']
 
-                string = f'{title} . {description} . {due_date}'
+                string = f'{title} . {description} . {due_date} {due_time}'
                 if settings.DEBUG:
                     print(f'\n\nDEBUG: {string}\n\n', file=sys.stderr)
                 listOfTasks.append((string,task))

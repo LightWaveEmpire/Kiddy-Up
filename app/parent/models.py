@@ -240,7 +240,7 @@ class Task(models.Model):
 
     # Will need to change to DateTimeField
 #    date = models.DateTimeField("Task Date")
-    date = models.DateField("Task Date", default=timezone.now())
+    date = models.DateField("Task Date", default=timezone.now)
     time = models.TimeField("Task Time", null=True, default=None)
     point_value = models.IntegerField("Point Value", default=1)
     location = models.CharField("Location", max_length=40)
@@ -305,6 +305,13 @@ class Original_Task(models.Model):
         if not self.has_created_task():
         # if True: # noqa: E115
             task_details = entity_extraction.extract_entities(self.otask, self.parent.entities)
+
+            # if time does end up getting defined by spacy, set it... otherwise set to null
+            if 'time' in task_details:
+                time=task_details['time']
+            else:
+                time = None
+
             # print(f'\n\nDEBUG Task Creation: {task_details}\n\n', file=sys.stderr)
             for kid_name in task_details['people']:
                 parent = self.parent
@@ -320,7 +327,7 @@ class Original_Task(models.Model):
                             name=task_details['name'],
                             description=task_details['description'],
                             date=task_details['date'],
-                            # time=task_details['time'],
+                            time=time,
                             location=task_details['location'],
                             image=''
                         )
