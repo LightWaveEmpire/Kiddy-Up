@@ -6,7 +6,7 @@ import sys
 from dateutil import parser as dupr
 
 
-def extract_entities(otask, entities=None) -> dict:
+def extract_entities(otask, entities=None, debug=False) -> dict:
     """
     Returns some reference for an image based on the task description
 
@@ -47,7 +47,8 @@ def extract_entities(otask, entities=None) -> dict:
     task['description'] = task['name'] = str(otask)
 
     for ent in doc.ents:
-        # print(ent, ent.label_, file=sys.stderr)
+        if debug:
+            print(ent, ent.label_, file=sys.stderr)
 
         if ent.label_ == "CHILD":
             task['people'].append(ent.text)
@@ -103,7 +104,7 @@ def reportClosest(current_top):
         return None
 
 
-def findClosest(list_of_golds, new_task, current_top=("Untitled Task", 0), strict=False):
+def findClosest(list_of_golds, new_task, current_top=("Untitled Task", 0), strict=False, debug=False):
 
     nlp = constants.NLP
     threshold = .86 if strict else .8
@@ -128,7 +129,8 @@ def findClosest(list_of_golds, new_task, current_top=("Untitled Task", 0), stric
             temp = nlp(gold_task)
             gold_task = temp
         sim = new_task.similarity(gold_task)
-#        print(gold_task, ": ", sim, file=sys.stderr)
+        if debug:
+            print(gold_task, ": ", sim, file=sys.stderr, flush=True)
         if strict and sim < threshold:
             pass
         elif sim > score:
@@ -144,14 +146,16 @@ def extract_location(entity, task):
         task['location'] = entity.text
         #print(ent.root.text, ent.root.dep_)
         task['name'] = task['name'].replace(entity.text, "").strip()
-        task['name'] = task['name'].replace(entity.root.head.text, "", 1).strip()
+        if entity.root.head.pos_ == "ADP":
+            task['name'] = task['name'].replace(entity.root.head.text, "", 1).strip()
 
     if entity.label_ == "ORG" or entity.label_ == "FAC":
         if entity.root.head.text in ["at", "in", "on"]:
             if task['location'] == "no location given":
                 task['location'] = entity.text
                 task['name'] = task['name'].replace(entity.text, "").strip()
-                task['name'] = task['name'].replace(entity.root.head.text, "", 1).strip()
+                if entity.root.head.pos_ == "ADP":
+                    task['name'] = task['name'].replace(entity.root.head.text, "", 1).strip()
 
     return (task)
 
@@ -161,7 +165,8 @@ def extract_date(entity, task):
     # DEBUG: use to dummy out issues reading date.
     # task['date'] = constants.TASK_STRUCTURE['date']
     task['name'] = task['name'].replace(entity.text, "").strip()
-    task['name'] = task['name'].replace(entity.root.head.text, "", 1).strip()
+    if entity.root.head.pos_ == "ADP":
+        task['name'] = task['name'].replace(entity.root.head.text, "", 1).strip()
 
     return (task)
 
