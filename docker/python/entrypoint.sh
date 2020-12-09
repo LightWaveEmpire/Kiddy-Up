@@ -29,9 +29,17 @@ python manage.py makemigrations
 python manage.py makemigrations parent
 python manage.py migrate
 
-echo "Setting superuser"
+echo "Setting superuser..."
 
 python manage.py shell -c "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'password')"
 
+# ----------- BJD ------------------
+echo "Creating Bethany's test users..."
+python manage.py shell -c "from django.contrib.auth.models import User; User.objects.create_user('803box', '803box@gmail.com', 'AllCats1!')"
+
+python manage.py shell -c "from django.contrib.auth.models import User; User.objects.create_user('bdeme004', 'bdeme004@odu.edu', 'AllCats1!')"
+
+echo "Assigning children to test users..."
+python manage.py shell -c "from django.core import management; from django.core.management.commands import loaddata;management.call_command('loaddata', 'thedata.json', verbosity=0)"
 
 exec "$@"
