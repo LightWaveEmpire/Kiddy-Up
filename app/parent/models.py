@@ -2,6 +2,7 @@ from django.db import models, IntegrityError # noqa: F401
 from django.contrib.auth.models import User #, AbstractUser, UserManager
 from django.contrib.auth import get_user_model # noqa: F401
 from django.urls import reverse
+from django.utils import timezone
 from parent.utils import entity_extraction, image_mapping
 from collections import defaultdict # noqa: F401
 import os
@@ -239,7 +240,7 @@ class Task(models.Model):
 
     # Will need to change to DateTimeField
 #    date = models.DateTimeField("Task Date")
-    date = models.DateField("Task Date")
+    date = models.DateField("Task Date", default=timezone.now())
     point_value = models.IntegerField("Point Value", default=1)
     location = models.CharField("Location", max_length=40)
 
