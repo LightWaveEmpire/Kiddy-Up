@@ -10,7 +10,7 @@ from .permissions import is_in_group_parent
 #from .models import Child, Task, Reward, Parent, Original_Task
 from django.views import generic
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from parent.forms import ParentSignUpForm, ChildSignUpForm, ChildUpdateForm, TaskUpdateForm, ChildUpdateProfileForm, ChildLoginForm, UpdateProfileForm
+from parent.forms import ParentSignUpForm, ChildSignUpForm, ChildUpdateForm, TaskCreateForm, TaskUpdateForm, ChildUpdateProfileForm, ChildLoginForm, UpdateProfileForm
 from parent.models import Child, Task, Reward, Parent, Original_Task, Earned_Reward, Location
 from parent.utils import calendar_pull, task_factory, reward_system
 from django.core.paginator import Paginator
@@ -69,8 +69,6 @@ Views to authenticate with Google and pull events and tasks
 # after a successful login.
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 REDIRECT_URI = 'http://localhost:8080/google_oauth/callback/'
-# REDIRECT_URI = 'https://411silverf20.cs.odu.edu/google_oauth/callback/'
-
 
 # Authorization scopes required
 SCOPES = [
@@ -122,10 +120,8 @@ def CallbackView(request):
 @user_passes_test(is_in_group_parent)
 def pull_tasks(request):
     try:
-        cal_service = calendar_pull.login_calendar(request.user)
-        list_of_events = calendar_pull.get_list_of_events(cal_service, 100)
-        task_service = calendar_pull.login_task(request.user)
-        list_of_tasks = calendar_pull.get_list_of_tasks(task_service, 100)
+        service = calendar_pull.login_calendar(request.user)
+        list_of_events = calendar_pull.get_list_of_events(service, 100)
         # for event, json_event in list_of_events:
         # print(f'\n\nDEBUG: {event}\n\n{json_event}\n\n', file=sys.stderr)
     except:
@@ -135,7 +131,6 @@ def pull_tasks(request):
     parent = Parent.objects.get(user=request.user)
 
     task_factory.create_otasks_from_list(parent, list_of_events)
-    task_factory.create_otasks_from_list(parent, list_of_tasks)
 
     children = Child.objects.filter(parent=parent)
     locations = Location.objects.filter(parent=parent)
@@ -908,6 +903,9 @@ class Original_TaskCreate(LoginRequiredMixin, UserPassesTestMixin, generic.Creat
     model = Original_Task
     fields = ['otask']
 
+    def get_queryset(self):
+        return Child.objects.filter(parent__user=self.request.user)
+
     def get_success_url(self):
         parent = Parent.objects.get(user=self.request.user)
         task_string = self.object.otask
@@ -1243,7 +1241,13 @@ class TaskDetailView(LoginRequiredMixin, UserPassesTestMixin, generic.DetailView
 
 class TaskCreate(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
     model = Task
-    fields = ['name', 'description', 'point_value', 'child', 'date']
+    form_class = TaskCreateForm
+    template_name = "parent/task_form.html"
+
+    def get_form_kwargs(self):
+        kwargs = super(TaskCreate, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
 
     def form_valid(self, form):
         form.instance.parent = Parent.objects.get(user=self.request.user)
@@ -1295,6 +1299,11 @@ class TaskUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     model = Task
     form_class = TaskUpdateForm
     template_name = "parent/task_form.html"
+
+    def get_form_kwargs(self):
+        kwargs = super(TaskUpdate, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
 
     def test_func(self):
         return is_member(self.request.user)
@@ -1474,6 +1483,11 @@ class ChildCreate(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
     template_name = "parent/child_form.html"
     success_url = reverse_lazy('settings')
 
+    def get_form_kwargs(self):
+        kwargs = super(ChildCreate, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
+
     def form_valid(self, form):
         form.instance.parent = Parent.objects.get(user=self.request.user)
 
@@ -1522,6 +1536,11 @@ class ChildUpdate(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     model = Child
     form_class = ChildUpdateForm
     template_name = "parent/child_form.html"
+
+    def get_form_kwargs(self):
+        kwargs = super(ChildUpdate, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
 
     def test_func(self):
         return is_member(self.request.user)
@@ -2037,12 +2056,12 @@ class ChildLoginView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateVi
         data['parent'] = parent = Parent.objects.get(user = self.request.user)
         data['children'] = Child.objects.filter(parent=parent)
         data['active_child'] = parent.active_child
-        # print(f'\n\nDEBUG: Parent = {parent}\n\n', file=sys.stderr)
-        # print(f'\n\nDEBUG: Active Child = {parent.active_child}\n\n', file=sys.stderr)
+        print(f'\n\nDEBUG: Parent = {parent}\n\n', file=sys.stderr)
+        print(f'\n\nDEBUG: Active Child = {parent.active_child}\n\n', file=sys.stderr)
         if parent.active_child:
             child = parent.active_child
             data['pin'] = pin = child.pin
-            # print(f'\n\nDEBUG: PIN = {pin}\n\n', file=sys.stderr)
+            print(f'\n\nDEBUG: PIN = {pin}\n\n', file=sys.stderr)
         return data
 
 
@@ -2109,22 +2128,22 @@ class ChildLoginView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateVi
 
 def SetActiveChildView(request, pk):
     parent = Parent.objects.get(user = request.user)
-    # print(f'\n\nDEBUG: Parent = {parent}\n\n', file=sys.stderr)
+    print(f'\n\nDEBUG: Parent = {parent}\n\n', file=sys.stderr)
     child = Child.objects.get(id = pk)
-    # print(f'\n\nDEBUG: Child = {child}\n\n', file=sys.stderr)
+    print(f'\n\nDEBUG: Child = {child}\n\n', file=sys.stderr)
     parent.active_child = child
-    # print(f'\n\nDEBUG: Active Child = {parent.active_child}\n\n', file=sys.stderr)
+    print(f'\n\nDEBUG: Active Child = {parent.active_child}\n\n', file=sys.stderr)
     parent.save()
     return redirect('child_login')
 
 
 def CheckPinView(request, pk):
     parent = Parent.objects.get(user = request.user)
-    # print(f'\n\nDEBUG: Parent = {parent}\n\n', file=sys.stderr)
+    print(f'\n\nDEBUG: Parent = {parent}\n\n', file=sys.stderr)
     child = Child.objects.get(id = pk)
-    # print(f'\n\nDEBUG: Child = {child}\n\n', file=sys.stderr)
+    print(f'\n\nDEBUG: Child = {child}\n\n', file=sys.stderr)
     parent.active_child = child
-    # print(f'\n\nDEBUG: Active Child = {parent.active_child}\n\n', file=sys.stderr)
+    print(f'\n\nDEBUG: Active Child = {parent.active_child}\n\n', file=sys.stderr)
     parent.save()
     return redirect('child_login')
 
