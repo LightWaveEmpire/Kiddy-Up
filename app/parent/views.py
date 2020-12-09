@@ -207,11 +207,11 @@ class DashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateVie
         return Earned_Reward.objects.filter(child__parent = parent)
 
     def tasks(self):
-        return Task.objects.filter(parent__user = self.request.user, status='OPEN').order_by('date')
+        return Task.objects.filter(parent__user = self.request.user, status='OPEN').order_by('date', 'time')
 
     def pending_tasks(self):
         parent = Parent.objects.get(user = self.request.user)
-        return Task.objects.filter(parent = parent, status='PEND').order_by('date')
+        return Task.objects.filter(parent = parent, status='PEND').order_by('date', 'time')
 
     def completed_tasks(self):
         parent = Parent.objects.get(user = self.request.user)
@@ -1160,7 +1160,7 @@ class TaskListView(LoginRequiredMixin, UserPassesTestMixin, generic.ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return Task.objects.filter(parent__user=self.request.user, status='OPEN').order_by('date')
+        return Task.objects.filter(parent__user=self.request.user, status='OPEN').order_by('date', 'time')
 
 
 
@@ -2186,7 +2186,7 @@ class ChildDashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.Templa
     def tasks(self):
         parent = Parent.objects.get(user = self.request.user)
         active_child = parent.active_child
-        tasks = Task.objects.filter(child = active_child, status='OPEN').order_by('date')[0:5]
+        tasks = Task.objects.filter(child = active_child, status='OPEN').order_by('date', 'time')[0:5]
         for task in tasks:
             task.image = Task.get_task_image(task)
             task.save(update_fields=["image"])
@@ -2332,7 +2332,7 @@ class ChildTaskListView(LoginRequiredMixin,
     def tasks(self):
         parent = Parent.objects.get(user = self.request.user)
         active_child = parent.active_child
-        return Task.objects.filter(child = active_child, status='OPEN').order_by('date')
+        return Task.objects.filter(child = active_child, status='OPEN').order_by('date', 'time')
 
     # def completed_tasks(self):
     #     parent = Parent.objects.get(user = self.request.user)
