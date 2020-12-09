@@ -28,6 +28,7 @@ class Parent(models.Model):
     zip_code = models.CharField(
         "ZIP / Postal code",
         max_length=12,
+        default=23505
     )
     # reevaluate field type on info re: acct storage
     # still need to work on things, not sure how this will work out
