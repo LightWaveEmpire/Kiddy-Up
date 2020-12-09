@@ -7,18 +7,19 @@
 
 {% block content %}
 
+<center>
   <h1>Child</h1>
 
-<ul>
-<li>Name: {{ child.name }}</li>
-<li>Age: {{ child.age }}</li>
-<li>Avatar: {{ child.avatar }}</li>
-<li>Comprehension: {{ child.comp_level }}</li>
-<li><a href="{% url 'child-update' child.id %}">Edit</a></li>
-{# <li><a href="{% url 'child-delete' child.id %}">Delete</a></li> #}
+<p>
+<p>Name: {{ child.name }}</p>
+<p>Age: {{ child.age }}</p>
+<p>Avatar: {{ child.avatar }}</p>
+<p>Comprehension: {{ child.comp_level }}</p>
+<p><a href="{% url 'child-update' child.id %}">Edit</a></p>
+{# <p><a href="{% url 'child-delete' child.id %}">Delete</a></p> #}
 
-</ul>
-
+</p>
+</center>
 
 {% endblock %}
 

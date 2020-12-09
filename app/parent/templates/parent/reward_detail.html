@@ -5,18 +5,18 @@
 {% block title %}Earned Reward - {{ block.super }}{% endblock %}
 
 {% block content %}
-
+<center>
   <h1 style="color:#F26B38;" >Reward</h1>
 
-<ul style="color:#F26B38;" >
-<li>Reward: {{ reward.rname }}</li>
-<li>Cost: {{ reward.cost }}</li>
-<li>Image: {{ reward.rimage }}</li>
-<li><a href="{% url 'reward-update' reward.id %}">Edit</a></li>
-<li><a href="{% url 'reward-delete' reward.id %}">Delete</a></li>
-</ul>
+<p style="color:#F26B38;" >
+<p>Reward: {{ reward.name }}</p>
+<p>Cost: {{ reward.cost }}</p>
+<p>Image: {{ reward.image }}</p>
+<p><a href="{% url 'reward-update' reward.id %}">Edit</a></p>
+<p><a href="{% url 'reward-delete' reward.id %}">Delete</a></p>
+</p>
 
-
+</center>
 {% endblock %}
 
 

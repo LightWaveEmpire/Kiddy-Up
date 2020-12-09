@@ -104,7 +104,7 @@
                     <tbody>
                         {% for task in view.tasks %}
                         <tr>
-                            <td><a href="{% url 'child-task' task.id %}">{{task.name}}</a></td>
+                            <td><a href="{% url 'task' task.id %}">{{task.name}}</a></td>
                             <td>{{ task.child }}</td>
                             <td>{{ task.date }}</td>
 
