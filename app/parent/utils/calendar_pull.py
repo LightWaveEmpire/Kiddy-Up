@@ -41,6 +41,11 @@ def login_calendar(user):
     creds = google_apis_oauth.load_credentials(parent.account_creds)
     return build('calendar', 'v3', credentials=creds)
 
+def login_task(user):
+    parent = Parent.objects.get(user = user)
+    creds = google_apis_oauth.load_credentials(parent.account_creds)
+    return build('tasks', 'v1', credentials=creds)
+
 '''
 function: get_list_of_events(service, n)
     This function accesses the specified amount of calendar events
@@ -84,9 +89,42 @@ def get_list_of_events(service, n):
         if 'description' in event:
             description = event['description']
 
-
-
-        string = f'{summary} . {description} . {location} . from {start_string} . to {end_string}.'
+        # Date and time are picked up better when we just pass the date time string as it is received from google
+        string = f'{summary} . {description} . {location} . from {start_date} . to {end_date}.'
+        # string = f'{summary} . {description} . {location} . from {start_string} . to {end_string}.'
         listOfEvents.append((string, event))
     # return a tuple of event
     return listOfEvents
+
+def get_list_of_tasks(service, n):
+    now = datetime.now(timezone(settings.TIME_ZONE)).isoformat()
+    out_time_format = "%I:%M%p on %A, %B %d"
+    tasks_result = service.tasklists().list(maxResults=100).execute()
+    task_lists = tasks_result.get('items', [])
+
+    listOfTasks = []
+
+    for task_list in task_lists:
+        task_list_name = task_list["title"]
+        task_list_id = task_list["id"]
+        print(f'{task_list["title"]} - {task_list["id"]}')
+        """
+        List Method - list all tasks from tasklist
+        """
+        task_results = service.tasks().list(
+            tasklist=task_list_id).execute()
+        list_of_tasks = task_results.get('items')
+        for task in list_of_tasks:
+            title = description = due = ''
+            print(f'\n\nDEBUG: {task}\n\n', file=sys.stderr)
+            if 'title' in task:
+                title = task['title']
+            if 'due' in task:
+                due = task['due']
+            if 'description' in task:
+                description = task['description']
+
+            string = f'{title} . {description} . {due}.'
+            listOfTasks.append((string,task))
+            # # return a tuple of task
+    return listOfTasks
