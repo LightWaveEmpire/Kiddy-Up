@@ -16,7 +16,7 @@ TASK_STRUCTURE = {
     'name': "Untitled Task",
     'description': "",
     'people': [],
-    'date': "2021-12-02",
+    'date': "12/02/2021",
     'location': "no location given"
 }
 

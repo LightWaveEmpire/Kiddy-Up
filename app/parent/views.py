@@ -68,7 +68,9 @@ Views to authenticate with Google and pull events and tasks
 # The url where the google oauth should redirect
 # after a successful login.
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
-REDIRECT_URI = 'http://localhost:8080/google_oauth/callback/'
+#REDIRECT_URI = 'http://localhost:8080/google_oauth/callback/'
+REDIRECT_URI = 'https://411silverf20.cs.odu.edu/google_oauth/callback/'
+
 
 # Authorization scopes required
 SCOPES = [
@@ -2362,7 +2364,7 @@ def TaskCompleteView(request, pk,):
     active_child = parent.active_child
     task = Task.objects.get(id=pk)
     reward_system.complete_task(active_child, task)
-    
+
     send_mail(
     'Task Completion Notification',
     render_to_string('parent/task_alert.html', {
@@ -2372,8 +2374,8 @@ def TaskCompleteView(request, pk,):
     [],
     [parent.user.email],
     fail_silently=False,
-    ) 
-   
+    )
+
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
