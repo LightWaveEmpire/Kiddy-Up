@@ -69,6 +69,8 @@ Views to authenticate with Google and pull events and tasks
 # after a successful login.
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 REDIRECT_URI = 'http://localhost:8080/google_oauth/callback/'
+# REDIRECT_URI = 'https://411silverf20.cs.odu.edu/google_oauth/callback/'
+
 
 # Authorization scopes required
 SCOPES = [
@@ -120,8 +122,11 @@ def CallbackView(request):
 @user_passes_test(is_in_group_parent)
 def pull_tasks(request):
     try:
-        service = calendar_pull.login_calendar(request.user)
-        list_of_events = calendar_pull.get_list_of_events(service, 100)
+        cal_service = calendar_pull.login_calendar(request.user)
+        list_of_events = calendar_pull.get_list_of_events(cal_service, 100)
+        task_service = calendar_pull.login_task(request.user)
+        list_of_tasks = calendar_pull.get_list_of_tasks(task_service, 100)
+
         # for event, json_event in list_of_events:
         # print(f'\n\nDEBUG: {event}\n\n{json_event}\n\n', file=sys.stderr)
     except:
@@ -130,7 +135,7 @@ def pull_tasks(request):
 
     parent = Parent.objects.get(user=request.user)
 
-    task_factory.create_otasks_from_list(parent, list_of_events)
+    task_factory.create_otasks_from_list(parent, list_of_tasks)
 
     children = Child.objects.filter(parent=parent)
     locations = Location.objects.filter(parent=parent)
