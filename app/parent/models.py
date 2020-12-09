@@ -165,13 +165,25 @@ class Location(models.Model):
 
 
 class Child(models.Model):
+    ONE = 1
+    TWO = 2
+    COMP_CHOICES = [
+        (ONE, "Younger Child"),
+        (TWO, "Older Child")
+    ]
+
+
     # user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='child')
     parent = models.ForeignKey(Parent, on_delete=models.CASCADE, related_name='parent')
     name = models.CharField("Child Name", max_length=20)
     is_authenticated = models.BooleanField(default=False)
     target_reward = models.ForeignKey('Reward', on_delete=models.SET_NULL, blank=True, null=True)
     age = models.IntegerField("Age")
-    comp_level = models.IntegerField("Comprehension Level", blank=True, null=True)
+        comp_level = models.IntegerField(
+        "Comprehension Level",
+        choices=COMP_CHOICES,
+        default=ONE
+    )
     owned_rewards = models.JSONField(blank=True, null=True)
     avatar = models.ImageField("Avatar", upload_to='avatars', default='default.jpg')
     current_points = models.IntegerField("Point Balance", default=0)
@@ -183,10 +195,10 @@ class Child(models.Model):
 
         constraints = [
             # ensures a parent can't have multiple children with same name
-            models.UniqueConstraint(fields=['parent', 'name'], name='unique_sibling'),
+            models.UniqueConstraint(fields=['parent', 'name'], name='unique_sibling')#,
 
             # ensures age of child is between 5-12, inclusive
-            models.CheckConstraint(check=models.Q(age__range=(5, 12)), name='age_5_12')
+            #models.CheckConstraint(check=models.Q(age__range=(5, 12)), name='age_5_12')
         ]
 
     def authenticate(self, pin):
