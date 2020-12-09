@@ -10,6 +10,7 @@ import sys
 from array import * # noqa: F401, F403
 import fnmatch # noqa: F401
 import json
+from datetime import time as pytime
 
 
 class Parent(models.Model):
@@ -240,8 +241,8 @@ class Task(models.Model):
 
     # Will need to change to DateTimeField
 #    date = models.DateTimeField("Task Date")
-    date = models.DateField("Task Date", default=timezone.now)
-    time = models.TimeField("Task Time", null=True, default=None)
+    date = models.DateField("Task Date", default=timezone.now())
+    time = models.TimeField("Task Time", null=True, default=pytime(hour=23, minute=59).isoformat('minutes'))
     point_value = models.IntegerField("Point Value", default=1)
     location = models.CharField("Location", max_length=40)
 
@@ -308,7 +309,7 @@ class Original_Task(models.Model):
 
             # if time does end up getting defined by spacy, set it... otherwise set to null
             if 'time' in task_details:
-                time=task_details['time']
+                time = task_details['time']
             else:
                 time = None
 
