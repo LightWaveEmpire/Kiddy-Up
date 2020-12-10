@@ -161,7 +161,7 @@ def extract_location(entity, task):
 
 
 def extract_date(entity, task):
-    task['date'] = dupr.parse(entity.text).isoformat()
+    task['date'] = dupr.parse(entity.text).date().isoformat()
     # DEBUG: use to dummy out issues reading date.
     # task['date'] = constants.TASK_STRUCTURE['date']
     task['name'] = task['name'].replace(entity.text, "").strip()
