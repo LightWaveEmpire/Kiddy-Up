@@ -4,7 +4,7 @@ import json
 from parent.utils import constants
 import sys
 from dateutil import parser as dupr
-
+from django.utils import timezone
 
 def extract_entities(otask, entities=None, debug=False) -> dict:
     """
