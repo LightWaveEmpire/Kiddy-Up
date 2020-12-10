@@ -90,6 +90,9 @@ def extract_entities(otask, entities=None, debug=False) -> dict:
             task['name'] = title.title()[0:17]
         if len(title) > 17:
             task['name'] += "..."
+            
+    if task['date'] == "2752-02-29":
+        task['date'] = timezone.localdate().isoformat()
 
     print(task, file=sys.stderr)
     #ABRACADABRA! When I put this here it works.
