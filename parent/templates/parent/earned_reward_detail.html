@@ -1,0 +1,26 @@
+{% extends "parent/parent_base.html" %}
+
+{% load has_perms %}
+
+{% block title %}Earned Reward - {{ block.super }}{% endblock %}
+
+{% block content %}
+
+  <h1 style="color:#F26B38;">Earned Reward</h1>
+
+<ul style="color:#F26B38;">
+<li>Reward: {{ earned_reward.child }}</li>
+<li>Cost: {{ earned_reward.reward }}</li>
+<!--<li>Image: {{ reward.rimage }}</li>-->
+<li><a href="{% url 'earned_reward-delete' earned_reward.id %}">Reward Given</a></li>
+</ul>
+
+
+{% endblock %}
+
+
+{% block sidebar_content %}
+<!-- no sidebar for registration page -->
+{% endblock %}
+
+

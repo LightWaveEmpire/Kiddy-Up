@@ -1,0 +1,43 @@
+ {% extends "parent/parent_base.html" %} {% load has_perms %} {% block title %} Completed Tasks  - {{ block.super }} {% endblock %} {% block content %}
+
+<h5><p style="color:#F26B38; margin-left: 15px">Completed Tasks - Validated</h5>
+
+
+<table class="table table-bordered">
+    <thead>
+        <tr style="color:#F26B38">
+            <th>Task</th>
+            <th>Child</th>
+            <th>Status</th>
+            <th>Point Value</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for task in object_list %}
+        <tr>
+            <td><a href="{% url 'task' task.id %}">{{task.name}}</a></td>
+            <td>{{ task.child }}</td>
+            <td>{{ task.status }}</td>
+            <td>{{ task.point_value }}</td>
+            <td><a href="{% url 'task-delete' task.id%}">Delete</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% block pagination %} {% if is_paginated %}
+<div class="pagination">
+    <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <span class="page-current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span> {% if page_obj.has_next %}
+    <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a> {% endif %}
+    </span>
+</div>
+{% endif %} {% endblock %} {% endblock %} {% block sidebar_content %}
+<!-- no sidebar for registration page -->
+{% endblock %}

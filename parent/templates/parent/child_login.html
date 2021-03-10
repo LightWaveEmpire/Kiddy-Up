@@ -1,0 +1,183 @@
+{% extends "parent/child_base.html" %}
+{% load static %}
+{% load has_perms %}
+
+
+{% block title %} Child Login - {{ block.super }} {% endblock %}
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script>
+            function set_active_child(child_id) {
+                    $.get('SetActiveChildView/'+child_id+'/', function (data) {
+                    alert("counter updated!");
+                });
+            }
+        </script>
+
+{% block content %}
+{{ block.super }}
+<!--    {% if request.user|has_perms %}-->
+<!--        <li class="nav-item">-->
+<!--                <span data-i18n="nav.dash.main">Authenticated</span>-->
+<!--        </li>-->
+<!--    {% endif %}-->
+<div style="margin: 20px 0px 0px;">
+    <div class="container" style="padding: 100px;">
+
+            <table>
+                <tr>
+                    <td>
+                        <div class="row" style="padding: 10px;">
+                            <div class="col-md-4">
+                                <h2 style=" color:#A569BD;width: 343px;">Welcome to Kiddy-Up!</h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table id="example" class="table " width="100%">
+                                    <thead>
+                                    </thead>
+                                    <tbody>
+                                        <p  style=" color:#A569BD;">Choose your user: </p>
+                                        {% for child in children %}
+
+                                        <tr>
+
+
+
+                                            {% if active_child == child.name %}
+                                                <td style="border: 1px solid"><b><img class="border rounded-circle img-profile" src="{{child.avatar.url}}" width="99" height="99"> &nbsp;&nbsp;&nbsp;&nbsp;{{child.name}}</b></td>
+                                            {% else %}
+                                                <td><a class="nav-link"  href="{% url 'set_active_child' child.id  %}"> <img class="border rounded-circle img-profile" src="{{child.avatar.url}}" width="99" height="99"> &nbsp;&nbsp;&nbsp;&nbsp;{{child.name}}</a></td>
+
+                                            {% endif %}
+
+                                        </tr>
+
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </td>
+                    {% if active_child %}
+
+                    <td>
+                        <div class="row" style="padding: 10px; text-align: center;">
+                            <div class="col-md-12">
+                                <script>
+
+                                    var count_presses = 0;
+                                    function input(e)
+                                    {
+                                        event.preventDefault();
+                                        console.log("pressed " + count_presses);
+                                        if (count_presses < 3) {
+                                            count_presses += 1;
+                                            var tbInput = document.getElementById("tbInput");
+                                            tbInput.value = tbInput.value + e.value;
+                                            showImage();
+
+                                        }
+                                    }
+
+                                    function del()
+                                    {
+                                        if (count_presses > 0) {
+                                            count_presses -= 1;
+                                            var tbInput = document.getElementById("tbInput");
+                                            tbInput.value = tbInput.value.substr(0,tbInput.value.length-1);
+                                            hideImage();
+                                        }
+                                    }
+
+                                    function showImage(){
+                                        console.log(count_presses);
+                                        switch ("add 1 = " + count_presses) {
+                                            case 1:
+                                                document.getElementById("pwimg1").style.visibility = "visible";
+                                            case 2:
+                                                document.getElementById("pwimg2").style.visibility = "visible";
+                                            case 3:
+                                                document.getElementById("pwimg3").style.visibility = "visible";
+                                            }
+                                    }
+                                    function hideImage(){
+                                        console.log("subtract 1 = " + count_presses);
+                                        switch (count_presses) {
+                                            case 1:
+                                                document.getElementById("pwimg1").style.visibility = "hidden";
+                                            case 2:
+                                                document.getElementById("pwimg2").style.visibility = "hidden";
+                                            case 3:
+                                                document.getElementById("pwimg3").style.visibility = "hidden";
+                                            }
+                                    }
+
+                            </script>
+<div>
+                       <p  style=" color:#A569BD;"> Enter your code, {{active_child}}<br /> </p>
+                                    <img class="border rounded-circle img-profile" src="{{active_child.avatar.url}}" width="150" height="150">
+                    </div>
+                                <form method="POST" >
+                                    {% csrf_token %}
+
+
+                                    <div id="VirtualKey" style="margin: 15px">
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_1.png' %}" width="99" height="99" id="btn1" value="1" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_2.png' %}" width="99" height="99" id="btn1" value="2" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_3.png' %}" width="99" height="99" id="btn1" value="3" onclick="input(this);">
+                                    <br>
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_4.png' %}" width="99" height="99"  id="btn1" value="4" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_5.png' %}" width="99" height="99"  id="btn1" value="5" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_6.png' %}" width="99" height="99"  id="btn1" value="6" onclick="input(this);">
+                                    <br>
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_7.png' %}" width="99" height="99"  id="btn1" value="7" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_8.png' %}" width="99" height="99"  id="btn1" value="8" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_9.png' %}" width="99" height="99"  id="btn1" value="9" onclick="input(this);">
+                                    <br>
+                                    <input id="btnDel" type="button" value="Backspace" onclick="del();" visibility=>
+                                    <br>
+
+                                    <input type="image" alt="*" src="{% static 'child_login_image_1.jpg' %}" id="pwimg1" style="visibility:hidden">
+                                    <input type="image" alt="*" src="{% static 'child_login_image_1.jpg' %}" id="pwimg2" style="visibility:hidden" >
+                                    <input type="image" alt="*" src="{% static 'child_login_image_1.jpg' %}" id="pwimg3" style="visibility:hidden" >
+                                    <br>
+                                    <input id="tbInput" name='form_pin' maxlength="3" autocomplete="off">
+                                    <input type="submit" value="Log In">
+                                </form>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    {%  endif %}
+                </tr>
+            </table>
+
+    </div>
+    <footer class="footer text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-5 mb-lg-0">
+                    <h4 class="text-uppercase mb-4"></h4>
+                    <p></p>
+                </div>
+                <div class="col-md-4 mb-5 mb-lg-0">
+                    <h4 class="text-uppercase"></h4>
+                    <ul class="list-inline">
+                        <li class="list-inline-item"><a class="btn btn-outline-light btn-social text-center rounded-circle" role="button" href="#"><i class="fa fa-facebook fa-fw"></i></a></li>
+                        <li class="list-inline-item"><a class="btn btn-outline-light btn-social text-center rounded-circle" role="button" href="#"><i class="fa fa-google-plus fa-fw"></i></a></li>
+                        <li class="list-inline-item"><a class="btn btn-outline-light btn-social text-center rounded-circle" role="button" href="#"><i class="fa fa-twitter fa-fw"></i></a></li>
+                        <li class="list-inline-item"><a class="btn btn-outline-light btn-social text-center rounded-circle" role="button" href="#"><i class="fa fa-dribbble fa-fw"></i></a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h4 class="text-uppercase mb-4"></h4>
+                    <p class="lead mb-0"><span></span></p>
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+        {% block sidebar_content %}
+        <!-- no sidebar for registration page -->
+        {% endblock %}

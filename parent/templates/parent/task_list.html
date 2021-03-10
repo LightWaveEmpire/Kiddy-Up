@@ -1,0 +1,55 @@
+ {% extends "parent/parent_base.html" %} {% load has_perms %} {% block title %} Tasks  - {{ block.super }} {% endblock %} {% block content %}
+
+<h1><p style=" color: #F26B38; margin-left: 10px"> Tasks</h1> </p>
+
+
+
+
+<h5><p style="color: #F26B38; margin-left: 15px"> Open Tasks</h5> </p>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th style="color: #F26B38;">Task</th> 
+            <th style="color: #F26B38;">Child</th> 
+            <th style="color: #F26B38;">Due</th> 
+            <th style="color: #F26B38;">Status</th> 
+            <th style="color: #F26B38;">Point Value</th> 
+            <th style="color: #F26B38;">Action</th> 
+        </tr>
+    </thead>
+    <tbody>
+        {% for task in object_list %}
+        <tr>
+            <td><a href="{% url 'task' task.id %}">{{task.name}}</a></td>
+            <td>{{ task.child }}</td>
+            <td>{{ task.date }}</td>
+            <td>{{ task.status }}</td>
+            <td>{{ task.point_value }}</td>
+            <td><a href="{% url 'task-update' task.id%}">Edit</a></td>
+        </tr>
+        {% endfor %}
+        <tr>
+
+            <td colspan="6" style="text-align:center"><a style="margin-left: 20px" href="{% url 'manual_add' %}">Add a Task</a></td>
+        </tr>
+    </tbody>
+</table>
+
+<h5><a style="margin-left: 20px" href="{% url 'pending_tasks' %}">Validate Completed Tasks</a></h5>
+<h5><a style="margin-left: 20px" href="{% url 'completed_tasks' %}">Past Completed Tasks</a></h5>
+
+{% block pagination %} {% if is_paginated %}
+<div class="pagination">
+    <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <span class="page-current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span> {% if page_obj.has_next %}
+    <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a> {% endif %}
+    </span>
+</div>
+{% endif %} {% endblock %} {% endblock %} {% block sidebar_content %}
+<!-- no sidebar for registration page -->
+{% endblock %}

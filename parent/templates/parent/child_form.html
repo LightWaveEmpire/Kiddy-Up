@@ -1,0 +1,106 @@
+
+{% extends "parent/parent_base.html" %}
+{% load static %}
+{% load has_perms %}
+
+{% block title %}Child - {{ block.super }}{% endblock %}
+
+{% block content %}
+
+  <h1 style="margin-left: 10px; color:#27AE60;">Add Child</h1>
+
+<script>
+
+                                    var count_presses = 0;
+                                    function input(e)
+                                    {
+                                        event.preventDefault();
+                                        console.log("pressed " + count_presses);
+                                        var tbInput = document.getElementById("id_pin");
+                                        if (count_presses == 0) {
+                                            tbInput.value = ""
+                                        }
+                                        if (count_presses < 3) {
+                                            count_presses += 1;
+
+                                            tbInput.value = tbInput.value + e.value;
+                                            showImage();
+
+                                        }
+                                    }
+
+                                    function del()
+                                    {
+                                        if (count_presses > 0) {
+                                            count_presses -= 1;
+                                            var tbInput = document.getElementById("id_pin");
+                                            tbInput.value = tbInput.value.substr(0,tbInput.value.length-1);
+                                            hideImage();
+                                        }
+                                    }
+
+                                    function showImage(){
+                                        console.log(count_presses);
+                                        switch ("add 1 = " + count_presses) {
+                                            case 1:
+                                                document.getElementById("pwimg1").style.visibility = "visible";
+                                            case 2:
+                                                document.getElementById("pwimg2").style.visibility = "visible";
+                                            case 3:
+                                                document.getElementById("pwimg3").style.visibility = "visible";
+                                            }
+                                    }
+                                    function hideImage(){
+                                        console.log("subtract 1 = " + count_presses);
+                                        switch (count_presses) {
+                                            case 1:
+                                                document.getElementById("pwimg1").style.visibility = "hidden";
+                                            case 2:
+                                                document.getElementById("pwimg2").style.visibility = "hidden";
+                                            case 3:
+                                                document.getElementById("pwimg3").style.visibility = "hidden";
+                                            }
+                                    }
+
+                            </script>
+<form method="post" enctype='multipart/form-data'>
+    {% csrf_token %}
+
+                                    <p style="margin-left: 15px; color:#27AE60;">Enter new pin, {{parent.active_child}} </p>
+
+                                    <img class="border rounded-circle img-profile" src="{{active_child.avatar.url}}">
+
+                                    <div id="VirtualKey" style="margin: 15px">
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_1.png' %}" width="99" height="99" id="btn1" value="1" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_2.png' %}" width="99" height="99" id="btn1" value="2" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_3.png' %}" width="99" height="99" id="btn1" value="3" onclick="input(this);">
+                                    <br>
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_4.png' %}" width="99" height="99"  id="btn1" value="4" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_5.png' %}" width="99" height="99"  id="btn1" value="5" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_6.png' %}" width="99" height="99"  id="btn1" value="6" onclick="input(this);">
+                                    <br>
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_7.png' %}" width="99" height="99"  id="btn1" value="7" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_8.png' %}" width="99" height="99"  id="btn1" value="8" onclick="input(this);">
+                                    <input type="image" src="{% static 'child_login_pin_images/child_login_image_9.png' %}" width="99" height="99"  id="btn1" value="9" onclick="input(this);">
+                                    <br>
+                                    <input id="btnDel" type="button" value="Backspace" onclick="del();" visibility=>
+                                    <br>
+
+                                    <input type="image" alt="*" src="{% static 'child_login_image_1.jpg' %}" id="pwimg1" style="visibility:hidden">
+                                    <input type="image" alt="*" src="{% static 'child_login_image_1.jpg' %}" id="pwimg2" style="visibility:hidden" >
+                                    <input type="image" alt="*" src="{% static 'child_login_image_1.jpg' %}" id="pwimg3" style="visibility:hidden" >
+                                    <br>
+                                        {{ form.as_p }}
+
+
+    <input type="submit" value="Save">
+</form>
+
+{% endblock %}
+
+
+{% block sidebar_content %}
+<!-- no sidebar for registration page -->
+{% endblock %}
+
+

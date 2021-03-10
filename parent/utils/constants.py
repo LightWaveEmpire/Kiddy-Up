@@ -1,0 +1,265 @@
+# import spacy
+import en_core_web_lg as model
+# from spacy.pipeline import EntityRuler
+
+# load any spaCy models that are installed
+# this takes some time to load so doing it here and hopefully this improves performance
+
+ENT_STRUCTURE = {
+    "CHILD": [],
+    "SCHOOL": [],
+    "WORK": [],
+    "RACT": []
+}
+
+TASK_STRUCTURE = {
+    'name': "Untitled Task",
+    'description': "",
+    'people': [],
+    'date': "2752-02-29",
+    'location': "no location given"
+}
+
+# NLP = spacy.load('en_core_web_lg')
+NLP = model.load()
+
+DEFAULT_TASKS = [
+    # Get Ready
+    NLP("get ready for school"),
+    NLP("get ready to leave"),
+    NLP("get ready to go"),
+    NLP("get ready for practice"),
+    NLP("get ready for the game"),
+    NLP("get ready for church"),
+    NLP("get ready to go out"),
+    NLP("get ready"),
+
+    # Hygiene
+    NLP("brush teeth"),
+    NLP("take a bath"),
+    NLP("have a shower"),
+    NLP("take a shower"),
+    NLP("have a bath"),
+    NLP("wash face"),
+    NLP("wash yourself"),
+    NLP("brush hair"),
+    NLP("clean face"),
+    NLP("clean teeth"),
+
+    # Room
+    NLP("put away toys"),
+    NLP("make the bed"),
+    NLP("clean room"),
+    NLP("make your bed"),
+    NLP("pack up toys"),
+    NLP("pick up toys"),
+    NLP("clean closet"),
+    NLP("vacuum your bedroom"),
+    NLP("vacuum room"),
+    NLP("vacuum bedroom"),
+    NLP("clean bedroom"),
+    NLP("make bed"),
+
+    # Laundry
+    NLP("put laundry in the hamper"),
+    NLP("sort the laundry"),
+    NLP("sort laundry"),
+    NLP("match the socks"),
+    NLP("match socks"),
+    NLP("wash clothes"),
+    NLP("move laundry"),
+    NLP("put away clothes"),
+    NLP("hang up clothes"),
+    NLP("fold clothes"),
+    NLP("fold laundry"),
+    NLP("fold towels"),
+    NLP("fold blankets"),
+
+    # Kitchen/Dining
+    NLP("clear the table"),
+    NLP("put away dishes"),
+    NLP("wash the dishes"),
+    NLP("load the dishwasher"),
+    NLP("unload the dishwasher"),
+    NLP("empty the dishwasher"),
+    NLP("set the table"),
+    NLP("bring in the groceries"),
+    NLP("put away the groceries"),
+    NLP("put away the dishes"),
+    NLP("wipe table"),
+    NLP("mop the kitchen"),
+    NLP("sweep the kitchen"),
+    NLP("sweep under the table"),
+    NLP("clean under the table"),
+    NLP("vacuum under the table"),
+    NLP("pack lunch"),
+    NLP("pack your lunch"),
+    NLP("clean fridge"),
+    NLP("make dinner"),
+    NLP("make lunch"),
+    NLP("make breakfast"),
+    NLP("help with dinner"),
+    NLP("help with lunch"),
+    NLP("help with breakfast"),
+
+
+    # General Cleaning
+    NLP("sweep the floor"),
+    NLP("bring trash"),
+    NLP("collect trash"),
+    NLP("collect the trash"),
+    NLP("sort recycling "),
+    NLP("sort the recycling "),
+    NLP("mop the floor"),
+    NLP("vacuum the floor"),
+    NLP("clean bathroom"),
+    NLP("clean living room"),
+    NLP("clean family room"),
+    NLP("clean garage"),
+    NLP("clean patio"),
+    NLP("clean basement"),
+    NLP("clean kitchen"),
+    NLP("clean dining room"),
+    NLP("clean hallway"),
+    NLP("clean windows"),
+    NLP("clean walls"),
+    NLP("clean baseboards"),
+    NLP("clean doors"),
+    NLP("clean floors"),
+    NLP("clean room"),
+    NLP("clean the bbq"),
+
+
+    # Outdoors
+    NLP("get the mail"),
+    NLP("take out the trash"),
+    NLP("take out the recycling"),
+    NLP("check the mail"),
+    NLP("mow the lawn"),
+    NLP("mow the yard"),
+    NLP("rake the leaves"),
+    NLP("rake leaves"),
+    NLP("pull weeds"),
+    NLP("weed the garden"),
+    NLP("water the plants"),
+    NLP("water the lawn"),
+    NLP("water the yard"),
+    NLP("shovel snow"),
+    NLP("shovel the driveway"),
+    NLP("shovel the sidewalk"),
+    NLP("wash the car"),
+    NLP("wash the truck"),
+    NLP("wash the van"),
+    NLP("wash the bugatti"),
+    NLP("wash car"),
+    NLP("sweep the porch"),
+    NLP("sweep the front porch"),
+    NLP("sweep the back porch"),
+    NLP("sweep the deck"),
+    NLP("sweep the patio"),
+    NLP("sweep the sidewalk"),
+    NLP("get firewood"),
+    NLP("feed chickens"),
+    NLP("feed animals"),
+    NLP("check on animals"),
+
+    # With Pets
+    NLP("feed the cat"),
+    NLP("feed the dog"),
+    NLP("feed the bird"),
+    NLP("feed the fish"),
+    NLP("wash the cat dishes"),
+    NLP("wash the dog dishes"),
+    NLP("clean the bird's cage"),
+    NLP("clean the bird cage"),
+    NLP("walk dog"),
+    NLP("walk the dog"),
+    NLP("let the dog out"),
+    NLP("exercise the dog"),
+    NLP("brush the dog"),
+    NLP("play with the cat"),
+    NLP("play with the dog"),
+    NLP("empty the litter box"),
+    NLP("clean the litter box"),
+    NLP("clean out the litter box"),
+
+    # For the sportsball
+    NLP("soccer practice"),
+    NLP("soccer game"),
+    NLP("baseball practice"),
+    NLP("baseball game"),
+    NLP("football practice"),
+    NLP("football game"),
+    NLP("cheerleading practice"),
+    NLP("gymnastics"),
+    NLP("swimming"),
+    NLP("basketball practice"),
+    NLP("basketball game"),
+
+
+
+    # Some for classes/school
+    NLP("do homework"),
+    NLP("finish homework"),
+    NLP("do project"),
+    NLP("start project"),
+    NLP("finish project"),
+    NLP("complete project"),
+    NLP("math class"),
+    NLP("science class"),
+    NLP("english class"),
+    NLP("history class"),
+    NLP("spanish class"),
+    NLP("art class"),
+    NLP("video call"),
+    NLP("zoom call"),
+    NLP("team meating"),
+    NLP("band practice"),
+    NLP("club meeting"),
+
+    # A few for the CS Profs
+    NLP("solve world peace"), # Brunell
+    NLP("learn rust"), # Kennedy
+    NLP("make a linked list"), # Morris
+
+    # Catch All - small versions of the above to catch the
+    # task in case it is worded slightly different
+    NLP("homework"),
+    NLP("project"),
+    NLP("dust"),
+    NLP("meeting"),
+    NLP("lecture"),
+    NLP("band"),
+    NLP("zoom"),
+    NLP("hangout"),
+    NLP("hangouts"),
+    NLP("class"),
+    NLP("sweep"),
+    NLP("vacuum"),
+    NLP("clean"),
+    NLP("rake"),
+    NLP("mow"),
+    NLP("laundry"),
+    NLP("dishes"),
+    NLP("dog"),
+    NLP("cat"),
+    NLP("fish"),
+    NLP("bird"),
+    NLP("put away"),
+    NLP("pick up"),
+    NLP("pack up"),
+    NLP("wipe"),
+    NLP("soccer"),
+    NLP("football"),
+    NLP("baseball"),
+    NLP("basketball"),
+    NLP("cheerleading"),
+    NLP("sport"),
+    NLP("foosball"),
+    NLP("lunch"),
+    NLP("breakfast"),
+    NLP("dinner"),
+    NLP("snack"),
+    NLP("club"),
+
+]

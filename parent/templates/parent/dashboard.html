@@ -1,0 +1,206 @@
+
+{% extends "parent/parent_base.html" %}
+
+{% load has_perms %}
+
+{% block title %} Parent Dashboard - {{block.super}} {% endblock %}
+
+{% block content %}
+
+{{ block.super }}
+
+<style>
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+.dashboard_container{
+  margin: 20px auto;
+  padding:25px;
+  width:100%;
+  height:100%;
+  background-color:#fff;
+  display:grid;
+  grid-template-columns: 60% 40%;
+  grid-row: auto auto;
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+
+    .dashboard_box{
+        background-color:#333;
+        padding:20px;
+        border-radius:10px;
+        color:#fff;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:10px;
+        font-family:sans-serif;
+      }
+
+}
+
+
+
+</style>
+<div class="dashboard_container">
+
+
+
+
+    <div class="dashboard_box">
+    <h2 style="color:#F26B38; width: 343px;"><u>Tasks</u></h2>
+    <h5 style="color:#A7226E;margin-left: 15px; width: 343px;"><u>Waiting For Approval</u></h5>
+        <div class="row">
+            <div class="col-md-12">
+                {% if view.pending_tasks %}
+                <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Child</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for task in view.pending_tasks %}
+                        <tr>
+                            <td>{{task.name}}</td>
+
+                            <td>{{ task.child }}</td>
+
+<td>
+                                <button type="button" class="btn btn-warning" onclick="location.href=&quot;{% url 'task-validate' task.id%}&quot;" ><i class="fas fa-pencil-alt d-xl-flex justify-content-xl-center align-items-xl-center">&nbsp;Mark as Complete</i></button>
+                                <button type="button" class="btn btn-warning" onclick="location.href=&quot;{% url 'task-invalidate' task.id%}&quot;" ><i class="fas fa-pencil-alt d-xl-flex justify-content-xl-center align-items-xl-center">&nbsp;Mark Unfinished</i></button>
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                                {% else %}
+               <p style="margin-left: 50px;"> No current completed tasks to be validated </p>
+                {% endif %}
+            </div>
+        </div>
+
+
+<div></div>
+        <h5 style="color:#A7226E; margin-left: 15px; width: 343px;"><u>Pending Completion</u></h5>
+        <div class="row">
+            <div class="col-md-12">
+                {% if view.tasks %}
+                <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Child</th>
+                            <th>Due</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for task in view.tasks %}
+                        <tr>
+                            <td><a href="{% url 'task' task.id %}">{{task.name}}</a></td>
+                            <td>{{ task.child }}</td>
+                            <td>{{ task.date }}</td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+               <p style="margin-left: 40px;"> Your kids have completed all their tasks! </p>
+                {% endif %}
+            </div>
+        </div>
+        <br>
+
+<!--
+   <div class="dashboard_box">
+            <p>
+                <span class="title">Weather for {{ view.weather.city }}</span>
+                <figure class="image is-50x50">
+                    <img src="http://openweathermap.org/img/w/{{ view.weather.icon }}.png" alt="Image"> {{ view.weather.now_temp }}° F</br>{{ view.weather.description }}
+                </figure>
+                Low: {{ view.weather.min_temp }}° F</br> High: {{ view.weather.max_temp }}° F</br>
+                </figure>
+            </p>
+
+
+</div>
+-->
+
+
+
+<div>
+
+</div>
+</div>
+    <div class="dashboard_box">
+        <h2 style="color:#D4AC0D; width: 343px;"><u>Rewards</u></h2>
+        <h5 style="color:#D4AC0D; margin-left: 25px; width: 343px;"><u>Earned Rewards</u></h5>
+        <div>
+            <div class="col-md-12">
+                {% if view.earned_rewards %}
+<table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Child</th>
+                            <th>Reward</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                {% for reward in view.earned_rewards %}
+                    <tr>
+                        <td>{{reward.child}}</td>
+                        <td>{{reward.reward}}</td>
+
+                        <td><button type="button" class="btn btn-warning" onclick="location.href=&quot;{% url 'earned_reward-delete' reward.id%}&quot;" ><i class="fas fa-pencil-alt d-xl-flex justify-content-xl-center align-items-xl-center">&nbsp;Give Reward</i></button></td>
+                        </tr>
+                {% endfor %}
+</table>
+{% else %}
+               <p style="margin-left: 40px;"> Your children have no earned rewards. </p>
+
+                {% endif %}<br>
+            </div>
+        </div>
+    </div>
+</div>
+    <footer class="footer text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-5 mb-lg-0">
+                    <h4 class="text-uppercase mb-4"></h4>
+                    <p></p>
+                </div>
+                <div class="col-md-4 mb-5 mb-lg-0">
+                    <h4 class="text-uppercase"></h4>
+                    <ul class="list-inline">
+                        <li class="list-inline-item"><a class="btn btn-outline-light btn-social text-center rounded-circle" role="button" href="#"><i class="fa fa-facebook fa-fw"></i></a></li>
+                        <li class="list-inline-item"><a class="btn btn-outline-light btn-social text-center rounded-circle" role="button" href="#"><i class="fa fa-google-plus fa-fw"></i></a></li>
+                        <li class="list-inline-item"><a class="btn btn-outline-light btn-social text-center rounded-circle" role="button" href="#"><i class="fa fa-twitter fa-fw"></i></a></li>
+                        <li class="list-inline-item"><a class="btn btn-outline-light btn-social text-center rounded-circle" role="button" href="#"><i class="fa fa-dribbble fa-fw"></i></a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h4 class="text-uppercase mb-4"></h4>
+                    <p class="lead mb-0"><span></span></p>
+                </div>
+            </div>
+        </div>
+
+
+{% endblock %}
+
+
+{% block sidebar_content %}
+<!-- no sidebar for registration page -->
+{% endblock %}
+
+

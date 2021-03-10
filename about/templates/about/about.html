@@ -1,0 +1,116 @@
+{% extends "about/about_base.html" %} {% block title %} About Us{% endblock %} {% block topnav %} {{ block.super }}{% endblock %} {% block content %}{% load static %}
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    body,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: "Raleway", sans-serif
+    }
+    
+    body,
+    html {
+        height: 100%;
+        line-height: 1.8;
+    }
+    /* Full height image header */
+    
+    .bgimg-1 {
+        background-position: center;
+        background-size: cover;
+        /*background-image: url("/w3images/mac.jpg");*/
+        background-image: url("{% static 'assets/img/joshua-eckstein-VAJEea9u6k8-unsplash.jpg' %}");
+        background-image: url="{% static 'assets/img/joshua-eckstein-VAJEea9u6k8-unsplash.jpg' %}";
+        min-height: 100%;
+    }
+    
+    .w3-bar .w3-button {
+        padding: 16px;
+    }
+    
+    .w3-container {
+        background-image: url("{% static '/static/assets/img/joshua-eckstein-VAJEea9u6k8-unsplash.jpg' %}");
+    }
+</style>
+
+<body>
+
+
+
+    <!-- About Section -->
+    <header class="masthead" style="background-image: url(" {% static '/static/assets/img/joshua-eckstein-VAJEea9u6k8-unsplash.jpg' %} ");">
+
+
+        <div style="color:rgb(0, 0, 0);" class="w3-container" style="padding:128px 16px " id="about ">
+
+            <h3 class="w3-center ">A web application that assists parents in building and managing their child's routine by collecting pertinent scheduling information from multiple online sources and presenting it to the child as an age-appropriate interface.</h3>
+            <p class="w3-center w3-large ">Key features of Kiddy-Up</p>
+            <div class="w3-row-padding w3-center " style="margin-top:64px ">
+                <div class="w3-quarter ">
+                    <i class="fas fa-magic fa-4x w3-margin-bottom w3-jumbo " ">
+        </i>
+        <p class="w3-large ">Automatic</p>
+        <p>Kiddy-Up provides automatic data import, intelligent data analysis and processing</p>
+    </div>
+    <div class="w3-quarter ">
+        <i class="fas fa-sync fa-spin w3-margin-bottom w3-jumbo "></i>
+        <p class="w3-large ">Continuously</p>
+        <p>Continuously monitor for new information from the family’s online calendars and task lists.</p>
+    </div>
+    <div class="w3-quarter ">
+        <i class="fas fa-child w3-margin-bottom w3-jumbo "></i>
+        <p class="w3-large ">Child Friendly</p>
+        <p>Assemble and present child-specific information in an age-appropriate format for each child.</p>
+    </div>
+    <div class="w3-quarter ">
+        <i class="fas fa-calendar-day w3-margin-bottom w3-jumbo "></i>
+        <p class="w3-large ">Routine</p>
+        <p>Provide children with consistent information about their daily routines that are aligned with the family’s schedules.</p>
+    </div>
+    <p><a href="{% url 'register' %} " class="w3-button w3-blue "><i class="fa fa-th "> </i> Register</a></p>
+    </div>
+    </div>
+
+
+
+    <script>
+        // Modal Image Gallery
+        function onClick(element) {
+            document.getElementById("img01 ").src = element.src;
+            document.getElementById("modal01 ").style.display = "block ";
+            var captionText = document.getElementById("caption ");
+            captionText.innerHTML = element.alt;
+        }
+
+
+        // Toggle between showing and hiding the sidebar when clicking the menu icon
+        var mySidebar = document.getElementById("mySidebar ");
+
+        function w3_open() {
+            if (mySidebar.style.display === 'block') {
+                mySidebar.style.display = 'none';
+            } else {
+                mySidebar.style.display = 'block';
+            }
+        }
+
+        // Close the sidebar with the close button
+        function w3_close() {
+            mySidebar.style.display = "none ";
+        }
+    </script>
+
+</body>
+
+
+
+
+{% endblock %}

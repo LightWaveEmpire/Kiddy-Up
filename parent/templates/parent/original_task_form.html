@@ -1,0 +1,12 @@
+ {% extends "parent/parent_base.html" %} {% load has_perms %} {% block title %}Add Tasks - {{ block.super }}{% endblock %} {% block content %}
+
+<h1>Add Tasks Manually</h1>
+<a href="{% url 'task-add' %}">Add task using a form</a>
+<form method="post">
+    {% csrf_token %} {{ form.as_p }}
+    <input type="submit" value="Save">
+</form>
+
+{% endblock %} {% block sidebar_content %}
+<!-- no sidebar for registration page -->
+{% endblock %}

@@ -1,0 +1,28 @@
+
+{% extends "parent/parent_base.html" %}
+
+{% load has_perms %}
+
+{% block title %} Profile - {{ block.super }}{% endblock %}
+
+{% block content %}
+
+<h1><p style="color:#CD6155; margin-left: 15px"> Profile:</h1>
+<ul>
+<li> <p style="color:#CD6155; margin-left: 15px"> Username:  {{ user.username }}</li>
+<li><p style="color:#CD6155; margin-left: 15px"> Email Address: {{user.email}}</li>
+<li><p style="color:#CD6155; margin-left: 15px"> Password: **** </li>
+
+
+</ul>
+
+
+
+{% endblock %}
+
+
+{% block sidebar_content %}
+<!-- no sidebar for registration page -->
+{% endblock %}
+
+

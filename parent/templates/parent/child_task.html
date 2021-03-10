@@ -1,0 +1,66 @@
+
+{% extends "parent/child_base.html" %}
+
+{% load has_perms %}
+
+{% block title %}Task- {{ block.super }} {% endblock %}
+
+{% block content %}
+{% load static %}
+
+<style>
+	h2 {
+		margin-left: 15px;
+	}
+
+	p {
+		margin-left: 20px;
+	}
+</style>
+
+ <center>
+  	<h1>{{ task.name }}</h1>
+  	<img class="border rounded-circle" src="{% static task.image %}" alt="Image" height=200px width=200px>
+	<br><br>
+
+	<h2>What does <i style="color: red"> {{ task.child }} </i> need to do?</h2>
+	<br>
+	<p>{{ task.description }}</p>
+	<br>
+	<br>
+	<p>Due by {{ task.date }} - {{ task.time }}</p>
+	<br>
+
+	<h2><i class="fas fa-coins" style="color: #D4AF37"></i> {{ task.point_value }}</h2>
+	<br><br>
+
+	<img class="border rounded-circle" style="display: inline-block;" src="/static/thumbs.png" alt="Image" height="50px" width="50px">
+	<h3 style="display: inline-block;"><a href="{% url 'task-complete' task.id%}">Complete</a></h3>
+	<img class="border rounded-circle" style="display: inline-block;" src="/static/thumbs.png" alt="Image" height="50px" width="50px">
+</center>
+
+<br><br>
+
+
+<!-- <ul>
+<li>Description: {{ task.description }}
+<li>Points: {{ task.point_value }}</li>
+<li>Image: {{ task.image }}</li>
+<li>Child: {{ task.child }}</li>
+<li><a href="{% url 'task-complete' task.id%}">Complete</a></li>
+</ul>
+
+<i class="fal fa-coin" style="color: #D4AF37"></i>
+<i class="fas fa-coins" style="color: #D4AF37">
+
+-->
+
+
+{% endblock %}
+
+
+{% block sidebar_content %}
+<!-- no sidebar for registration page -->
+{% endblock %}
+
+

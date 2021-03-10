@@ -1,0 +1,50 @@
+ {% extends "parent/parent_base.html" %} {% load has_perms %} {% block title %} Completed Tasks  - {{ block.super }} {% endblock %} {% block content %}
+
+
+<h5><p style="color:#F26B38; margin-left: 15px">Completed Tasks - Requires Validation</h5>
+            <div >
+                {% if object_list %}
+                <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr style="color:#F26B38;">
+                            <th>Event</th>
+                            <th>Child</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for task in object_list %}
+                        <tr>
+                            <td>{{task.name}}</td>
+
+                            <td>{{ task.child }}</td>
+
+<td>
+                                <button type="button" class="btn btn-warning" onclick="location.href=&quot;{% url 'task-validate' task.id%}&quot;" ><i class="fas fa-pencil-alt d-xl-flex justify-content-xl-center align-items-xl-center">&nbsp;Mark as Complete</i></button>
+                                <button type="button" class="btn btn-warning" onclick="location.href=&quot;{% url 'task-invalidate' task.id%}&quot;" ><i class="fas fa-pencil-alt d-xl-flex justify-content-xl-center align-items-xl-center">&nbsp;Mark Unfinished</i></button>
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                                {% else %}
+               <p style="margin-left: 30px; color:#F26B38;"> No current completed tasks to be validated </p>
+                {% endif %}
+            </div>
+
+{% block pagination %} {% if is_paginated %}
+<div class="pagination">
+    <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <span class="page-current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span> {% if page_obj.has_next %}
+    <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a> {% endif %}
+    </span>
+</div>
+{% endif %} {% endblock %} {% endblock %} {% block sidebar_content %}
+<!-- no sidebar for registration page -->
+{% endblock %}

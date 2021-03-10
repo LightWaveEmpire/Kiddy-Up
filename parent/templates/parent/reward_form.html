@@ -1,0 +1,25 @@
+
+{% extends "parent/parent_base.html" %}
+
+{% load has_perms %}
+
+{% block title %}Reward{% endblock %}
+
+{% block content %}
+
+  <h1 style=" margin-left: 20px; color:#D4AC0D;" >Add Reward</h1>
+
+<form method="post"> 
+    {% csrf_token %} 
+    {{ form.as_p }} 
+    <input type="submit" value="Save"> 
+</form>
+
+{% endblock %}
+
+
+{% block sidebar_content %}
+<!-- no sidebar for registration page -->
+{% endblock %}
+
+

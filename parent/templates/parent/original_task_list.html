@@ -1,0 +1,60 @@
+
+{% extends "parent/parent_base.html" %}
+
+
+{% load has_perms %}
+
+
+{% block title %} Tasks {% endblock %}
+
+{% block content %}
+
+  <h1>Original Tasks</h1>
+
+<p><a href="{% url 'original_task-add' %}">Add an Original Task</a></p>
+
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Owner</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for original_task in object_list %}
+      <tr>
+        <td><a href="{% url 'original_task' original_task.id %}">{{original_task.otask}}</a></td>
+<!--        <td>{{ original_task.owner }}</td>-->
+        <td><a href="{% url 'original_task-update' original_task.id%}">Edit</a></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% block pagination %}
+    {% if is_paginated %}
+        <div class="pagination">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <span class="page-current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a>
+                {% endif %}
+            </span>
+        </div>
+    {% endif %}
+  {% endblock %}
+
+{% endblock %}
+
+
+{% block sidebar_content %}
+<!-- no sidebar for registration page -->
+{% endblock %}
+
+
