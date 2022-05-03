@@ -1898,8 +1898,6 @@ class ParentSignUpView(View):
             user.save()
 
             current_site = get_current_site(request)
-            # image_path = 'static/images/kiddy-up.png'
-            # image_name = Path(image_path).name
             subject = 'Activate Your Kiddy-Up Account'
 
             body_text = render_to_string('parent/auth_user_email.html', {
@@ -1908,20 +1906,7 @@ class ParentSignUpView(View):
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                 'token': account_activation_token.make_token(user),
             })
-            # html_text = f"""
-            #     <!doctype html>
-            #         <html lang=en>
-            #             <head>
-            #                 <meta charset=utf-8>
-            #             </head>
-            #             <body>
-            #                 <h2>{subject}</h2>
-            #                 <p>
-            #                 <img src='cid:{image_name}'/>
-            #                 </p>
-            #             </body>
-            #         </html>
-            # """
+            
             message = EmailMultiAlternatives(
                 subject=subject,
                 body=body_text,
@@ -1929,22 +1914,8 @@ class ParentSignUpView(View):
                 to=[user.email],
                 **kwargs
             )
-            # message.mixed_subtype = 'related'
-            # message.attach_alternative(html_text, "text/html")
-            # message.content_subtype = 'html'
-            # message.attach('static/images/kiddy-up.png', img_data, 'image/png')
-
+            
             message.send(fail_silently=False)
-
-
-
-            # message = render_to_string('parent/auth_user_email.html', {
-            #     'user': user,
-            #     'domain': current_site.domain,
-            #     'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-            #     'token': account_activation_token.make_token(user),
-            # })
-            # user.email_user(subject, message)
 
             messages.success(request, ('Please confirm your email to complete registration.'))
 
